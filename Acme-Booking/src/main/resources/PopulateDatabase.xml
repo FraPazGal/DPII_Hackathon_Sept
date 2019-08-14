@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- * PopulateDatabase.xml * * Copyright (C) 2019 Universidad de Sevilla 
+	* * The use of this project is hereby constrained to the conditions of the 
+	* TDG Licence, a copy of which you may download from http://www.tdg-seville.info/License.html -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- USER ACCOUNTS -->
+
+	<!-- ADMINISTRATORS -->
+
+	<bean id="userAdmin1" class="security.UserAccount">
+		<property name="username" value="admin" />
+		<property name="password" value="21232f297a57a5a743894a0e4a801fc3" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="ADMIN" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="userAdmin2" class="security.UserAccount">
+		<property name="username" value="admin2" />
+		<property name="password" value="c84258e9c39059a89ab77d846ddab909" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="ADMIN" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- CUSTOMERS -->
+
+	<bean id="userCustomer1" class="security.UserAccount">
+		<property name="username" value="customer1" />
+		<property name="password" value="ffbc4675f864e0e9aab8bdf7a0437010" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="CUSTOMER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="userCustomer2" class="security.UserAccount">
+		<property name="username" value="customer2" />
+		<property name="password" value="5ce4d191fd14ac85a1469fb8c29b7a7b" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="CUSTOMER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="userCustomer3" class="security.UserAccount">
+		<property name="username" value="customer3" />
+		<property name="password" value="033f7f6121501ae98285ad77f216d5e7" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="CUSTOMER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- OWNERS -->
+
+	<bean id="userOwner1" class="security.UserAccount">
+		<property name="username" value="owner1" />
+		<property name="password" value="4ef5ba0c918c537fadba2ada54e3dd68" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="OWNER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="userOwner2" class="security.UserAccount">
+		<property name="username" value="owner2" />
+		<property name="password" value="b1e3677cd7c6f633e6c08037583c846f" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="OWNER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="userOwner3" class="security.UserAccount">
+		<property name="username" value="owner3" />
+		<property name="password" value="80a38342307696962140b56a785877ae" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="OWNER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="userOwner4" class="security.UserAccount">
+		<property name="username" value="owner4" />
+		<property name="password" value="b6faad5051326390f43710c2dd66b15e" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="OWNER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- ACTORS -->
+
+	<!-- ADMINISTATORS -->
+
+	<bean id="administrator1" class="domain.Administrator">
+		<property name="name" value="Boros" />
+		<property name="middleName" value="Dominator" />
+		<property name="surname" value="of the Universe" />
+		<property name="photo"
+			value="https://vignette.wikia.nocookie.net/onepunchman/images/c/ce/Boros_color.jpg/revision/latest?cb=20151017212925" />
+		<property name="email" value="boros@" />
+		<property name="phoneNumber" value="+34666666666" />
+		<property name="address" value="C/ Collapsing Star Roaring Cannon" />
+		<property name="userAccount" ref="userAdmin1" />
+	</bean>
+
+	<bean id="administrator2" class="domain.Administrator">
+		<property name="name" value="Mozgus" />
+		<property name="middleName" value="The Great" />
+		<property name="surname" value="Angel" />
+		<property name="photo"
+			value="https://vignette.wikia.nocookie.net/berserk/images/0/05/Mozgus_Manga.jpg/revision/latest/scale-to-width-down/250?cb=20140416220234" />
+		<property name="email" value="mozgus@" />
+		<property name="phoneNumber" value="+34698652413" />
+		<property name="address" value="C/ Holy See" />
+		<property name="userAccount" ref="userAdmin2" />
+	</bean>
+
+	<!-- CUSTOMERS -->
+
+	<bean id="customer1" class="domain.Customer">
+		<property name="name" value="Frieza" />
+		<property name="middleName" value="Agent" />
+		<property name="surname" value="of Destruction" />
+		<property name="photo"
+			value="https://vignette.wikia.nocookie.net/dragonball/images/8/83/Frieza_DBZ_Ep_85_002v2.png/revision/latest/scale-to-width-down/278?cb=20170920193805" />
+		<property name="email" value="frieza@hotmail.com" />
+		<property name="phoneNumber" value="+34615243875" />
+		<property name="address" value="C/ Planet Namek" />
+		<property name="userAccount" ref="userCustomer1" />
+		<property name="creditCard" ref="creditCard1" />
+	</bean>
+
+	<bean id="customer2" class="domain.Customer">
+		<property name="name" value="Dio" />
+		<property name="surname" value="Brando" />
+		<property name="photo"
+			value="https://vignette.wikia.nocookie.net/jjba/images/1/18/Dio3Anime.png/revision/latest/scale-to-width-down/270?cb=20170301013659" />
+		<property name="email" value="dio@outlook.com" />
+		<property name="phoneNumber" value="+34685742458" />
+		<property name="address" value="C/ Phantom Blood" />
+		<property name="userAccount" ref="userCustomer2" />
+		<property name="creditCard" ref="creditCard2" />
+	</bean>
+	
+	<bean id="customer3" class="domain.Customer">
+		<property name="name" value="Calliu" />
+		<property name="surname" value="Pictures" />
+		<property name="photo" value="http://2.bp.blogspot.com/-GMbk63S19wI/Ul-rdWP_YUI/AAAAAAAAW-o/byjGxrZ2GWc/s1600/caillou-xl-pictures-12.jpg" />
+		<property name="email" value="calliu@outlook.com" />
+		<property name="phoneNumber" value="+34688721658" />
+		<property name="address" value="C/ Phantom Blood" />
+		<property name="userAccount" ref="userCustomer3" />
+		<property name="creditCard" ref="creditCard20" />
+	</bean>
+
+	<!-- OWNERS -->
+
+	<bean id="owner1" class="domain.Owner">
+		<property name="name" value="King" />
+		<property name="middleName" value="Bradley" />
+		<property name="surname" value="Wrath" />
+		<property name="photo"
+			value="https://vignette.wikia.nocookie.net/fma/images/0/0b/KingBradley1080p.png/revision/latest/scale-to-width-down/310?cb=20161230194652" />
+		<property name="email" value="bradley@mail.com" />
+		<property name="phoneNumber" value="+34697854321" />
+		<property name="address" value="C/ Amestris" />
+		<property name="userAccount" ref="userOwner1" />
+	</bean>
+
+	<bean id="owner2" class="domain.Owner">
+		<property name="name" value="Meruem" />
+		<property name="middleName" value="Middle" />
+		<property name="surname" value="Chimera Ants' King" />
+		<property name="photo"
+			value="https://vignette.wikia.nocookie.net/hunterxhunter/images/7/71/91_-_Meruem%27s_cruel_nature.png/revision/latest/scale-to-width-down/250?cb=20131008123029" />
+		<property name="email" value="meruem@yahoo.com" />
+		<property name="phoneNumber" value="+34658974582" />
+		<property name="address" value="C/ Chimera ants' nest" />
+		<property name="userAccount" ref="userOwner2" />
+	</bean>
+
+	<bean id="owner3" class="domain.Owner">
+		<property name="name" value="Cartoon" />
+		<property name="surname" value="Man" />
+		<property name="photo" value="http://cliparts.co/cliparts/Aib/jRa/AibjRa9zT.jpg" />
+		<property name="email" value="cartoon@yahoo.com" />
+		<property name="phoneNumber" value="+34T627946333" />
+		<property name="address" value="C/ Cliparts, 99" />
+		<property name="userAccount" ref="userOwner3" />
+	</bean>
+
+	<bean id="owner4" class="domain.Owner">
+		<property name="name" value="Barbudo" />
+		<property name="surname" value="Sandalias" />
+		<property name="photo" value="http://www.aperfectworld.org/clipart/cartoons/tourist.png" />
+		<property name="email" value="bsandalias@yahoo.com" />
+		<property name="phoneNumber" value="+34697421153" />
+		<property name="address" value="C/ La playa, 0" />
+		<property name="userAccount" ref="userOwner4" />
+	</bean>
+
+	<!-- FINDERS -->
+
+	<bean id="finderCustomer1" class="domain.Finder">
+		<property name="results">
+			<list>
+			</list>
+		</property>
+		<property name="customer" ref="customer1" />
+	</bean>
+
+	<bean id="finderCustomer2" class="domain.Finder">
+		<property name="results">
+			<list>
+			</list>
+		</property>
+		<property name="customer" ref="customer2" />
+	</bean>
+	
+	<bean id="finderCustomer3" class="domain.Finder">
+		<property name="results">
+			<list>
+			</list>
+		</property>
+		<property name="customer" ref="customer3" />
+	</bean>
+
+
+	<!-- ***** CREDITCARD ***** -->
+
+	<bean id="creditCard1" class="domain.CreditCard">
+		<property name="holder" value="Frieza" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4764042457713154" />
+		<property name="expirationMonth" value="02" />
+		<property name="expirationYear" value="22" />
+		<property name="CVV" value="177" />
+	</bean>
+
+	<bean id="creditCard2" class="domain.CreditCard">
+		<property name="holder" value="Dio Brando" />
+		<property name="make" value="MASTERCARD" />
+		<property name="number" value="4544963188930071" />
+		<property name="expirationMonth" value="11" />
+		<property name="expirationYear" value="20" />
+		<property name="CVV" value="366" />
+	</bean>
+
+	<bean id="creditCard3" class="domain.CreditCard">
+		<property name="holder" value="King Bradley" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4582276213483252" />
+		<property name="expirationMonth" value="01" />
+		<property name="expirationYear" value="28" />
+		<property name="CVV" value="707" />
+	</bean>
+
+	<bean id="creditCard4" class="domain.CreditCard">
+		<property name="holder" value="Meruem" />
+		<property name="make" value="AMERICAN EXPRESS" />
+		<property name="number" value="4354197982162289" />
+		<property name="expirationMonth" value="02" />
+		<property name="expirationYear" value="28" />
+		<property name="CVV" value="479" />
+	</bean>
+	
+	<bean id="creditCard5" class="domain.CreditCard">
+		<property name="holder" value="Cartoon Man" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4285589630343424" />
+		<property name="expirationMonth" value="10" />
+		<property name="expirationYear" value="19" />
+		<property name="CVV" value="123" />
+	</bean>
+
+	<bean id="creditCard6" class="domain.CreditCard">
+		<property name="holder" value="Barbudo Sandalias" />
+		<property name="make" value="MASTERCARD" />
+		<property name="number" value="4248139401623715" />
+		<property name="expirationMonth" value="08" />
+		<property name="expirationYear" value="24" />
+		<property name="CVV" value="999" />
+	</bean>
+
+	<bean id="creditCard7" class="domain.CreditCard">
+		<property name="holder" value="Paula Montero Galán" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4017359522310013" />
+		<property name="expirationMonth" value="09" />
+		<property name="expirationYear" value="25" />
+		<property name="CVV" value="525" />
+	</bean>
+
+	<bean id="creditCard8" class="domain.CreditCard">
+		<property name="holder" value="Gustavos S.A." />
+		<property name="make" value="AMERICAN EXPRESS" />
+		<property name="number" value="4786794545649162" />
+		<property name="expirationMonth" value="07" />
+		<property name="expirationYear" value="27" />
+		<property name="CVV" value="458" />
+	</bean>
+
+	<bean id="creditCard9" class="domain.CreditCard">
+		<property name="holder" value="Google" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4288676013366200" />
+		<property name="expirationMonth" value="09" />
+		<property name="expirationYear" value="25" />
+		<property name="CVV" value="140" />
+	</bean>
+
+	<bean id="creditCard10" class="domain.CreditCard">
+		<property name="holder" value="Pato Donald" />
+		<property name="make" value="MASTERCARD" />
+		<property name="number" value="4735502658425730" />
+		<property name="expirationMonth" value="03" />
+		<property name="expirationYear" value="20" />
+		<property name="CVV" value="808" />
+	</bean>
+	
+	<bean id="creditCard11" class="domain.CreditCard">
+		<property name="holder" value="Sydnee Adams" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4798111595272462" />
+		<property name="expirationMonth" value="07" />
+		<property name="expirationYear" value="26" />
+		<property name="CVV" value="640" />
+	</bean>
+	
+	<bean id="creditCard12" class="domain.CreditCard">
+		<property name="holder" value="Amya Rodriguez" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4339257829049535" />
+		<property name="expirationMonth" value="04" />
+		<property name="expirationYear" value="28" />
+		<property name="CVV" value="546" />
+	</bean>
+	
+	<bean id="creditCard13" class="domain.CreditCard">
+		<property name="holder" value="Frieza" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4764042457713154" />
+		<property name="expirationMonth" value="02" />
+		<property name="expirationYear" value="22" />
+		<property name="CVV" value="177" />
+	</bean>
+	
+	<bean id="creditCard14" class="domain.CreditCard">
+		<property name="holder" value="Frieza" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4764042457713154" />
+		<property name="expirationMonth" value="02" />
+		<property name="expirationYear" value="22" />
+		<property name="CVV" value="177" />
+	</bean>
+	
+	<bean id="creditCard15" class="domain.CreditCard">
+		<property name="holder" value="Frieza" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4764042457713154" />
+		<property name="expirationMonth" value="02" />
+		<property name="expirationYear" value="22" />
+		<property name="CVV" value="177" />
+	</bean>
+	
+	<bean id="creditCard16" class="domain.CreditCard">
+		<property name="holder" value="Dio Brando" />
+		<property name="make" value="MASTERCARD" />
+		<property name="number" value="4544963188930071" />
+		<property name="expirationMonth" value="11" />
+		<property name="expirationYear" value="20" />
+		<property name="CVV" value="366" />
+	</bean>
+	
+	<bean id="creditCard17" class="domain.CreditCard">
+		<property name="holder" value="Dio Brando" />
+		<property name="make" value="MASTERCARD" />
+		<property name="number" value="4544963188930071" />
+		<property name="expirationMonth" value="11" />
+		<property name="expirationYear" value="20" />
+		<property name="CVV" value="366" />
+	</bean>
+	
+	<bean id="creditCard18" class="domain.CreditCard">
+		<property name="holder" value="Calliu Pictures" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4944053599316338" />
+		<property name="expirationMonth" value="06" />
+		<property name="expirationYear" value="20" />
+		<property name="CVV" value="128" />
+	</bean>
+	
+	<bean id="creditCard19" class="domain.CreditCard">
+		<property name="holder" value="Calliu Pictures" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4944053599316338" />
+		<property name="expirationMonth" value="06" />
+		<property name="expirationYear" value="20" />
+		<property name="CVV" value="128" />
+	</bean>
+	
+	<bean id="creditCard20" class="domain.CreditCard">
+		<property name="holder" value="Calliu Pictures" />
+		<property name="make" value="VISA" />
+		<property name="number" value="4944053599316338" />
+		<property name="expirationMonth" value="06" />
+		<property name="expirationYear" value="20" />
+		<property name="CVV" value="128" />
+	</bean>
+	
+	<!-- SYSTEM CONFIGURATION -->
+
+	<bean id="systemConfiguration" class="domain.SystemConfiguration">
+		<property name="systemName" value="Acme-Booking" />
+		<property name="banner" value="http://seawatchtours.ca/wp-content/uploads/2017/08/book-a-session.png" />
+		<property name="countryCode" value="+034"/>
+		<property name="VATTax" value="0.21"/>
+		<property name="makers" value="VISA,MASTERCARD,DINNERS,AMEX"/>
+		<property name="spamWords"
+			value="sex,viagra,cialis,one million,you've been selected,nigeria,sexo,un millón,un millon,has sido seleccionado" />
+		<property name="welcomeMessage">
+			<util:map id="utilmap1" map-class="java.util.HashMap"
+				key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="English"
+					value="Welcome to Acme Booking! Welcome to a new era of room renting" />
+				<entry key="Español"
+					value="¡Bienvenidos a Acme Booking! ¡Bienvenidos a una nueva era del alquiler de salas!" />
+			</util:map>
+		</property>
+		<property name="timeResultsCached" value="5" />
+		<property name="maxResults" value="10" />
+	</bean>
+
+</beans>
