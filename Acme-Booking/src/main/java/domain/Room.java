@@ -1,13 +1,10 @@
 package domain;
 
-import java.util.Collection;
-
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -24,12 +21,10 @@ public class Room extends DomainEntity {
 
 	/* Attributes */
 
-	private String title, ticker, description, detailedDescription, address, photos, openingHour, closingHour, status, attachments;
+	private String title, visibility, ticker, description, scheduleDetails, address, photos, openingHour, closingHour, status, attachments;
 	private Double pricePerHour;
 	private Integer capacity;
-	private boolean isOutOfService, isDraft;
 	private Category category;
-	private Collection<Service> services;
 	private Owner owner;
 
 	/* Getters and setters */
@@ -41,6 +36,16 @@ public class Room extends DomainEntity {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	@NotBlank
+	@Pattern(regexp = "\b(DRAFT|ACTIVE|OUTOFSERVICE)\b")
+	public String getVisibility() {
+		return visibility;
+	}
+
+	public void setVisibility(String visibility) {
+		this.visibility = visibility;
 	}
 
 	@NotBlank
@@ -65,11 +70,11 @@ public class Room extends DomainEntity {
 	@NotBlank
 	@Type(type="text")
 	public String getDetailedDescription() {
-		return detailedDescription;
+		return scheduleDetails;
 	}
 
 	public void setDetailedDescription(String detailedDescription) {
-		this.detailedDescription = detailedDescription;
+		this.scheduleDetails = detailedDescription;
 	}
 
 	@NotBlank
@@ -90,7 +95,7 @@ public class Room extends DomainEntity {
 	}
 
 	@NotBlank
-	@Pattern(regexp = "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")
+	@Pattern(regexp = "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", message = "wrong.hour")
 	public String getOpeningHour() {
 		return openingHour;
 	}
@@ -100,7 +105,7 @@ public class Room extends DomainEntity {
 	}
 
 	@NotBlank
-	@Pattern(regexp = "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")
+	@Pattern(regexp = "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", message = "wrong.hour")
 	public String getClosingHour() {
 		return closingHour;
 	}
@@ -148,22 +153,6 @@ public class Room extends DomainEntity {
 		this.capacity = capacity;
 	}
 
-	public boolean getIsOutOfService() {
-		return isOutOfService;
-	}
-
-	public void setIsOutOfService(boolean isOutOfService) {
-		this.isOutOfService = isOutOfService;
-	}
-	
-	public boolean getisDraft() {
-		return isDraft;
-	}
-
-	public void setisDraft(boolean isDraft) {
-		this.isDraft = isDraft;
-	}
-	
 	@Valid
 	@ManyToOne(optional = true)
 	public Category getCategory() {
@@ -174,17 +163,6 @@ public class Room extends DomainEntity {
 		this.category = category;
 	}
 	
-	@Valid
-	@NotNull
-	@ManyToMany
-	public Collection<Service> getServices() {
-		return services;
-	}
-
-	public void setServices(Collection<Service> services) {
-		this.services = services;
-	}
-
 	@Valid
 	@ManyToOne(optional = true)
 	public Owner getOwner() {

@@ -25,35 +25,36 @@
 		<!-- Do not forget the "fNiv" class for the first level links !! -->
 
 		
-		<%-- <security:authorize access="permitAll">
+		<security:authorize access="permitAll">
 			<li><a class="fNiv"><spring:message
-							code="master.page.irobot" /></a>
+							code="master.page.room" /></a>
 					<ul>
 						<li class="arrow"></li>
-							<li><a href="iRobot/list.do"><spring:message
-										code="master.page.irobot.list" /></a></li>
+							<li><a href="room/list.do"><spring:message
+										code="master.page.room.list" /></a></li>
 										
-						<security:authorize access="hasRole('SCIENTIST')">
-							<li><a href="iRobot/create.do"><spring:message
-										code="master.page.irobot.new" /></a></li>
-						</security:authorize>
-						
-						<security:authorize access="hasRole('CUSTOMER')">
-							<li><a href="finder/search.do"><spring:message
-										code="master.page.irobot.finder" /></a></li>
-						</security:authorize>
-						<security:authorize access="!hasRole('CUSTOMER')">
-							<li><a href="finder/anon/search.do"><spring:message
-										code="master.page.irobot.finder" /></a></li>
+						<security:authorize access="hasRole('OWNER')">
+							<li><a href="room/create.do"><spring:message
+										code="master.page.room.new" /></a></li>
 						</security:authorize>
 					</ul></li>
 					
-			<li><a href="scientist/list.do"><spring:message
-				code="master.page.scientist.list" /></a></li>
-										
-		</security:authorize> --%>
+		</security:authorize>
 		
 		<security:authorize access="hasRole('ADMIN')">
+		
+			<!-- Category -->
+			<li><a class="fNiv"><spring:message
+						code="master.page.categories" /></a>
+				<ul>
+					<li class="arrow"></li>
+					<li><a href="category/list.do"><spring:message
+								code="master.page.categories.list" /></a></li>
+					<li><a href="category/create.do"><spring:message
+								code="master.page.categories.new" /></a></li>
+				</ul></li>
+				
+			
 			<!-- Register admin -->
 			<li><a class="fNiv"><spring:message
 						code="master.page.register" /></a>

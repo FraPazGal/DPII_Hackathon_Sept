@@ -78,45 +78,63 @@ public class UtilityService {
 		return isAdmin;
 	}
 	
-//	public String generateTicker(Owner owner) {
-//		String uniqueTicker = null;
-//		String surname = null, alphaNum;
-//		boolean unique = false;
-//		
-//		if(owner.getSurname().length() >= 4) {
-//			surname = owner.getSurname().substring(0, 4);
-//		} else {
-//			surname = owner.getSurname().substring(0, owner.getSurname().length());
-//		}
-//		if(surname.length() < 4) {
-//			for(int length = 4 - surname.length(); length != 0 ;length--) {
-//				surname = surname.concat("X");
-//			}
-//		}
-//		while (unique == false) {
-//			alphaNum = this.randomStringTicker();
-//			uniqueTicker = surname + "-" + alphaNum;
-//			unique = this.checkForUniqueTicket(uniqueTicker);
-//		}
-//		return uniqueTicker;
-//	}
-//
-//	private String randomStringTicker() {
-//
-//		final String possibleChars = "0123456789";
-//		final SecureRandom rnd = new SecureRandom();
-//		final int length = 4;
-//
-//		final StringBuilder stringBuilder = new StringBuilder(length);
-//
-//		for (int i = 0; i < length; i++)
-//			stringBuilder.append(possibleChars.charAt(rnd.nextInt(possibleChars
-//					.length())));
-//		return stringBuilder.toString();
-//
-//	}
-//	
-//	private boolean checkForUniqueTicket(String ticker) {
-//		return this.roomService.uniqueTicket(ticker);
-//	}
+	public String generateTicker(Owner owner) {
+		String uniqueTicker = null;
+		String middleName = null;
+		String address = null, alphaNum;
+		boolean unique = false;
+		
+		if(owner.getMiddleName() != null) {
+			if(owner.getMiddleName().length() >= 4) {
+				middleName = owner.getMiddleName().substring(0, 4);
+			} else {
+				middleName = owner.getMiddleName().substring(0, owner.getMiddleName().length());
+			}
+			if(middleName.length() < 4) {
+				for(int length = 4 - middleName.length(); length != 0 ;length--) {
+					middleName = middleName.concat("M");
+				}
+			}
+		} else {
+			middleName = "MMM";
+		}
+		
+		if(owner.getAddress().length() >= 4) {
+			address = owner.getAddress().substring(0, 4);
+		} else {
+			address = owner.getAddress().substring(0, owner.getAddress().length());
+		}
+		if(address.length() < 4) {
+			for(int length = 4 - address.length(); length != 0 ;length--) {
+				address = address.concat("A");
+			}
+		}
+		
+		
+		while (unique == false) {
+			alphaNum = this.randomStringTicker();
+			uniqueTicker = middleName + address + "-" + alphaNum;
+			unique = this.checkForUniqueTicket(uniqueTicker);
+		}
+		return uniqueTicker;
+	}
+
+	private String randomStringTicker() {
+
+		final String possibleChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWYZ";
+		final SecureRandom rnd = new SecureRandom();
+		final int length = 6;
+
+		final StringBuilder stringBuilder = new StringBuilder(length);
+
+		for (int i = 0; i < length; i++)
+			stringBuilder.append(possibleChars.charAt(rnd.nextInt(possibleChars
+					.length())));
+		return stringBuilder.toString();
+
+	}
+	
+	private boolean checkForUniqueTicket(String ticker) {
+		return this.roomService.uniqueTicket(ticker);
+	}
 }

@@ -1,6 +1,9 @@
 package repositories;
 
+import java.util.Collection;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import domain.Room;
@@ -8,21 +11,18 @@ import domain.Room;
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Integer> {
 	
-//	@Query("select i from IRobot i where i.isDecomissioned = false and i.isDeleted = false")
-//	Collection<Room> findIRobotsNotDecomissioned();
-//	
-//	@Query("select i from IRobot i where i.isDecomissioned = true and i.isDeleted = false and i.scientist.id = ?1")
-//	Collection<Room> findIRobotsDecomissionedAndMine(Integer scientistId);
-//	
-//	@Query("select i from IRobot i where i.isDecomissioned = false and i.isDeleted = false and i.scientist.id = ?1")
-//	Collection<Room> findIRobotsNotDecomissionedAndMine(Integer scientistId);
-//	
-//	@Query("select i from IRobot i where i.scientist.id = ?1")
-//	Collection<Room> findIRobotsMine(Integer scientistId);
-//	
-//	@Query("select i from IRobot i where i.isDeleted = false and i.scientist.id = ?1")
-//	Collection<Room> findIRobotsNotDeleted(Integer scientistId);
-//	
-//	@Query("select case when (count(i) = 0) then true else false end from IRobot i where i.ticker = ?1")
-//	boolean uniqueTicket(String ticker);
+	@Query("select r from Room r where r.visibility == 'ACTIVE'")
+	Collection<Room> findRoomsForBooking();
+
+	@Query("select r from Room r r.visibility == 'DRAFT' and r.owner.id = ?1")
+	Collection<Room> findRoomsDraftAndMine(Integer ownerId);
+	
+	@Query("select r from Room r r.visibility == 'ACTIVE' and r.owner.id = ?1")
+	Collection<Room> findRoomsActiveAndMine(Integer ownerId);
+	
+	@Query("select r from Room r r.visibility == 'OUTOFSERVICE' and r.owner.id = ?1")
+	Collection<Room> findRoomsOutOfServiceAndMine(Integer ownerId);
+
+	@Query("select case when (count(i) = 0) then true else false end from Room r where r.ticker = ?1")
+	boolean uniqueTicket(String ticker);
 }

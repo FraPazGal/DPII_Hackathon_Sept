@@ -1,15 +1,16 @@
 package domain;
 
-import java.util.Map;
-
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Access(AccessType.PROPERTY)
@@ -18,21 +19,30 @@ public class Service extends DomainEntity {
 
 	/* Attributes */
 
-	private Map<String,String> name;
+	private String name, description;
 	private Double price;
-	private boolean isFinal;
+	private Room room;
 
 	/* Getters and setters */
 	
-	@ElementCollection
-	public Map<String, String> getName() {
+	@NotBlank
+	public String getName() {
 		return name;
 	}
 	
-	public void setName(Map<String, String> name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 	
+	@NotBlank
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	@NotNull
 	@Min(value = 0L, message = "The value must be positive")
 	public Double getPrice() {
@@ -43,15 +53,17 @@ public class Service extends DomainEntity {
 		this.price = price;
 	}
 
-	
-	public boolean isFinal() {
-		return isFinal;
+	@Valid
+	@ManyToOne(optional = true)
+	public Room getRoom() {
+		return room;
 	}
 
-	public void setFinal(boolean isFinal) {
-		this.isFinal = isFinal;
+	public void setRoom(Room room) {
+		this.room = room;
 	}
 	
 	
+
 
 }
