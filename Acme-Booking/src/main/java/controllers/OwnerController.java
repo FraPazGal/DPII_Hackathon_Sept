@@ -9,6 +9,7 @@ import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
@@ -37,14 +38,20 @@ public class OwnerController extends AbstractController {
 
 	/* Display */
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
-	public ModelAndView display() {
+	public ModelAndView display(@RequestParam (required = false) final Integer ownerId) {
 		ModelAndView result = new ModelAndView("owner/display");
-
+		Actor actor = null;
+		boolean isPrincipal = false;
 		try {
-			Actor actor = this.utilityService.findByPrincipal();
-			Assert.isTrue(this.utilityService.checkAuthority(actor, "OWNER"), "not.allowed");
-			
-			result.addObject("admin", actor);
+			if(ownerId == null) {
+				actor = this.utilityService.findByPrincipal();
+				Assert.isTrue(this.utilityService.checkAuthority(actor, "OWNER"), "not.allowed");
+				isPrincipal = true;
+			} else {
+				actor = this.ownerService.findOne(ownerId);
+			}
+			result.addObject("owner", actor);
+			result.addObject("isPrincipal", isPrincipal);
 		} catch (final Throwable oops) {
 			result.addObject("errMsg", oops.getMessage());
 		}

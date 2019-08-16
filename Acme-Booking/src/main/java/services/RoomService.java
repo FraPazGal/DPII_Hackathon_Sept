@@ -140,7 +140,7 @@ public class RoomService {
 			result.setTitle(room.getTitle());
 		}
 		
-		result.setDetailedDescription(room.getDetailedDescription());
+		result.setScheduleDetails(room.getScheduleDetails());
 		result.setOpeningHour(room.getOpeningHour());
 		result.setClosingHour(room.getClosingHour());
 

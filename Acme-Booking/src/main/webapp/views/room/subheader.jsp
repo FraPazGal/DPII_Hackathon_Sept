@@ -32,7 +32,7 @@
 								code="room.room.list.active" /></a></li>
 								
 					<li><a href="room/list.do?range=mineO"><spring:message
-								code="room.room.list.decomissioned" /></a></li>
+								code="room.room.list.out" /></a></li>
 
 				</ul></li>
 				

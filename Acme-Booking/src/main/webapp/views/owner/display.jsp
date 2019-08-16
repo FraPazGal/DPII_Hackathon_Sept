@@ -8,7 +8,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
-<security:authorize access="hasRole('OWNER')">
+<security:authorize access="permitAll">
 	<!-- Actor Attributes -->
 	<h1><spring:message	code="actor.view" /></h1>
 	<fieldset style="width: 35%">
@@ -59,4 +59,10 @@
 		</div>
 
 	</fieldset>
+	<br>
+	<jstl:if test="${isPrincipal }">
+		<input type="button" name="edit" value="<spring:message code="mp.edit" />" onclick="javascript: relativeRedir('/owner/edit.do')" />&nbsp;
+	</jstl:if>
+	<input type="button" name="back" value="<spring:message code="mp.back" />" onclick="window.history.back()" />&nbsp;
+	
 </security:authorize>

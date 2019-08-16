@@ -65,24 +65,22 @@
 						code="mp.display" />
 				</a>
 			</display:column>
-			
-			<display:column>
-				<jstl:if test="${!room.isOutOfService}">
+			<jstl:if test="${room.visibility != 'OUTOFSERVICE'}">
+				<display:column>
 					<a href="room/edit.do?roomId=${room.id}"> <spring:message
 							code="mp.edit" />
 					</a>
-				</jstl:if>
-			</display:column>
-			
-			<display:column>
-				<jstl:if test="${!room.isOutOfService and !room.isDraft}">
+				</display:column>
+			</jstl:if>
+			<jstl:if test="${room.visibility == 'ACTIVE'}">
+				<display:column>
 					<a id="decomission"
-						href="room/action.do?action=decomission&roomId=${room.id}">
-						<spring:message code="room.decomission" />
+						href="room/action.do?action=decommission&roomId=${room.id}">
+						<spring:message code="room.decommission" />
 					</a>
-				</jstl:if>
-			</display:column>
-			<jstl:if test="${room.isDraft}">
+				</display:column>
+			</jstl:if>
+			<jstl:if test="${room.visibility == 'DRAFT'}">
 				<display:column>
 					<a href="room/delete.do?roomId=${room.id}" 
 						onclick="return confirm('<spring:message code="room.confirm.delete"/>')">
@@ -136,7 +134,7 @@
 			</display:column>
 			
 			<display:column>
-				<a href="owner/display.do?id=${room.owner.id}"> <spring:message
+				<a href="owner/display.do?ownerId=${room.owner.id}"> <spring:message
 						code="room.owner" />
 				</a>
 			</display:column>

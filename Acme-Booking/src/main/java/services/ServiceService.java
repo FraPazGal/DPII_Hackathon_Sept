@@ -83,6 +83,7 @@ public class ServiceService {
 		result.setName(service.getName());
 		result.setDescription(service.getDescription());
 		result.setPrice(service.getPrice());
+		result.setRoom(service.getRoom());
 
 		this.validator.validate(result, binding);
 
@@ -95,7 +96,7 @@ public class ServiceService {
 		Owner principal = (Owner) this.utilityService.findByPrincipal();
 
 		Assert.isTrue(service.getRoom().getOwner().equals(principal),"not.allowed");
-		Assert.isTrue((service.getRoom().getVisibility() == "DRAFT"),"not.allowed");
+		Assert.isTrue((service.getRoom().getVisibility().contains("DRAFT")),"not.allowed");
 	}
 
 	public Collection<domain.Service> findServicesByRoomId (int roomId) {

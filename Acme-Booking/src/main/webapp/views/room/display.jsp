@@ -11,7 +11,7 @@
 
 <security:authorize access="permitAll">
 
-	<h1><jstl:out value="${room.title}" /></h1>
+	<h1><spring:message code="room.legend" /> <i><jstl:out value="${room.title}" /></i></h1>
 	<fieldset style="width: 30%">
 	<legend style="font-size: 21px">
 		<spring:message code="room.details" />
@@ -72,27 +72,30 @@
 			<jstl:out value="${room.attachments}" />
 		</div>
 		<br />
-	
-		<div>
-			<strong><spring:message code="room.photos" />: </strong>
-			<jstl:out value="${room.photos}" />
-		</div>
-		<br />
 		
+		<jstl:if test="${not empty room.photos}">
+			<div>
+				<strong><spring:message code="room.photos" />: </strong>
+				<jstl:out value="${room.photos}" />
+			</div>
+		<br />
+		</jstl:if>
+
 		<jstl:choose>
 			<jstl:when test="${pageContext.response.locale.language == 'es'}">
 				<tr>
 					<td><strong> <spring:message code="room.category" /> : </strong></td>
-					<td><jstl:out value="${room.category.get('Español')}" /></td>
+					<td><jstl:out value="${room.category.title.get('Español')}" /></td>
 				</tr>
 			</jstl:when>
 			<jstl:otherwise>
 				<tr>
 					<td><strong> <spring:message code="room.category" /> : </strong></td>
-					<td><jstl:out value="${room.category.get('English')}" /></td>
+					<td><jstl:out value="${room.category.title.get('English')}" /></td>
 				</tr>
 			</jstl:otherwise>
 		</jstl:choose>
+		
 		<jstl:if test="${isPrincipal }">
 		
 			<jstl:if test="${room.visibility == 'DRAFT'}">
@@ -106,6 +109,7 @@
 			</jstl:if>
 		
 			<div>
+				<br>
 				<strong><spring:message code="room.visibility" />: </strong>
 				<jstl:out value="${status}" />
 			</div>
@@ -120,7 +124,7 @@
 		</h2>
 		<display:table style="width: 80%" class="displaytag"
 			name="services" pagesize="5"
-			requestURI="room/display.do?roomId=${room.id}"
+			requestURI="${requestURI}"
 			id="service">
 			
 			<display:column titleKey="service.name">
@@ -141,11 +145,14 @@
 			
 	<security:authorize access="isAuthenticated()">
 		<br>
-		<input type="button"
-			onclick="redirect: location.href = 'service/create.do?roomId=${room.id}';"
-			value="<spring:message code='service.create' />" /><br>
+		<jstl:if test="${room.visibility == 'DRAFT'}">
+			<input type="button"
+				onclick="redirect: location.href = 'service/create.do?roomId=${room.id}';"
+				value="<spring:message code='service.create' />" /><br>
+		<br>
+		</jstl:if>
 	</security:authorize>
-	<br>
+	
 	<input type="button" name="back"
 		value="<spring:message code="mp.back" />"
 		onclick="window.history.back()" />

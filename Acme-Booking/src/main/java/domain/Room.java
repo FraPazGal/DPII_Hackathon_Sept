@@ -39,7 +39,7 @@ public class Room extends DomainEntity {
 	}
 	
 	@NotBlank
-	@Pattern(regexp = "\b(DRAFT|ACTIVE|OUTOFSERVICE)\b")
+	@Pattern(regexp = "\\b(DRAFT|ACTIVE|OUTOFSERVICE)\\b")
 	public String getVisibility() {
 		return visibility;
 	}
@@ -69,12 +69,12 @@ public class Room extends DomainEntity {
 	
 	@NotBlank
 	@Type(type="text")
-	public String getDetailedDescription() {
+	public String getScheduleDetails() {
 		return scheduleDetails;
 	}
 
-	public void setDetailedDescription(String detailedDescription) {
-		this.scheduleDetails = detailedDescription;
+	public void setScheduleDetails(String scheduleDetails) {
+		this.scheduleDetails = scheduleDetails;
 	}
 
 	@NotBlank
@@ -114,8 +114,7 @@ public class Room extends DomainEntity {
 		this.closingHour = closingHour;
 	}
 
-	@NotBlank
-	@Pattern(regexp = "\b(IN-REVISION|APPROVED|REJECTED)\b")
+	@Pattern(regexp = "\\b(IN-REVISION|APPROVED|REJECTED)\\b")
 	public String getStatus() {
 		return status;
 	}

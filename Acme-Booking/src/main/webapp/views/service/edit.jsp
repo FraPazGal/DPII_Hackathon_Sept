@@ -13,10 +13,10 @@
 
 <security:authorize access="hasRole('OWNER')">
 	<jstl:if test="${service.id == 0 }">
-		<h1><spring:message	code="service.create" /><jstl:out value="${service.room.name }"/></h1>
+		<h1><spring:message	code="service.create" /><jstl:out value="${service.room.title }"/></h1>
 	</jstl:if>
 	<jstl:if test="${service.id != 0 }">
-		<h1><spring:message	code="service.title.edit" /><jstl:out value="${service.room.name }"/></h1>
+		<h1><spring:message	code="service.title.edit" /><jstl:out value="${service.room.title }"/></h1>
 	</jstl:if>
 	<form:form modelAttribute="service" action="service/edit.do" id="form">
 	
@@ -27,11 +27,12 @@
 			<br/>
 			<form:hidden path="id" />
 			<form:hidden path="room" />
-			<acme:textarea code="service.description" path="description" cols="71px" rows="4"/><br/> <br/>
+			<acme:textbox code="service.name" path="name" size="40px"/><br/> 
+			<acme:textarea code="service.description" path="description" cols="71px" rows="4"/><br/>
 			<acme:textbox code="service.price" path="price" size="20px"/><br/> 
 			
 		</fieldset>
-		<br><br>
+		<br>
 		
 		<acme:submit code="mp.save" name="save" />&nbsp;
 		<acme:cancel url="service/list.do?range=mineA" code="mp.cancel" />

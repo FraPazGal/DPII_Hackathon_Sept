@@ -58,6 +58,7 @@ public class RoomController extends AbstractController {
 			result.addObject("room", room);
 			result.addObject("isPrincipal", isPrincipal);
 			result.addObject("requestURI", "room/display.do?roomId=" + roomId);
+			result.addObject("services", this.serviceService.findServicesByRoomId(room.getId()));
 			
 		} catch (final Throwable oops) {
 			result = new ModelAndView("redirect:/");
@@ -193,7 +194,7 @@ public class RoomController extends AbstractController {
 		return result;
 	}
 	
-	/* Decomission a room */
+	/* Decommission a room */
 	@RequestMapping(value = "/action", method = RequestMethod.GET)
 	public ModelAndView actionsEnrolments(@RequestParam final String action, @RequestParam final int roomId) {
 		ModelAndView result = new ModelAndView("redirect:/room/list.do?range=mineO");
@@ -201,7 +202,7 @@ public class RoomController extends AbstractController {
 			Room room = this.roomService.findOne(roomId);
 			this.roomService.assertOwnershipAndEditable(room);
 
-			if (action.equals("decomission")) {
+			if (action.equals("decommission")) {
 				
 				this.roomService.decommision(room);
 			} 
@@ -237,7 +238,6 @@ public class RoomController extends AbstractController {
 		result.addObject("room", room);
 		result.addObject("errMsg", messageCode);
 		result.addObject("categories", this.categoryService.findAll());
-		result.addObject("services", this.serviceService.findServicesByRoomId(room.getId()));
 
 		return result;
 	}

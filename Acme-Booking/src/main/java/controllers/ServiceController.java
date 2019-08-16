@@ -58,7 +58,7 @@ public class ServiceController extends AbstractController {
 	/* Create */
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create(@RequestParam final int roomId) {
-		ModelAndView result = new ModelAndView("service/list");
+		ModelAndView result = new ModelAndView("redirect:/");
 		try {
 			Service service = this.serviceService.create();
 			Room room = this.roomService.findOne(roomId);
@@ -76,7 +76,7 @@ public class ServiceController extends AbstractController {
 	/* Edit */
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@RequestParam final int serviceId) {
-		ModelAndView result = new ModelAndView("service/list");
+		ModelAndView result = new ModelAndView("redirect:service/display.do?serviceId=" + serviceId);
 		try {
 			Service service = this.serviceService.findOne(serviceId);
 			
@@ -105,7 +105,7 @@ public class ServiceController extends AbstractController {
 					result = new ModelAndView("redirect:room/display.do?roomId=" + toSave.getRoom().getId());
 
 				} catch (final Throwable oops) {
-					result.addObject("Service", toSave);
+					result.addObject("service", toSave);
 					result.addObject("errMsg", oops.getMessage());
 				}
 		} catch (final Throwable oops) {

@@ -34,10 +34,10 @@
 	</fieldset>
 	<br>
 	
-	<jstl:if test="${isPrincipal }">
+	<jstl:if test="${isPrincipal and service.room.visibility == 'DRAFT'}">
 		<input type="button" name="back"
 			value="<spring:message code="mp.edit" />"
-			onclick="redirect: location.href = 'service/edit.do?serviceId=${service.room.id}';" />
+			onclick="redirect: location.href = 'service/edit.do?serviceId=${service.id}';" />
 	</jstl:if>
 		
 	<input type="button" name="back"
