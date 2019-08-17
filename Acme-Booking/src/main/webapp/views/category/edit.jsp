@@ -17,10 +17,7 @@
 
 		<form:hidden path="id" />
 
-		<p>
-			<spring:message code="category.title.es" />
-		</p>
-		
+		<strong><spring:message code="category.title.es" /></strong><br>
 		<input type="text" name="nameES" id="nameES"
 			value="${category.title.get('Español')}"
 			placeholder="<spring:message code='category.edit.placeholder.es' />"
@@ -28,21 +25,18 @@
 		<br />
 		<br />
 
-		<p>
-			<spring:message code="category.title.en" />
-		</p>
+		<strong><spring:message code="category.title.en" /></strong><br>
 		<input type="text" name="nameEN" id="nameEN"
 			value="${category.title.get('English')}"
 			placeholder="<spring:message code='category.edit.placeholder.en' />"
 			style="width: 25%">
-			<br><br>
-		<form:errors cssClass="error" path="title" />
-		<br />
-		<br />
+			<br>
+		<form:errors cssClass="error" path="title" /><br><br>
+
 		<jstl:if test="${category.id == 0 }">
 			<jstl:choose>
 				<jstl:when test="${pageContext.response.locale.language == 'es'}">
-					<form:label path="parentCategory"><spring:message code="category.parentCategory" /></form:label><br>
+					<strong><form:label path="parentCategory"><spring:message code="category.parentCategory" /></form:label></strong><br>
 					<form:select path="parentCategory" style="width:200px;">
 						<jstl:forEach var="parentCategory" items="${categories}">
 							<form:option value="${parentCategory}" label="${parentCategory.title.get('Español')}" />
@@ -50,7 +44,7 @@
 					</form:select><br>
 				</jstl:when>
 				<jstl:otherwise>
-					<form:label path="parentCategory"><spring:message code="category.parentCategory" /></form:label><br>
+					<strong><form:label path="parentCategory"><spring:message code="category.parentCategory" /></form:label></strong><br>
 					<form:select path="parentCategory" style="width:200px;">
 					<jstl:set var="lol" value="<spring:message code='category.no.parent' />"/>
 						<jstl:forEach var="parentCategory" items="${categories}">

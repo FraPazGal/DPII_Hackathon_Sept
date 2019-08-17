@@ -774,37 +774,52 @@
 	
 	<bean id="room1" class="domain.Room">
 		<property name="title" value="Presentaciones de estudiantes" />
-		<property name="visibility" value="ACTIVE" />
+		<property name="status" value="ACTIVE" />
 		<property name="ticker" value="MMMAAA-5D8D46" />
 		<property name="description" value="Esta es la mejor sala que encontrarás para presentar tu trabajo de tfg"/>
 		<property name="openingHour" value="08:30" />
 		<property name="closingHour" value="22:00" />
 		<property name="scheduleDetails" value="Las llaves se recojen en consejería y se entregan en el buzón de la sala" />
 		<property name="address" value="C/ En un país multicolor" />
-		<property name="status" value="APPROVED" />
-		<property name="attachments" value="No me acuerdo para que servía este atrib" />
+		<property name="proveOfOwnership" value="http://registrodepropescaneado.com" />
 		<property name="pricePerHour" value="22" />
 		<property name="capacity" value="30" />
 		<property name="category" ref="presentation" />
 		<property name="owner" ref="owner1" />
+		<property name="administrator" ref="administrator1" />
 	</bean>
 	
 	<bean id="room2" class="domain.Room">
 		<property name="title" value="Reuniones" />
-		<property name="visibility" value="DRAFT" />
+		<property name="status" value="DRAFT" />
 		<property name="ticker" value="MMMAAA-5D8D46" />
 		<property name="description" value="Sala de reuniones pero que como solo puedo elegir una categoría tengo que elegir si quiero que salga en enterprise->meeting o study->meeting"/>
 		<property name="openingHour" value="06:30" />
 		<property name="closingHour" value="17:45" />
 		<property name="scheduleDetails" value="Para ampliar el horario, contacte por email o teléfono" />
 		<property name="address" value="C/ Nació una abeja bajo el sol" />
-		<property name="status" value="APPROVED" />
-		<property name="attachments" value="No, en serio, ¿para qué eran los attachments?" />
+		<property name="proveOfOwnership" value="http://urlcondocweno.com" />
 		<property name="pricePerHour" value="40" />
 		<property name="capacity" value="124" />
 		<property name="photos" value="LOOOL, encima tengo que admitir + de 1 foto" />
 		<property name="category" ref="meetingE" />
 		<property name="owner" ref="owner1" />
+	</bean>
+	
+	<bean id="room3" class="domain.Room">
+		<property name="title" value="No se aceptará" />
+		<property name="status" value="REVISION-PENDING" />
+		<property name="ticker" value="MMMAAA-5D8D46" />
+		<property name="description" value="En verda no es una sala y en verda no es mía, pero si cuela cuela"/>
+		<property name="openingHour" value="00:00" />
+		<property name="closingHour" value="00:00" />
+		<property name="scheduleDetails" value="Abierta 24/7 los 365 del año" />
+		<property name="address" value="C/ Mejor no lo digo" />
+		<property name="proveOfOwnership" value="http://secreto.com" />
+		<property name="pricePerHour" value="500" />
+		<property name="capacity" value="10" />
+		<property name="category" ref="recreation" />
+		<property name="owner" ref="owner2" />
 	</bean>
 	
 	<!-- SERVICE -->

@@ -13,6 +13,7 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.URL;
 
 @Entity
 @Access(AccessType.PROPERTY)
@@ -21,11 +22,12 @@ public class Room extends DomainEntity {
 
 	/* Attributes */
 
-	private String title, visibility, ticker, description, scheduleDetails, address, photos, openingHour, closingHour, status, attachments;
+	private String title, status, ticker, description, scheduleDetails, address, photos, openingHour, closingHour, proveOfOwnership;
 	private Double pricePerHour;
 	private Integer capacity;
 	private Category category;
 	private Owner owner;
+	private Administrator administrator;
 
 	/* Getters and setters */
 
@@ -39,13 +41,13 @@ public class Room extends DomainEntity {
 	}
 	
 	@NotBlank
-	@Pattern(regexp = "\\b(DRAFT|ACTIVE|OUTOFSERVICE)\\b")
-	public String getVisibility() {
-		return visibility;
+	@Pattern(regexp = "\\b(DRAFT|REVISION-PENDING|ACTIVE|OUT-OF-SERVICE|REJECTED)\\b")
+	public String getStatus() {
+		return status;
 	}
 
-	public void setVisibility(String visibility) {
-		this.visibility = visibility;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	@NotBlank
@@ -95,7 +97,7 @@ public class Room extends DomainEntity {
 	}
 
 	@NotBlank
-	@Pattern(regexp = "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", message = "wrong.hour")
+	@Pattern(regexp = "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")
 	public String getOpeningHour() {
 		return openingHour;
 	}
@@ -105,7 +107,7 @@ public class Room extends DomainEntity {
 	}
 
 	@NotBlank
-	@Pattern(regexp = "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", message = "wrong.hour")
+	@Pattern(regexp = "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")
 	public String getClosingHour() {
 		return closingHour;
 	}
@@ -114,22 +116,14 @@ public class Room extends DomainEntity {
 		this.closingHour = closingHour;
 	}
 
-	@Pattern(regexp = "\\b(IN-REVISION|APPROVED|REJECTED)\\b")
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
 	@NotBlank
-	public String getAttachments() {
-		return attachments;
+	@URL
+	public String getProveOfOwnership() {
+		return proveOfOwnership;
 	}
 
-	public void setAttachments(String attachments) {
-		this.attachments = attachments;
+	public void setProveOfOwnership(String proveOfOwnership) {
+		this.proveOfOwnership = proveOfOwnership;
 	}
 
 	@NotNull
@@ -170,6 +164,16 @@ public class Room extends DomainEntity {
 
 	public void setOwner(Owner owner) {
 		this.owner = owner;
+	}
+	
+	@Valid
+	@ManyToOne(optional = true)
+	public Administrator getAdministrator() {
+		return administrator;
+	}
+
+	public void setAdministrator(Administrator administrator) {
+		this.administrator = administrator;
 	}
 
 }

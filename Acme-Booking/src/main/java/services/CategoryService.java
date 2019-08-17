@@ -64,7 +64,10 @@ public class CategoryService {
 	}
 	
 	public Category findOne(final int categoryId) {
-		return this.categoryRepository.findOne(categoryId);
+		Category result = this.categoryRepository.findOne(categoryId);
+		Assert.notNull(result, "wrong.id");
+		
+		return result;
 	}
 
 	public Collection<Category> findAll() {
@@ -82,26 +85,26 @@ public class CategoryService {
 				this.utilityService.checkAuthority(principal, "ADMIN"),
 				"not.allowed");
 		
-		Assert.notNull(category.getChildCategories());
-		Assert.notNull(category.getRooms());
-		Assert.notNull(category.getTitle());
+		Assert.notNull(category.getChildCategories(), "not.allowed");
+		Assert.notNull(category.getRooms(), "not.allowed");
+		Assert.notNull(category.getTitle(), "not.allowed");
 		
 		systemConf = systemConfigurationService.findMySystemConfiguration();
 		Set<String> idiomasSystemConf = new HashSet<String>(systemConf
 				.getWelcomeMessage().keySet());
 		idiomasCategory = category.getTitle().keySet();
-		Assert.isTrue(idiomasSystemConf.equals(idiomasCategory));
+		Assert.isTrue(idiomasSystemConf.equals(idiomasCategory), "not.allowed");
 		
-		if(category.getTitle().containsValue("CONFERENCE")) {
+		if(category.getTitle().containsValue("CATEGORY")) {
 			aux = this.findOne(category.getId());
 			category.setParentCategory(aux.getParentCategory());
 			category.setTitle(aux.getTitle());
 		} else {
-			Assert.notNull(category.getParentCategory());
+			Assert.notNull(category.getParentCategory(), "not.allowed");
 		}
 		
 		result = this.categoryRepository.save(category);
-		Assert.notNull(result);
+		Assert.notNull(result, "not.allowed");
 		
 		if(category.getId() == 0) {
 			this.addNewChild(result);
@@ -118,8 +121,8 @@ public class CategoryService {
 				this.utilityService.checkAuthority(principal, "ADMIN"),
 				"not.allowed");
 		
-		Assert.notNull(category);
-		Assert.isTrue(category.getId() != 0);
+		Assert.notNull(category, "not.allowed");
+		Assert.isTrue(category.getId() != 0, "not.allowed");
 		
 		this.deleteFromParent(category);
 		
@@ -252,7 +255,7 @@ public class CategoryService {
 	public Collection<Category> findAllAsAdmin() {
 		Actor principal = this.utilityService.findByPrincipal();
 		Assert.isTrue(this.utilityService.checkAuthority(principal,
-				"ADMIN"));
+				"ADMIN"), "not.allowed");
 
 		return this.categoryRepository.findAll();
 	}

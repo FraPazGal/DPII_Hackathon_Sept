@@ -38,11 +38,14 @@ public class ServiceController extends AbstractController {
 		boolean isPrincipal = false;
 
 		try {
-			Actor principal = this.utilityService.findByPrincipal();
-			if (this.serviceService.findOne(serviceId).getRoom().getOwner().equals(principal)) {
-				service = this.serviceService.findOne(serviceId);
-				isPrincipal = true;
-			}
+			try {
+				Actor principal = this.utilityService.findByPrincipal();
+				if (this.serviceService.findOne(serviceId).getRoom().getOwner().equals(principal)) {
+					service = this.serviceService.findOne(serviceId);
+					isPrincipal = true;
+				}
+			} catch (final Throwable oops) {}
+			
 			service = this.serviceService.findOne(serviceId);
 				
 			result.addObject("service", service);
@@ -50,7 +53,7 @@ public class ServiceController extends AbstractController {
 			result.addObject("requestURI", "service/display.do?serviceId=" + serviceId);
 			
 		} catch (final Throwable oops) {
-			result = new ModelAndView("redirect:/");
+			result = new ModelAndView("redirect:/welcome/index.do");
 		}
 		return result;
 	}
@@ -58,11 +61,11 @@ public class ServiceController extends AbstractController {
 	/* Create */
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create(@RequestParam final int roomId) {
-		ModelAndView result = new ModelAndView("redirect:/");
+		ModelAndView result = new ModelAndView("redirect:/welcome/index.do");
 		try {
 			Service service = this.serviceService.create();
 			Room room = this.roomService.findOne(roomId);
-			this.roomService.assertOwnershipAndDraft(room);
+			this.roomService.assertOwnershipAndStatus(room, "DRAFT");
 			
 			service.setRoom(room);
 			result = this.createEditModelAndView(service);

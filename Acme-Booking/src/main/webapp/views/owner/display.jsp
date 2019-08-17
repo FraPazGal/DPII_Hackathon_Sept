@@ -22,7 +22,12 @@
 				<strong><spring:message code="actor.name" />: </strong>
 				<jstl:out value="${owner.name}" />
 			</div>
-
+			<br />
+			
+			<div>
+				<strong><spring:message code="actor.middleName" />: </strong>
+				<jstl:out value="${owner.middleName}" />
+			</div>
 			<br />
 
 			<div>

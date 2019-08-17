@@ -23,20 +23,27 @@
 <div>
 	<ul id="jMenu">
 		<!-- Do not forget the "fNiv" class for the first level links !! -->
-
-		
 		<security:authorize access="permitAll">
 			<li><a class="fNiv"><spring:message
 							code="master.page.room" /></a>
 					<ul>
 						<li class="arrow"></li>
+						<security:authorize access="!hasAnyRole('OWNER','ADMIN')">
 							<li><a href="room/list.do"><spring:message
 										code="master.page.room.list" /></a></li>
-										
-						<security:authorize access="hasRole('OWNER')">
-							<li><a href="room/create.do"><spring:message
-										code="master.page.room.new" /></a></li>
 						</security:authorize>
+						
+						<security:authorize access="hasRole('OWNER')">
+							<li><a href="room/list.do"><spring:message code="room.list" /></a></li>
+							<li><a href="room/list.do?range=mineA"><spring:message code="room.owner.list.owner" /></a></li>
+							<li><a href="room/create.do"><spring:message code="master.page.room.new" /></a></li>
+						</security:authorize>
+						
+						<security:authorize access="hasRole('ADMIN')">
+							<li><a href="room/list.do"><spring:message code="room.list" /></a></li>
+							<li><a href="room/list.do?range=toReview"><spring:message code="room.owner.list.owner" /></a></li>
+						</security:authorize>
+						
 					</ul></li>
 					
 		</security:authorize>

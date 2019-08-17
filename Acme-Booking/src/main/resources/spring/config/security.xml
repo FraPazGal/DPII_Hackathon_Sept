@@ -70,8 +70,12 @@
 			access="hasRole('OWNER')" />
 		<security:intercept-url pattern="/room/edit.do"
 			access="hasRole('OWNER')" />
-		<security:intercept-url pattern="/room/action.do"
+		<security:intercept-url pattern="/room/editA.do"
 			access="hasRole('OWNER')" />
+		<security:intercept-url pattern="/room/delete.do"
+			access="hasRole('OWNER')" />
+		<security:intercept-url pattern="/room/action.do"
+			access="hasAnyRole('OWNER','ADMIN')" />
 			
 		<security:intercept-url pattern="/service/display.do"
 			access="permitAll" />

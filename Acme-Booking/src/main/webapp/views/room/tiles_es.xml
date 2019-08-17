@@ -25,4 +25,9 @@
 		<put-attribute name="body" value="/views/room/edit.jsp" />
 	</definition>
 	
+	<definition name="room/editA" extends="master.page">
+		<put-attribute name="title" value="Editar sala" />
+		<put-attribute name="body" value="/views/room/editA.jsp" />
+	</definition>
+	
 </tiles-definitions>

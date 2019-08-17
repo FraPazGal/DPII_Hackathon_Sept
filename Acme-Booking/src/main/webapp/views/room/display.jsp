@@ -68,8 +68,8 @@
 		<br />
 		
 		<div>
-			<strong><spring:message code="room.attachments" />: </strong>
-			<jstl:out value="${room.attachments}" />
+			<strong><spring:message code="room.proveOfOwnership" />: </strong>
+			<a href="<jstl:out value="${room.proveOfOwnership}" />"><jstl:out value="${room.proveOfOwnership}" /></a>
 		</div>
 		<br />
 		
@@ -98,26 +98,32 @@
 		
 		<jstl:if test="${isPrincipal }">
 		
-			<jstl:if test="${room.visibility == 'DRAFT'}">
+			<jstl:if test="${room.status == 'DRAFT'}">
 				<spring:message var="status" code='room.status.draft' />
 			</jstl:if>
-			<jstl:if test="${room.visibility == 'ACTIVE'}">
+			<jstl:if test="${room.status == 'REVISION-PENDING'}">
+				<spring:message var="status" code='room.status.inrevision' />
+			</jstl:if>
+			<jstl:if test="${room.status == 'ACTIVE'}">
 				<spring:message var="status" code='room.status.active' />
 			</jstl:if>
-			<jstl:if test="${room.visibility == 'OUTOFSERVICE'}">
+			<jstl:if test="${room.status == 'OUT-OF-SERVICE'}">
 				<spring:message var="status" code='room.status.outofservice' />
+			</jstl:if>
+			<jstl:if test="${room.status == 'REJECTED'}">
+				<spring:message var="status" code='room.status.rejected' />
 			</jstl:if>
 		
 			<div>
 				<br>
-				<strong><spring:message code="room.visibility" />: </strong>
+				<strong><spring:message code="room.status" />: </strong>
 				<jstl:out value="${status}" />
 			</div>
 			<br />
 		</jstl:if>
 		</div>
 	</fieldset>
-
+	<br>
 	<jstl:if test="${not empty services}">
 		<h2>
 			<strong><spring:message code="room.services" /></strong>
@@ -143,15 +149,13 @@
 		</display:table>
 	</jstl:if>
 			
-	<security:authorize access="isAuthenticated()">
+	<jstl:if test="${room.status == 'DRAFT'}">
+		
+		<input type="button"
+			onclick="redirect: location.href = 'service/create.do?roomId=${room.id}';"
+			value="<spring:message code='service.create' />" /><br>
 		<br>
-		<jstl:if test="${room.visibility == 'DRAFT'}">
-			<input type="button"
-				onclick="redirect: location.href = 'service/create.do?roomId=${room.id}';"
-				value="<spring:message code='service.create' />" /><br>
-		<br>
-		</jstl:if>
-	</security:authorize>
+	</jstl:if>
 	
 	<input type="button" name="back"
 		value="<spring:message code="mp.back" />"

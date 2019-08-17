@@ -80,40 +80,43 @@ public class UtilityService {
 	
 	public String generateTicker(Owner owner) {
 		String uniqueTicker = null;
-		String middleName = null;
-		String address = null, alphaNum;
+		String mName, add, alphaNum, address;
 		boolean unique = false;
 		
 		if(owner.getMiddleName() != null) {
-			if(owner.getMiddleName().length() >= 4) {
-				middleName = owner.getMiddleName().substring(0, 4);
+			String middleName = owner.getMiddleName().replaceAll("[0-9]|,|/| ", "");
+			middleName = middleName.toUpperCase();
+			if(middleName.length() >= 4) {
+				mName = owner.getMiddleName().substring(0, 4);
 			} else {
-				middleName = owner.getMiddleName().substring(0, owner.getMiddleName().length());
+				mName = owner.getMiddleName().substring(0, owner.getMiddleName().length());
 			}
-			if(middleName.length() < 4) {
+			if(mName.length() < 4) {
 				for(int length = 4 - middleName.length(); length != 0 ;length--) {
-					middleName = middleName.concat("M");
+					mName = mName.concat("M");
 				}
 			}
 		} else {
-			middleName = "MMM";
+			mName = "MMM";
 		}
 		
-		if(owner.getAddress().length() >= 4) {
-			address = owner.getAddress().substring(0, 4);
+		address = owner.getAddress().replaceAll("[0-9]|,|/| ", "");
+		address = address.toUpperCase();
+		
+		if(address.length() >= 4) {
+			add = address.substring(0, 4);
 		} else {
-			address = owner.getAddress().substring(0, owner.getAddress().length());
+			add = address.substring(0, owner.getAddress().length());
 		}
-		if(address.length() < 4) {
-			for(int length = 4 - address.length(); length != 0 ;length--) {
-				address = address.concat("A");
+		if(add.length() < 4) {
+			for(int length = 4 - add.length(); length != 0 ;length--) {
+				add = address.concat("A");
 			}
 		}
 		
-		
 		while (unique == false) {
 			alphaNum = this.randomStringTicker();
-			uniqueTicker = middleName + address + "-" + alphaNum;
+			uniqueTicker = mName + add + "-" + alphaNum;
 			unique = this.checkForUniqueTicket(uniqueTicker);
 		}
 		return uniqueTicker;

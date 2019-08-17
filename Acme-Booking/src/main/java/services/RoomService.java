@@ -11,8 +11,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
 import repositories.RoomRepository;
+import domain.Administrator;
 import domain.Owner;
 import domain.Room;
+import forms.ActiveRoomForm;
 
 @Transactional
 @Service
@@ -25,6 +27,9 @@ public class RoomService {
 
 	// Supporting services -----------------------------------
 
+	@Autowired
+	private ServiceService serviceService;
+	
 	@Autowired
 	private UtilityService utilityService;
 
@@ -42,14 +47,14 @@ public class RoomService {
 		result = new Room();
 		result.setTicker(this.utilityService.generateTicker(principal));
 		result.setOwner(principal);
-		result.setStatus("IN-REVISION");
+		result.setStatus("DRAFT");
 		
 		return result;
 	}
 	
 	public Room findOne(final int roomId) {
 		Room result = this.roomRepository.findOne(roomId);
-		Assert.notNull(result, "wrong.id");
+		Assert.notNull(result, "wrong.room.id");
 		return result;
 	}
 
@@ -59,24 +64,7 @@ public class RoomService {
 	
 	public Room save (Room room) {
 		Assert.notNull(room, "not.allowed");
-		Owner principal = (Owner) this.utilityService.findByPrincipal();
-		Assert.isTrue(room.getOwner().equals(principal), "not.allowed");
-		
-		if(room.getId() != 0) {
-			Room aux = this.findOne(room.getId());
-			Assert.isTrue(!(room.getVisibility() == "OUTOFSERVICE"), "not.allowed");
-			
-			if(!(room.getVisibility() == "DRAFT")){
-				Assert.isTrue(room.getTitle().equals(aux.getTitle()), "not.allowed");
-				Assert.isTrue(room.getAddress().equals(aux.getAddress()), "not.allowed");
-				Assert.isTrue(room.getPhotos().equals(aux.getPhotos()), "not.allowed");
-				Assert.isTrue(room.getDescription().equals(aux.getDescription()), "not.allowed");
-				Assert.isTrue(room.getPricePerHour().equals(aux.getPricePerHour()), "not.allowed");
-				Assert.isTrue(room.getCategory().equals(aux.getCategory()), "not.allowed");
-				Assert.isTrue(room.getCapacity().equals(aux.getCapacity()), "not.allowed");
-				Assert.isTrue(room.getAttachments().equals(aux.getAttachments()), "not.allowed");
-			}
-		}
+		this.assertOwnershipAndEditable(room);
 		
 		Room result = this.roomRepository.save(room);
 		Assert.notNull(result, "commit.error");
@@ -95,43 +83,33 @@ public class RoomService {
 	
 	// Other business methods -------------------------------
 	
-	public Room reconstruct(final Room room, BindingResult binding) {
+	public Room reconstructDraft(final Room room, BindingResult binding) {
 		Assert.notNull(room, "not.allowed");
-		Owner principal = (Owner) this.utilityService.findByPrincipal();
 
 		Room result = this.create();
 
 		if (room.getId() != 0) {
 			Room aux = this.findOne(room.getId());
-			Assert.isTrue(room.getOwner().equals(principal), "not.allowed");
 			
-			Assert.isTrue(!(room.getVisibility() == "OUTOFSERVICE"), "not.allowed");
+			this.assertOwnershipAndStatus(aux, "DRAFT");
 			
-			if((aux.getVisibility() == "DRAFT")) {
-				result.setAddress(room.getAddress());
-				result.setAttachments(room.getAttachments());
-				result.setCapacity(room.getCapacity());
-				result.setCategory(room.getCategory());
-				result.setDescription(room.getDescription());
-				result.setPhotos(room.getPhotos());
-				result.setPricePerHour(room.getPricePerHour());
-				result.setTitle(room.getTitle());
-			} else {
-				result.setAddress(aux.getAddress());
-				result.setAttachments(aux.getAttachments());
-				result.setCapacity(aux.getCapacity());
-				result.setCategory(aux.getCategory());
-				result.setDescription(aux.getDescription());
-				result.setPhotos(aux.getPhotos());
-				result.setPricePerHour(aux.getPricePerHour());
-				result.setTitle(aux.getTitle());
-			}
+			result.setAddress(room.getAddress());
+			result.setProveOfOwnership(room.getProveOfOwnership());
+			result.setCapacity(room.getCapacity());
+			result.setCategory(room.getCategory());
+			result.setDescription(room.getDescription());
+			result.setPhotos(room.getPhotos());
+			result.setPricePerHour(room.getPricePerHour());
+			result.setTitle(room.getTitle());
+
 			result.setId(aux.getId());
 			result.setVersion(aux.getVersion());
+			result.setTicker(aux.getTicker());
+			result.setStatus(aux.getStatus());
 
 		} else {
 			result.setAddress(room.getAddress());
-			result.setAttachments(room.getAttachments());
+			result.setProveOfOwnership(room.getProveOfOwnership());
 			result.setCapacity(room.getCapacity());
 			result.setCategory(room.getCategory());
 			result.setDescription(room.getDescription());
@@ -149,30 +127,46 @@ public class RoomService {
 		return result;
 	}
 	
+	public Room reconstructActive(final ActiveRoomForm form, BindingResult binding) {
+		Assert.isTrue(form.getId() != 0 , "not.allowed");
+
+		Room result = this.create();
+		Room aux = this.findOne(form.getId());
+		
+		this.assertOwnershipAndStatus(aux, "ACTIVE");
+		
+		result.setId(aux.getId());
+		result.setVersion(aux.getVersion());
+		result.setAddress(aux.getAddress());
+		result.setProveOfOwnership(aux.getProveOfOwnership());
+		result.setCapacity(aux.getCapacity());
+		result.setCategory(aux.getCategory());
+		result.setDescription(aux.getDescription());
+		result.setPhotos(aux.getPhotos());
+		result.setPricePerHour(aux.getPricePerHour());
+		result.setTitle(aux.getTitle());
+		result.setAdministrator(aux.getAdministrator());
+		result.setTicker(aux.getTicker());
+		result.setStatus(aux.getStatus());
+		
+		result.setScheduleDetails(form.getScheduleDetails());
+		result.setOpeningHour(form.getOpeningHour());
+		result.setClosingHour(form.getClosingHour());
+
+		this.validator.validate(result, binding);
+
+		return result;
+	}
+	
 	public boolean uniqueTicket(String ticker) {
 		return this.roomRepository.uniqueTicket(ticker);
 	}
 	
-	public void assertOwnershipAndEditable (Room room) {
-		Assert.notNull(room, "wrong.id");
-		Owner principal = (Owner) this.utilityService.findByPrincipal();
-		
-		Assert.isTrue(room.getOwner().equals(principal), "not.allowed");
-		Assert.isTrue(!(room.getVisibility() == "OUTOFSERVICE"), "not.allowed");
-	}
-	
-	public void assertOwnershipAndDraft (Room room) {
-		Assert.notNull(room, "wrong.id");
-		Owner principal = (Owner) this.utilityService.findByPrincipal();
-		
-		Assert.isTrue(room.getOwner().equals(principal), "not.allowed");
-		Assert.isTrue(!(room.getVisibility() == "DRAFT"), "not.allowed");
-	}
-	
 	public Room findOneToDisplay (int roomId) {
 		Room result = this.findOne(roomId);
-		Assert.isTrue(!(result.getVisibility() == "OUTOFSERVICE"), "not.allowed");
-		Assert.isTrue(!(result.getVisibility() == "DRAFT"), "wrong.id");
+		Assert.notNull(result, "wrong.room.id");
+		
+		Assert.isTrue(result.getStatus().contains("ACTIVE"), "wrong.status");
 		
 		return result;
 	}
@@ -185,22 +179,103 @@ public class RoomService {
 		return this.roomRepository.findRoomsDraftAndMine(ownerId);
 	}
 	
-	public Collection<Room> findRoomsActiveAndMine (int ownerId) {
-		return this.roomRepository.findRoomsActiveAndMine(ownerId);
+	public Collection<Room> findRoomsRevisionPendingAndMine (int actorId) {
+		return this.roomRepository.findRoomsRevisionPendingAndMine(actorId);
+	}
+	
+	public Collection<Room> findRoomsActiveAndMine (int actorId) {
+		return this.roomRepository.findRoomsActiveAndMine(actorId);
+	}
+	
+	public Collection<Room> findRoomsRejectedAndMine (int actorId) {
+		return this.roomRepository.findRoomsRejectedAndMine(actorId);
 	}
 	
 	public Collection<Room> findRoomsOutOfServiceAndMine (int ownerId) {
 		return this.roomRepository.findRoomsOutOfServiceAndMine(ownerId);
 	}
 	
+	public Collection<Room> findRoomsToAssign () {
+		return this.roomRepository.findRoomsToAssign();
+	}
+	
+	public Room saveAsFinal (Room room) {
+		Assert.notNull(room, "not.allowed");
+		this.assertOwnershipAndStatus(room, "REVISION-PENDING");
+		
+		Room result = this.roomRepository.save(room);
+		Assert.notNull(result, "commit.error");
+		
+		return result;
+	}
+	
+	public void acceptRoom(Room room) {
+		
+		this.assertAdminAndEditable(room);
+		this.changeStatus(room, "ACTIVE");
+	}
+	
+	public void rejectRoom(Room room) {
+		
+		this.assertAdminAndEditable(room);
+		this.changeStatus(room, "REJECTED");
+	}
+	
 	public void decommision(Room room) {
-		Assert.isTrue(!(room.getVisibility() == "OUTOFSERVICE"), "already.decomissioned");
-		this.roomRepository.save(room);
+		
+		this.assertOwnershipAndStatus(room, "ACTIVE");
+		this.changeStatus(room, "OUT-OF-SERVICE");
 	}
 	
 	public void deleteAsDraft(Room room) {
-		Assert.isTrue((room.getVisibility() == "DRAFT"), "not.allowed");
+		
+		this.assertOwnershipAndStatus(room, "DRAFT");
+		this.serviceService.deleteServicesOfRoom(room.getId());
 		this.delete(room);
 	}
 	
+	public void assignRoom(Room room) {
+		Assert.notNull(room, "wrong.room.id");
+		
+		Assert.isTrue(room.getStatus().contains("REVISION-PENDING"), "wrong.status");
+		Assert.isTrue((room.getAdministrator() == null), "already.assigned");
+		
+		Administrator principal = (Administrator) this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "ADMIN"),"not.allowed");
+		
+		room.setAdministrator(principal);
+		this.roomRepository.save(room);
+	}
+	
+	public void assertOwnershipAndEditable (Room room) {
+		Assert.notNull(room, "wrong.room.id");
+		Owner principal = (Owner) this.utilityService.findByPrincipal();
+		
+		Assert.isTrue(room.getOwner().equals(principal), "not.allowed");
+		Assert.isTrue(room.getStatus().contains("DRAFT") || room.getStatus().contains("ACTIVE"), "wrong.status");
+	}
+	
+	public void assertOwnershipAndStatus (Room room, String status) {
+		Assert.notNull(room, "wrong.room.id");
+		Owner principal = (Owner) this.utilityService.findByPrincipal();
+		
+		Assert.isTrue(room.getOwner().equals(principal), "not.allowed");
+		Assert.isTrue(room.getStatus().contains(status), "wrong.status");
+	}
+	
+	public void assertAdminAndEditable (Room room) {
+		Assert.notNull(room, "wrong.room.id");
+		Administrator principal = (Administrator) this.utilityService.findByPrincipal();
+		
+		Assert.isTrue(room.getAdministrator().equals(principal), "not.allowed");
+		Assert.isTrue(room.getStatus().contains("REVISION-PENDING"), "wrong.status");
+	}
+	
+	private void changeStatus(Room room, String newStatus) {
+		Assert.isTrue((newStatus == "DRAFT" || newStatus == "REVISION-PENDING" || newStatus == "ACTIVE" ||
+				newStatus == "REJECTED" || newStatus == "OUT-OF-SERVICE"), "invalid.status");
+		
+		room.setStatus(newStatus);
+		this.roomRepository.save(room);
+	}
 }

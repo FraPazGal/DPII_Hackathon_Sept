@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import services.ServiceService;
 import services.UtilityService;
 import domain.Actor;
 import domain.Room;
+import forms.ActiveRoomForm;
 
 @Controller
 @RequestMapping("/room")
@@ -40,15 +42,15 @@ public class RoomController extends AbstractController {
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
 	public ModelAndView display(@RequestParam final int roomId) {
 		ModelAndView result = new ModelAndView("room/display");
-		Room room = null;
+		Room room = this.roomService.findOne(roomId);
 		boolean isPrincipal = false;
-
 		try {
 			try {
 				Actor principal = this.utilityService.findByPrincipal();
-				if (this.roomService.findOne(roomId).getOwner().equals(principal)) {
-					room = this.roomService.findOne(roomId);
+				if (room.getOwner().equals(principal)) {
 					isPrincipal = true;
+				} else if (room.getAdministrator() == null && room.getStatus().equals("REVISION-PENDING") ||
+						room.getAdministrator().equals(principal)) {
 				} else {
 					room = this.roomService.findOneToDisplay(roomId);
 				}
@@ -61,46 +63,78 @@ public class RoomController extends AbstractController {
 			result.addObject("services", this.serviceService.findServicesByRoomId(room.getId()));
 			
 		} catch (final Throwable oops) {
-			result = new ModelAndView("redirect:/");
+			result = new ModelAndView("redirect:/welcome/index.do");
 		}
 		return result;
 	}
 
 	/* Listing */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list(
-			@RequestParam(required = false) final String range,
-			@RequestParam(required = false) final Integer ownerId) {
+	public ModelAndView list(@RequestParam(required = false) final String range) {
 		ModelAndView result = new ModelAndView("room/list");
-		Collection<Room> rooms = null;
-		Actor principal = null;
-		boolean isPrincipal = false;
+		Collection<Room> rooms = new ArrayList<>();
+		String isPrincipal = null;
 		boolean listConf = false;
-
 		try {
 			try {
-				principal = this.utilityService.findByPrincipal();
-				if(this.utilityService.checkAuthority(principal, "OWNER"))
-					listConf = true;
-			} catch (final Throwable oops) {}
-			if(range == null && ownerId == null) {
-				rooms = this.roomService.findRoomsForBooking();
-			} else if (range != null){
-				Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER"), "not.allowed");
-				isPrincipal = true;
+				Actor principal = this.utilityService.findByPrincipal();
+				Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER") ||
+						this.utilityService.checkAuthority(principal, "ADMIN"), "not.allowed");
 				
-				switch (range) {
-				case "mineD":
-					rooms = this.roomService.findRoomsDraftAndMine(principal.getId());
-					break;
+				listConf = true;
+			} catch (final Throwable oops){}
+			
+			if(range == null) {
+				rooms = this.roomService.findRoomsForBooking();
 
-				case "mineA":
-					rooms = this.roomService.findRoomsActiveAndMine(principal.getId());
-					break;
+			} else {
+				Actor principal = this.utilityService.findByPrincipal();
+				Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER") ||
+						this.utilityService.checkAuthority(principal, "ADMIN"), "not.allowed");
+				
+				if(this.utilityService.checkAuthority(principal, "OWNER")) {
+					isPrincipal = "OWNER";
 					
-				case "mineO":
-					rooms = this.roomService.findRoomsOutOfServiceAndMine(principal.getId());
-					break;
+					switch (range) {
+					case "mineD":
+						rooms = this.roomService.findRoomsDraftAndMine(principal.getId());
+						break;
+
+					case "mineA":
+						rooms = this.roomService.findRoomsActiveAndMine(principal.getId());
+						break;
+						
+					case "mineO":
+						rooms = this.roomService.findRoomsOutOfServiceAndMine(principal.getId());
+						break;
+						
+					case "mineI":
+						rooms = this.roomService.findRoomsRevisionPendingAndMine(principal.getId());
+						break;
+						
+					case "mineR":
+						rooms = this.roomService.findRoomsRejectedAndMine(principal.getId());
+						break;
+					}
+				} else {
+					isPrincipal = "ADMIN";
+					switch (range) {
+					case "toAssign":
+						rooms = this.roomService.findRoomsToAssign();
+						break;
+						
+					case "toReview":
+						rooms = this.roomService.findRoomsRevisionPendingAndMine(principal.getId());
+						break;
+						
+					case "accepted":
+						rooms = this.roomService.findRoomsActiveAndMine(principal.getId());
+						break;
+						
+					case "rejected":
+						rooms = this.roomService.findRoomsRejectedAndMine(principal.getId());
+						break;
+					}
 				}
 			} 
 			result.addObject("rooms", rooms);
@@ -120,7 +154,7 @@ public class RoomController extends AbstractController {
 		try {
 			final Room room = this.roomService.create();
 
-			result = this.createEditModelAndView(room);
+			result = this.createEditDraftModelAndView(room);
 
 		} catch (final Throwable oops) {
 			result.addObject("errMsg", oops.getMessage());
@@ -130,13 +164,13 @@ public class RoomController extends AbstractController {
 
 	/* Edit */
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int roomId) {
+	public ModelAndView editDraft(@RequestParam final int roomId) {
 		ModelAndView result = new ModelAndView("room/list");
 		try {
 			Room room = this.roomService.findOne(roomId);
 			
 			this.roomService.assertOwnershipAndEditable(room);
-			result = this.createEditModelAndView(room);
+			result = this.createEditDraftModelAndView(room);
 
 		} catch (final Throwable oops) {
 			result.addObject("errMsg", oops.getMessage());
@@ -146,81 +180,129 @@ public class RoomController extends AbstractController {
 
 	/* Save */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(Room room, BindingResult binding) {
+	public ModelAndView saveDraft(Room room, BindingResult binding) {
 		ModelAndView result = new ModelAndView("room/edit");
 
 		try {
-			Room toSave = this.roomService.reconstruct(room, binding);
+			Room toSave = this.roomService.reconstructDraft(room, binding);
 			if (binding.hasErrors()) {
 
 				result.addObject("room", room);
+				result.addObject("catId", room.getCategory().getId());
 			} else
 				try {
 					this.roomService.save(toSave);
 					result = new ModelAndView("redirect:list.do?range=mineD");
 
 				} catch (final Throwable oops) {
-					result.addObject("Room", toSave);
+					result.addObject("room", toSave);
 					result.addObject("errMsg", oops.getMessage());
 				}
+			result.addObject("categories", this.categoryService.findAll());
 		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(room, oops.getMessage());
+			result = this.createEditDraftModelAndView(room, oops.getMessage());
 		}
 		return result;
 	}
 	
 	/* Save as Final */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "saveFinal")
-	public ModelAndView saveFinal(Room room, BindingResult binding) {
+	public ModelAndView saveDraftFinal(Room room, BindingResult binding) {
 		ModelAndView result = new ModelAndView("room/edit");
 		try {
-			Room toSave = this.roomService.reconstruct(room, binding);
+			Room toSave = this.roomService.reconstructDraft(room, binding);
 			if (binding.hasErrors()) {
 
 				result.addObject("room", room);
 			} else
 				try {
-					toSave.setVisibility("ACTIVE");
-					this.roomService.save(toSave);
-					result = new ModelAndView("redirect:list.do?range=mineA");
+					toSave.setStatus("REVISION-PENDING");
+					this.roomService.saveAsFinal(toSave);
+					result = new ModelAndView("redirect:list.do?range=mineI");
 
 				} catch (final Throwable oops) {
 					result.addObject("room", toSave);
 					result.addObject("errMsg", oops.getMessage());
 				}
 		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(room, oops.getMessage());
+			result = this.createEditDraftModelAndView(room, oops.getMessage());
 		}
 		return result;
 	}
 	
-	/* Decommission a room */
-	@RequestMapping(value = "/action", method = RequestMethod.GET)
-	public ModelAndView actionsEnrolments(@RequestParam final String action, @RequestParam final int roomId) {
-		ModelAndView result = new ModelAndView("redirect:/room/list.do?range=mineO");
+	/* Edit active room*/
+	@RequestMapping(value = "/editA", method = RequestMethod.GET)
+	public ModelAndView editActive(@RequestParam final int roomId) {
+		ModelAndView result = new ModelAndView("room/list");
 		try {
 			Room room = this.roomService.findOne(roomId);
+			ActiveRoomForm activeRoomForm = new ActiveRoomForm(room);
+			
 			this.roomService.assertOwnershipAndEditable(room);
+			result = this.createEditActiveModelAndView(activeRoomForm);
 
-			if (action.equals("decommission")) {
-				
-				this.roomService.decommision(room);
-			} 
 		} catch (final Throwable oops) {
 			result.addObject("errMsg", oops.getMessage());
 		}
 		return result;
 	}
 
+	/* Save active room*/
+	@RequestMapping(value = "/editA", method = RequestMethod.POST, params = "save")
+	public ModelAndView saveActive(ActiveRoomForm activeRoomForm, BindingResult binding) {
+		ModelAndView result = new ModelAndView("room/editA");
+
+		try {
+			Room toSave = this.roomService.reconstructActive(activeRoomForm, binding);
+			if (binding.hasErrors()) {
+
+				result.addObject("activeRoomForm", activeRoomForm);
+			} else
+				try {
+					this.roomService.save(toSave);
+					result = new ModelAndView("redirect:list.do?range=mineA");
+
+				} catch (final Throwable oops) {
+					result.addObject("activeRoomForm", toSave);
+					result.addObject("errMsg", oops.getMessage());
+				}
+		} catch (final Throwable oops) {
+			result = this.createEditActiveModelAndView(activeRoomForm, oops.getMessage());
+		}
+		return result;
+	}
+	
+	/* Change status of a room by owner (decomission) or admin (accept/reject)*/
+	@RequestMapping(value = "/action", method = RequestMethod.GET)
+	public ModelAndView actionsRoom(@RequestParam final String action, @RequestParam final int roomId) {
+		ModelAndView result = new ModelAndView("redirect:/room/list.do?range=toReview");
+		try {
+			Room room = this.roomService.findOne(roomId);
+
+			if (action.equals("decommission")) {
+				this.roomService.decommision(room);
+				result = new ModelAndView("redirect:/room/list.do?range=mineO");
+			} else if (action.equals("assign")) {
+				this.roomService.assignRoom(room);
+			} else if (action.equals("accept")) {
+				this.roomService.acceptRoom(room);
+				result = new ModelAndView("redirect:/room/list.do?range=accepted");
+			} else if (action.equals("reject")) {
+				this.roomService.rejectRoom(room);
+				result = new ModelAndView("redirect:/room/list.do?range=rejected");
+			}
+		} catch (final Throwable oops) {
+			result.addObject("errMsg", oops.getMessage());
+		}
+		return result;
+	}
+	
 	/* Delete */
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@RequestParam final int roomId) {
-		ModelAndView result = new ModelAndView("redirect:/room/list.do?range=mineA");
+		ModelAndView result = new ModelAndView("redirect:/room/list.do?range=mineO");
 		try {
-			Room room = this.roomService.findOne(roomId);
-			this.roomService.assertOwnershipAndEditable(room);
-			
-			this.roomService.deleteAsDraft(room);
+			this.roomService.deleteAsDraft(this.roomService.findOne(roomId));
 
 		} catch (final Throwable oops) {
 			result.addObject("errMsg", oops.getMessage());
@@ -229,15 +311,28 @@ public class RoomController extends AbstractController {
 	}
 
 	/* Ancillary methods */
-	protected ModelAndView createEditModelAndView(final Room room) {
-		return this.createEditModelAndView(room, null);
+	protected ModelAndView createEditDraftModelAndView(final Room room) {
+		return this.createEditDraftModelAndView(room, null);
 	}
 
-	protected ModelAndView createEditModelAndView(final Room room, final String messageCode) {
+	protected ModelAndView createEditDraftModelAndView(final Room room, final String messageCode) {
 		ModelAndView result = new ModelAndView("room/edit");
 		result.addObject("room", room);
 		result.addObject("errMsg", messageCode);
+		result.addObject("catId", room.getCategory().getId());
 		result.addObject("categories", this.categoryService.findAll());
+
+		return result;
+	}
+	
+	protected ModelAndView createEditActiveModelAndView(final ActiveRoomForm activeRoomForm) {
+		return this.createEditActiveModelAndView(activeRoomForm, null);
+	}
+
+	protected ModelAndView createEditActiveModelAndView(final ActiveRoomForm activeRoomForm, final String messageCode) {
+		ModelAndView result = new ModelAndView("room/editA");
+		result.addObject("activeRoomForm", activeRoomForm);
+		result.addObject("errMsg", messageCode);
 
 		return result;
 	}

@@ -21,6 +21,11 @@
 				<strong><spring:message code="actor.name" />: </strong>
 				<jstl:out value="${customer.name}" />
 			</div><br/>
+			
+			<div>
+				<strong><spring:message code="actor.middleName" />: </strong>
+				<jstl:out value="${customer.middleName}" />
+			</div><br />
 
 			<div>
 				<strong><spring:message code="actor.surname" />: </strong>

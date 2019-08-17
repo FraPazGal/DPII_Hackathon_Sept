@@ -96,10 +96,17 @@ public class ServiceService {
 		Owner principal = (Owner) this.utilityService.findByPrincipal();
 
 		Assert.isTrue(service.getRoom().getOwner().equals(principal),"not.allowed");
-		Assert.isTrue((service.getRoom().getVisibility().contains("DRAFT")),"not.allowed");
+		Assert.isTrue((service.getRoom().getStatus().contains("DRAFT")),"not.allowed");
 	}
 
 	public Collection<domain.Service> findServicesByRoomId (int roomId) {
 		return this.serviceRepository.findServicesByRoomId(roomId);
+	}
+	
+	public void deleteServicesOfRoom (Integer roomId) {
+		Collection<domain.Service> toDelete = this.serviceRepository.findServicesByRoomId(roomId);
+		for(domain.Service service : toDelete) {
+			this.delete(service);
+		}
 	}
 }
