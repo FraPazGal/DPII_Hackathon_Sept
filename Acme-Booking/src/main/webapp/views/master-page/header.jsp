@@ -89,12 +89,12 @@
 		</security:authorize>
 		
 		<security:authorize access="hasRole('ADMIN')">
+		
+			<li><a href="statistics/display.do"><spring:message code="master.page.administrator.statistics" /></a></li>
 			
-			<li><a href="statistics/display.do"><spring:message
-						code="master.page.administrator.statistics" /></a></li>
-						
-			<li><a href="config/admin/display.do"><spring:message
-									code="master.page.system" /></a></li>
+			<li><a href="config/admin/display.do"><spring:message code="master.page.system" /></a></li>
+			
+			<li><a href="config/admin/listSA.do"><spring:message code="master.page.list.suspicious" /></a></li>
 		</security:authorize>
 		
 		<security:authorize access="isAuthenticated()">
