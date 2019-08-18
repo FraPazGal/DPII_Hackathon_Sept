@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -175,13 +176,44 @@ public class CategoryService {
 		Collection<Room> rooms = parent.getRooms();
 		
 		rooms.addAll(roomsToTransfer);
+		rooms = this.removeDuplicatesRooms(rooms);
 		parent.setRooms(rooms);
 		
 		for(Room room : roomsToTransfer) {
-			room.setCategory(parent);
-			this.roomService.save(room);
+			Collection<Category> aux = room.getCategories();
+			aux.remove(category);
+			aux.add(parent);
+			aux = this.removeDuplicatesCats(aux);
+			room.setCategories(aux);
+			this.roomService.saveChangeCat(room);
 		}
 		this.save(parent);
+	}
+	
+	private Collection<Category> removeDuplicatesCats(Collection<Category> categories) {
+		List<Integer> ids = new ArrayList<>();
+		Collection<Category> result = new ArrayList<>();
+		
+		for(Category category : categories) {
+			if(!ids.contains(category.getId())) {
+				ids.add(category.getId());
+				result.add(category);
+			}
+		}
+		return result;
+	}
+
+	private Collection<Room> removeDuplicatesRooms(Collection<Room> rooms) {
+		List<Integer> ids = new ArrayList<>();
+		Collection<Room> result = new ArrayList<>();
+		
+		for(Room room : rooms) {
+			if(!ids.contains(room.getId())) {
+				ids.add(room.getId());
+				result.add(room);
+			}
+		}
+		return result;
 	}
 	
 	private void transferChildren(Category category) {
@@ -239,9 +271,14 @@ public class CategoryService {
 		this.categoryRepository.flush();
 	}
 	
-	public Category findOneByRoomId(int roomId) {
-		
-		return this.categoryRepository.findOneByRoomId(roomId);
+	public void deleteRoomFromCats(Room room) {
+		Collection<Category> categories = this.categoryRepository.findCatWithRoom(room.getId());
+		for(Category category : categories) {
+			Collection<Room> aux = category.getRooms();
+			aux.remove(room);
+			category.setRooms(aux);
+			this.categoryRepository.save(category);
+		}
 	}
 	
 	public void addNewRoom(Collection<Category> categories, Room room) {
@@ -249,6 +286,7 @@ public class CategoryService {
 			Collection<Room> collCon = cat.getRooms();
 			collCon.add(room);
 			cat.setRooms(collCon);
+			this.categoryRepository.save(cat);
 		}
 	}
 	

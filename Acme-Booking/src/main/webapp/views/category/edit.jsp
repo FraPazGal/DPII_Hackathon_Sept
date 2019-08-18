@@ -52,11 +52,11 @@
 						</jstl:forEach>
 					</form:select><br>
 				</jstl:otherwise>
-			</jstl:choose>
+			</jstl:choose><br>
 		</jstl:if>
-		<br>
+		
 		<acme:submit code="mp.save" name="save"/>&nbsp;
 
-		<acme:cancel code="mp.cancel" url="category/list.do"/><br/><br/>
+		<acme:cancel code="mp.cancel" url="category/list.do"/><br/>
 	</form:form>
 </security:authorize>

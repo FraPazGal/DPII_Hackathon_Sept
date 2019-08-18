@@ -1,5 +1,6 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.transaction.Transactional;
@@ -7,11 +8,13 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.ResourceUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
 import repositories.RoomRepository;
 import domain.Administrator;
+import domain.Category;
 import domain.Owner;
 import domain.Room;
 import forms.ActiveRoomForm;
@@ -31,6 +34,9 @@ public class RoomService {
 	private ServiceService serviceService;
 	
 	@Autowired
+	private CategoryService categoryService;
+	
+	@Autowired
 	private UtilityService utilityService;
 
 	@Autowired
@@ -46,6 +52,7 @@ public class RoomService {
 
 		result = new Room();
 		result.setTicker(this.utilityService.generateTicker(principal));
+		result.setCategories(new ArrayList<Category>());
 		result.setOwner(principal);
 		result.setStatus("DRAFT");
 		
@@ -68,6 +75,11 @@ public class RoomService {
 		
 		Room result = this.roomRepository.save(room);
 		Assert.notNull(result, "commit.error");
+		
+		if(room.getStatus().equals("DRAFT")) {
+			this.categoryService.deleteRoomFromCats(room);
+			this.categoryService.addNewRoom(result.getCategories(), result);
+		}
 		
 		return result;
 	}
@@ -96,7 +108,7 @@ public class RoomService {
 			result.setAddress(room.getAddress());
 			result.setProveOfOwnership(room.getProveOfOwnership());
 			result.setCapacity(room.getCapacity());
-			result.setCategory(room.getCategory());
+			result.setCategories(room.getCategories());
 			result.setDescription(room.getDescription());
 			result.setPhotos(room.getPhotos());
 			result.setPricePerHour(room.getPricePerHour());
@@ -111,7 +123,7 @@ public class RoomService {
 			result.setAddress(room.getAddress());
 			result.setProveOfOwnership(room.getProveOfOwnership());
 			result.setCapacity(room.getCapacity());
-			result.setCategory(room.getCategory());
+			result.setCategories(room.getCategories());
 			result.setDescription(room.getDescription());
 			result.setPhotos(room.getPhotos());
 			result.setPricePerHour(room.getPricePerHour());
@@ -123,6 +135,14 @@ public class RoomService {
 		result.setClosingHour(room.getClosingHour());
 
 		this.validator.validate(result, binding);
+		
+		if(!binding.hasErrors()) {
+			try {
+				this.checkIfUrl(result.getPhotos());
+			} catch (final Exception e) {
+				binding.rejectValue("photos", "photo.error");
+			}
+		}
 
 		return result;
 	}
@@ -140,7 +160,7 @@ public class RoomService {
 		result.setAddress(aux.getAddress());
 		result.setProveOfOwnership(aux.getProveOfOwnership());
 		result.setCapacity(aux.getCapacity());
-		result.setCategory(aux.getCategory());
+		result.setCategories(aux.getCategories());
 		result.setDescription(aux.getDescription());
 		result.setPhotos(aux.getPhotos());
 		result.setPricePerHour(aux.getPricePerHour());
@@ -271,11 +291,45 @@ public class RoomService {
 		Assert.isTrue(room.getStatus().contains("REVISION-PENDING"), "wrong.status");
 	}
 	
+	public Room saveChangeCat (Room room) {
+		Assert.notNull(room, "not.allowed");
+		Administrator principal = (Administrator) this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "ADMIN"),"not.allowed");
+		
+		Room result = this.roomRepository.save(room);
+		Assert.notNull(result, "commit.error");
+		
+		return result;
+	}
+	
 	private void changeStatus(Room room, String newStatus) {
 		Assert.isTrue((newStatus == "DRAFT" || newStatus == "REVISION-PENDING" || newStatus == "ACTIVE" ||
 				newStatus == "REJECTED" || newStatus == "OUT-OF-SERVICE"), "invalid.status");
 		
 		room.setStatus(newStatus);
 		this.roomRepository.save(room);
+	}
+	
+	public Collection<String> splitAttachments(final String attachments) {
+		final Collection<String> res = new ArrayList<>();
+		if (attachments != null && !attachments.isEmpty()) {
+			final String[] slice = attachments.split(",");
+			for (final String p : slice)
+				if (p.trim() != "") {
+					res.add(p);
+				}
+		}
+		return res;
+	}
+	
+	private void checkIfUrl(final String attachments) {
+		if (attachments != null && !attachments.isEmpty()) {
+			final String[] slice = attachments.split(",");
+			for (final String p : slice) {
+				if (p.trim() != "") {
+					Assert.isTrue(ResourceUtils.isUrl(p));
+				}
+			}
+		}
 	}
 }

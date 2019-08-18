@@ -10,6 +10,17 @@
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
+<script>
+	function addFieldsPhotos() {
+		// Container <div> where dynamic content will be placed
+		var container = document.getElementById("container");
+		// Create an <input> element, set its type and name attributes
+		var input = document.createElement("input");
+		input.type = "text";
+		input.name = "photos";
+		container.appendChild(input);
+	}
+</script>
 
 <security:authorize access="hasRole('OWNER')">
 	<jstl:if test="${room.id == 0 }">
@@ -37,42 +48,40 @@
 			<acme:textarea code="room.scheduleDetails" path="scheduleDetails" cols="71px" rows="4"/><br/> 
 			<acme:textbox code="room.proveOfOwnership" path="proveOfOwnership" size="100px" /><br/>
 			
-			<spring:message code="room.category" />
+			<strong><spring:message code="room.categories" /></strong><br>
 			<jstl:choose>
 				<jstl:when test="${pageContext.response.locale.language == 'es'}">
-					<form:select path="category" name="categoryArray" style="width:200px;">
+					<form:select path="categories" name="categoryArray" style="width:200px;" multiple="multiple">
 						<jstl:forEach var="category" items="${categories}">
-							<jstl:if test="${category.id eq catId}">
-								<option value="${category.id}" selected="selected">
-									<jstl:out value="${category.title.get('Español')}" />
-								</option>
-							</jstl:if>
-							<jstl:if test="${category.id ne catId}">
-								<option value="${category.id}">
-									<jstl:out value="${category.title.get('Español')}" />
-								</option>
-							</jstl:if>
+							<option value="${category.id}">
+								<jstl:out value="${category.title.get('Español')}" />
+							</option>
 						</jstl:forEach>
-					</form:select><br><br>
+					</form:select><br>
 				</jstl:when>
 				<jstl:otherwise>
-					<form:select path="category" name="categoryArray" style="width:200px;">
+					<form:select path="categories" name="categoryArray" style="width:200px;" multiple="multiple">
 						<jstl:forEach var="category" items="${categories}">
-							<jstl:if test="${category.id eq catId}">
-								<option value="${category.id}" selected="selected">
-									<jstl:out value="${category.title.get('English')}" />
-								</option>
-							</jstl:if>
-							<jstl:if test="${category.id ne catId}">
-								<option value="${category.id}">
-									<jstl:out value="${category.title.get('English')}" />
-								</option>
-							</jstl:if>
+							<option value="${category.id}">
+								<jstl:out value="${category.title.get('English')}" />
+							</option>
 						</jstl:forEach>
-					</form:select><br><br>
+					</form:select><br>
 				</jstl:otherwise>
 			</jstl:choose>
+			<form:errors cssClass="error" path="categories" /><br>
 			
+			<strong><spring:message code="room.photos" /></strong><br>
+			<button type="button" onClick="addFieldsPhotos()" >
+				<spring:message code="room.add" />
+			</button>
+			<div id="container"></div>
+			<jstl:forEach items="${room.photos}" var="photo">
+				<input name="photos" value="${photo}" />
+			</jstl:forEach>
+			<form:errors path="photos" cssClass="error" />
+			<br><br>
+		
 		</fieldset>
 		<br><br>
 		

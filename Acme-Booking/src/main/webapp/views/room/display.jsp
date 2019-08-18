@@ -73,29 +73,38 @@
 		</div>
 		<br />
 		
-		<jstl:if test="${not empty room.photos}">
-			<div>
-				<strong><spring:message code="room.photos" />: </strong>
-				<jstl:out value="${room.photos}" />
-			</div>
-		<br />
+		<jstl:if test="${not empty room.categories}">
+			<jstl:choose>
+				<jstl:when test="${pageContext.response.locale.language == 'es'}">
+					<tr>
+						<td><strong> <spring:message code="room.categories" /> : </strong></td>
+						<td>
+							|| 
+							<jstl:forEach var="category" items="${room.categories}">
+								<jstl:if test="${category.title.get('Español') ne 'CATEGORIA'}">
+									<jstl:out value="${category.parentCategory.title.get('Español')}" /> -> 
+								</jstl:if>
+								<i><jstl:out value="${category.title.get('Español')}" /></i> || 
+							</jstl:forEach>
+						</td>
+					</tr>
+				</jstl:when>
+				<jstl:otherwise>
+					<tr>
+						<td><strong> <spring:message code="room.categories" /> : </strong></td>
+						<td>
+							|| 
+							<jstl:forEach var="category" items="${room.categories}">
+								<jstl:if test="${category.title.get('English') ne 'CATEGORY'}">
+									<jstl:out value="${category.parentCategory.title.get('English')}" /> -> 
+								</jstl:if>
+								<i><jstl:out value="${category.title.get('English')}" /></i> || 
+							</jstl:forEach>
+						</td>
+					</tr>
+				</jstl:otherwise>
+			</jstl:choose>
 		</jstl:if>
-
-		<jstl:choose>
-			<jstl:when test="${pageContext.response.locale.language == 'es'}">
-				<tr>
-					<td><strong> <spring:message code="room.category" /> : </strong></td>
-					<td><jstl:out value="${room.category.title.get('Español')}" /></td>
-				</tr>
-			</jstl:when>
-			<jstl:otherwise>
-				<tr>
-					<td><strong> <spring:message code="room.category" /> : </strong></td>
-					<td><jstl:out value="${room.category.title.get('English')}" /></td>
-				</tr>
-			</jstl:otherwise>
-		</jstl:choose>
-		
 		<jstl:if test="${isPrincipal }">
 		
 			<jstl:if test="${room.status == 'DRAFT'}">
@@ -122,6 +131,16 @@
 			<br />
 		</jstl:if>
 		</div>
+		
+		<jstl:if test="${not empty room.photos}">
+			<div>
+				<strong> <spring:message code="room.photos" /> : </strong><br><br>
+				<jstl:forEach items="${photos}" var="photo">
+					<img src="${photo}" alt="photo" style="margin-bottom: 0.5em; max-height: 150px;" /><br>
+				</jstl:forEach>
+			</div>
+		</jstl:if>
+		
 	</fieldset>
 	<br>
 	<jstl:if test="${not empty services}">

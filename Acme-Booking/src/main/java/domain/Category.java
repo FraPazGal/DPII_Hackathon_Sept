@@ -9,6 +9,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.Valid;
@@ -64,7 +65,7 @@ public class Category extends DomainEntity {
 
 	@Valid
 	@NotNull
-	@OneToMany(mappedBy = "category")
+	@ManyToMany
 	public Collection<Room> getRooms() {
 		return rooms;
 	}

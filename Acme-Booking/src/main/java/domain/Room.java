@@ -1,10 +1,13 @@
 package domain;
 
+import java.util.Collection;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -25,7 +28,7 @@ public class Room extends DomainEntity {
 	private String title, status, ticker, description, scheduleDetails, address, photos, openingHour, closingHour, proveOfOwnership;
 	private Double pricePerHour;
 	private Integer capacity;
-	private Category category;
+	private Collection<Category> categories;
 	private Owner owner;
 	private Administrator administrator;
 
@@ -88,6 +91,7 @@ public class Room extends DomainEntity {
 		this.address = address;
 	}
 
+	@Type(type="text")
 	public String getPhotos() {
 		return photos;
 	}
@@ -147,13 +151,14 @@ public class Room extends DomainEntity {
 	}
 
 	@Valid
-	@ManyToOne(optional = true)
-	public Category getCategory() {
-		return category;
+	@NotNull
+	@ManyToMany
+	public Collection<Category> getCategories() {
+		return categories;
 	}
 
-	public void setCategory(Category category) {
-		this.category = category;
+	public void setCategories(Collection<Category> categories) {
+		this.categories = categories;
 	}
 	
 	@Valid

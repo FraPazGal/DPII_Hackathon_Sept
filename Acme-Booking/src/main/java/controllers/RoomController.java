@@ -60,6 +60,7 @@ public class RoomController extends AbstractController {
 			result.addObject("room", room);
 			result.addObject("isPrincipal", isPrincipal);
 			result.addObject("requestURI", "room/display.do?roomId=" + roomId);
+			result.addObject("photos", this.roomService.splitAttachments(room.getPhotos()));
 			result.addObject("services", this.serviceService.findServicesByRoomId(room.getId()));
 			
 		} catch (final Throwable oops) {
@@ -188,7 +189,7 @@ public class RoomController extends AbstractController {
 			if (binding.hasErrors()) {
 
 				result.addObject("room", room);
-				result.addObject("catId", room.getCategory().getId());
+				//result.addObject("catId", room.getCategory().getId());
 			} else
 				try {
 					this.roomService.save(toSave);
@@ -319,7 +320,7 @@ public class RoomController extends AbstractController {
 		ModelAndView result = new ModelAndView("room/edit");
 		result.addObject("room", room);
 		result.addObject("errMsg", messageCode);
-		result.addObject("catId", room.getCategory().getId());
+		//result.addObject("catId", room.getCategory().getId());
 		result.addObject("categories", this.categoryService.findAll());
 
 		return result;

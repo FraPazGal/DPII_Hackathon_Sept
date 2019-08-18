@@ -134,8 +134,6 @@ public class AdministratorController extends AbstractController {
 		return result;
 	}
 
-	/* Auxiliary methods */
-
 	/* Registration related */
 	protected ModelAndView createRegisterModelAndView(final ActorRegistrationForm actorRegistrationForm) {
 
