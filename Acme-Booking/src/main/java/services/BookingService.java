@@ -137,7 +137,7 @@ public class BookingService {
 		this.validator.validate(result, binding);
 		if (result.getId() != 0 && bookingF.getStatus().equals("REJECTED"))
 			try {
-				Assert.isTrue(!bookingF.getRejectionReason().isEmpty());
+				Assert.isTrue(!bookingF.getRejectionReason().isEmpty() && bookingF.getRejectionReason() != null);
 
 			} catch (final Throwable oops) {
 				binding.rejectValue("rejectionReason", "rejectionReason.error");
@@ -183,6 +183,14 @@ public class BookingService {
 
 			} catch (final Throwable oops) {
 				binding.rejectValue("reservationDate", "reservationDate.error.occuped");
+			}
+		if (result.getReservationDate() != null)
+			try {
+				final Date now = new Date();
+				Assert.isTrue(result.getReservationDate().after(now));
+
+			} catch (final Throwable oops) {
+				binding.rejectValue("reservationDate", "reservationDate.error.future");
 			}
 		return result;
 	}

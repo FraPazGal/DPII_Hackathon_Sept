@@ -47,7 +47,7 @@
 
 	<bean id="systemConfiguration" class="domain.SystemConfiguration">
 		<property name="systemName" value="Acme-Booking" />
-		<property name="banner" value="https://i.ibb.co/6Bpvwck/acme-irobot.png" />
+		<property name="banner" value="http://seawatchtours.ca/wp-content/uploads/2017/08/book-a-session.png" />
 		<property name="countryCode" value="+034"/>
 		<property name="VATTax" value="0.21"/>
 		<property name="makers" value="VISA,MASTERCARD,DINNERS,AMEX"/>

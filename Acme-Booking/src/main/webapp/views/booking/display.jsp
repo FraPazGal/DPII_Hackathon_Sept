@@ -89,12 +89,11 @@
 		</div>
 	</fieldset>
 
-	<jstl:if test="${not empty services}">
+	<jstl:if test="${not empty booking.services}">
 		<h2>
 			<strong><spring:message code="room.services" /></strong>
 		</h2>
-		<display:table style="width: 80%" class="displaytag" name="services"
-			pagesize="5" requestURI="${requestURI}" id="service">
+		<display:table style="width: 80%" class="displaytag" name="booking.services" id="service">
 
 			<display:column titleKey="service.name">
 				<jstl:out value="${service.name}" />
