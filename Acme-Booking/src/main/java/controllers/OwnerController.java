@@ -1,3 +1,4 @@
+
 package controllers;
 
 import javax.servlet.http.HttpSession;
@@ -9,10 +10,10 @@ import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
+import services.MessageBoxService;
 import services.OwnerService;
 import services.UtilityService;
 import domain.Actor;
@@ -26,38 +27,36 @@ public class OwnerController extends AbstractController {
 
 	/* Services */
 	@Autowired
-	private OwnerService ownerService;
+	private OwnerService		ownerService;
 
 	@Autowired
-	private ActorService actorService;
+	private ActorService		actorService;
 
 	@Autowired
-	private UtilityService utilityService;
+	private UtilityService		utilityService;
+
+	@Autowired
+	private MessageBoxService	messageBoxService;
+
 
 	/* Methods */
 
 	/* Display */
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
-	public ModelAndView display(@RequestParam (required = false) final Integer ownerId) {
-		ModelAndView result = new ModelAndView("owner/display");
-		Actor actor = null;
-		boolean isPrincipal = false;
+	public ModelAndView display() {
+		final ModelAndView result = new ModelAndView("owner/display");
+
 		try {
-			if(ownerId == null) {
-				actor = this.utilityService.findByPrincipal();
-				Assert.isTrue(this.utilityService.checkAuthority(actor, "OWNER"), "not.allowed");
-				isPrincipal = true;
-			} else {
-				actor = this.ownerService.findOne(ownerId);
-			}
-			result.addObject("owner", actor);
-			result.addObject("isPrincipal", isPrincipal);
+			final Actor actor = this.utilityService.findByPrincipal();
+			Assert.isTrue(this.utilityService.checkAuthority(actor, "OWNER"), "not.allowed");
+
+			result.addObject("admin", actor);
 		} catch (final Throwable oops) {
 			result.addObject("errMsg", oops.getMessage());
 		}
 		return result;
 	}
-	
+
 	/* Registration */
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public ModelAndView registerNewOwner() {
@@ -68,18 +67,19 @@ public class OwnerController extends AbstractController {
 
 	/* Save Registration */
 	@RequestMapping(value = "/register", method = RequestMethod.POST, params = "save")
-	public ModelAndView register(@Valid ActorRegistrationForm actorRegistrationForm, BindingResult binding) {
+	public ModelAndView register(@Valid final ActorRegistrationForm actorRegistrationForm, final BindingResult binding) {
 		ModelAndView result = new ModelAndView("redirect:/");
 		try {
-			Owner owner = this.ownerService.reconstruct(actorRegistrationForm, binding);
+			final Owner owner = this.ownerService.reconstruct(actorRegistrationForm, binding);
 
 			if (binding.hasErrors())
 				result = this.createRegisterModelAndView(actorRegistrationForm);
 			else {
-				this.ownerService.save(owner);
-			} 
-		} catch (Throwable oops) {
-			result = this.createRegisterModelAndView(actorRegistrationForm,oops.getMessage());
+				final Owner saved = this.ownerService.save(owner);
+				this.messageBoxService.initializeDefaultBoxes(saved);
+			}
+		} catch (final Throwable oops) {
+			result = this.createRegisterModelAndView(actorRegistrationForm, oops.getMessage());
 		}
 		return result;
 	}
@@ -87,15 +87,16 @@ public class OwnerController extends AbstractController {
 	/* Edit */
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView editOwner() {
-		ModelAndView result = new ModelAndView("customer/display");;
+		ModelAndView result = new ModelAndView("customer/display");
+		;
 		try {
-			Actor principal = this.utilityService.findByPrincipal();
+			final Actor principal = this.utilityService.findByPrincipal();
 			Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER"), "not.allowed");
-			
+
 			final ActorForm actorForm = new ActorForm(principal);
-			
+
 			result = this.createEditModelAndView(actorForm);
-		} catch (Throwable oops) {
+		} catch (final Throwable oops) {
 			result.addObject("errMsg", oops.getMessage());
 		}
 		return result;
@@ -103,31 +104,29 @@ public class OwnerController extends AbstractController {
 
 	/* Save Edit */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView edit(ActorForm actorForm, BindingResult binding) {
-		ModelAndView result =  new ModelAndView("redirect:/owner/display.do");
+	public ModelAndView edit(final ActorForm actorForm, final BindingResult binding) {
+		ModelAndView result = new ModelAndView("redirect:/owner/display.do");
 		try {
-			Assert.isTrue(this.utilityService.findByPrincipal().getId() == actorForm.getId()
-					&& this.actorService.findOne(this.utilityService.findByPrincipal().getId()) != null, "not.allowed");
+			Assert.isTrue(this.utilityService.findByPrincipal().getId() == actorForm.getId() && this.actorService.findOne(this.utilityService.findByPrincipal().getId()) != null, "not.allowed");
 
-			Owner owner = this.ownerService.reconstruct(actorForm, binding);
+			final Owner owner = this.ownerService.reconstruct(actorForm, binding);
 
-			if (binding.hasErrors()) {
+			if (binding.hasErrors())
 				result = this.createEditModelAndView(actorForm);
-			} else {
+			else
 				this.ownerService.save(owner);
-			}
-		} catch (Throwable oops) {
+		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(actorForm, oops.getMessage());
 		}
 		return result;
 	}
-	
+
 	/* Delete */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
 	public ModelAndView deleteRookie(final ActorForm actorForm, final BindingResult binding, final HttpSession session) {
 		ModelAndView result = new ModelAndView("redirect:/welcome/index.do");
 
-		Owner owner = this.ownerService.findOne(actorForm.getId());
+		final Owner owner = this.ownerService.findOne(actorForm.getId());
 
 		if (binding.hasErrors())
 			result = this.createEditModelAndView(actorForm);
@@ -150,7 +149,7 @@ public class OwnerController extends AbstractController {
 	}
 
 	protected ModelAndView createRegisterModelAndView(final ActorRegistrationForm actorRegistrationForm, final String messageCode) {
-		ModelAndView result = new ModelAndView("owner/register");
+		final ModelAndView result = new ModelAndView("owner/register");
 
 		actorRegistrationForm.setTermsAndConditions(false);
 		result.addObject("actorRegistrationForm", actorRegistrationForm);
@@ -166,7 +165,7 @@ public class OwnerController extends AbstractController {
 	}
 
 	protected ModelAndView createEditModelAndView(final ActorForm actorForm, final String messageCode) {
-		ModelAndView result = new ModelAndView("owner/edit");
+		final ModelAndView result = new ModelAndView("owner/edit");
 
 		result.addObject("actorForm", actorForm);
 		result.addObject("errMsg", messageCode);

@@ -1,3 +1,4 @@
+
 package domain;
 
 import java.util.Collection;
@@ -17,37 +18,39 @@ import org.hibernate.validator.constraints.NotBlank;
 public class MessageBox extends DomainEntity {
 
 	// Attributes
-	private String name;
-	private boolean isPredefined;
-	private Collection<Message> messages;
-	private Actor owner;
+	private String				name;
+	private boolean				isPredefined;
+	private Collection<Message>	messages;
+	private Actor				owner;
+	private MessageBox			parentMessageBoxes;
+
 
 	// Getters and setters
 
 	@NotBlank
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
 	public boolean getIsPredefined() {
-		return isPredefined;
+		return this.isPredefined;
 	}
 
-	public void setIsPredefined(boolean isPredefined) {
+	public void setIsPredefined(final boolean isPredefined) {
 		this.isPredefined = isPredefined;
 	}
 
 	@Valid
 	@ManyToMany
 	public Collection<Message> getMessages() {
-		return messages;
+		return this.messages;
 	}
 
-	public void setMessages(Collection<Message> messages) {
+	public void setMessages(final Collection<Message> messages) {
 		this.messages = messages;
 	}
 
@@ -62,6 +65,14 @@ public class MessageBox extends DomainEntity {
 		this.owner = owner;
 	}
 
+	@Valid
+	@ManyToOne(optional = true)
+	public MessageBox getParentMessageBoxes() {
+		return this.parentMessageBoxes;
+	}
+
+	public void setParentMessageBoxes(final MessageBox parentMessageBoxes) {
+		this.parentMessageBoxes = parentMessageBoxes;
+	}
 
 }
-

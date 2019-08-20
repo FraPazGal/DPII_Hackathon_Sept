@@ -1,3 +1,4 @@
+
 package services;
 
 import java.util.ArrayList;
@@ -10,10 +11,12 @@ import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
 import repositories.FinderRepository;
 import domain.Actor;
+import domain.Category;
 import domain.Customer;
 import domain.Finder;
 import domain.Room;
@@ -22,219 +25,237 @@ import domain.Room;
 @Service
 public class FinderService {
 
-	// Managed repository ------------------------------------
+	// Managed repository ------------------------------
 	@Autowired
-	private FinderRepository finderRepository;
+	private FinderRepository			finderRepository;
 
-	// Supporting services -----------------------------------
+	// Supporting services -----------------------
+	@Autowired
+	private UtilityService				utilityService;
 
 	@Autowired
-	private UtilityService utilityService;
+	private SystemConfigurationService	systemConfigurationService;
 
 	@Autowired
-	private SystemConfigurationService systemConfigurationService;
-	
-	@Autowired
-	private Validator validator;
+	private Validator					validator;
 
 
-	// CRUD Methods ------------------------------------------
+	// Constructors
+	public FinderService() {
+		super();
+	}
 
 	public Finder create() {
 		Finder result;
-		Actor principal = this.utilityService.findByPrincipal();
-
 		result = new Finder();
-		result.setResults(new ArrayList<Room>());
-		result.setCustomer((Customer) principal);
+		final Collection<Room> rooms = new ArrayList<Room>();
+		result.setResults(rooms);
 		return result;
 	}
 
-	public Finder findOne(final int finderId) {
-		Finder result = this.finderRepository.findOne(finderId);
-		Assert.notNull(result, "wrong.id");
-		return result;
-	}
-
-	public Collection<Finder> findAll() {
-		return this.finderRepository.findAll();
-	}
-
-	public Finder save(Finder finder) {
-		Finder result;
-		Actor principal;
-
-		if (finder.getId() == 0) {
-			result = this.finderRepository.save(finder);
-		} else {
-			principal = this.utilityService.findByPrincipal();
-			
-			Assert.isTrue(principal.equals(finder.getCustomer()), "not.allowed");
-			Assert.notNull(finder, "not.allowed");
-
-			finder.setSearchMoment(new Date(System.currentTimeMillis() - 1));
-			result = this.finderRepository.save(finder);
-			Assert.notNull(result, "not.null");
+	public Finder defaultFinder(final Customer customer) {
+		Finder finder = this.finderRepository.findByCustomer(customer.getId());
+		if (finder == null) {
+			final Finder f = this.create();
+			f.setCustomer(customer);
+			finder = this.save(f);
 		}
+		return finder;
+	}
+
+	// /FINDONE
+	public Finder findOne(final int finderId) {
+		Finder result;
+
+		result = this.finderRepository.findOne(finderId);
 
 		return result;
 	}
 
-	public void delete(Finder finder) {
-		Actor principal;
-		Finder aux;
-		
-		Assert.isTrue(finder.getId() != 0, "not.allowed");
-		
-		principal = this.utilityService.findByPrincipal();
-		aux = this.findOne(finder.getId());
-		
-		Assert.isTrue(principal.equals(aux.getCustomer()), "not.allowed");
-		
-		finder.setCustomer(aux.getCustomer());
-		finder.setVersion(aux.getVersion());
-		finder.setResults(new ArrayList<Room>());
-		finder.setKeyWord(null);
-		finder.setCapacity(null);
-		finder.setMaximumFee(null);
-		finder.setMaximumHour(null);
-		finder.setMinimumHour(null);
+	// FINDALL
+	public Collection<Finder> findAll() {
+		Collection<Finder> result;
+		result = this.finderRepository.findAll();
 
-		this.save(finder);
+		return result;
+
 	}
 
-	// Other business methods -------------------------------
+	public Finder save(final Finder finder) {
+		Finder result;
+		Customer principal;
+		Date currentMoment;
+		currentMoment = new Date(System.currentTimeMillis() - 1);
+		if (finder.getId() != 0) {
+			final Actor actor = this.utilityService.findByPrincipal();
+			principal = (Customer) actor;
+			Assert.isTrue(this.utilityService.checkAuthority(principal, "CUSTOMER"), "not.allowed");
+			Assert.isTrue(this.finderRepository.findByCustomer(principal.getId()).equals(finder), "not.allowed");
+			Assert.notNull(finder, "not.allowed");
+			if (finder.getMaximumFee() != null)
+				Assert.isTrue(finder.getMaximumFee() >= 0., "not.negative");
+			if (finder.getCapacity() != null)
+				Assert.isTrue(finder.getCapacity() >= 0., "not.negative");
+			finder.setSearchMoment(currentMoment);
+		}
+		result = this.finderRepository.save(finder);
+		Assert.notNull(result, "not.null");
+		return result;
+	}
 
-	public void deleteExpiredFinder(Finder finder) {
+	//DELETE 
+	public void delete(final Finder finder) {
+		final Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "CUSTOMER"), "not.allowed");
+		Assert.isTrue(finder.getId() != 0);
+		Assert.isTrue(this.finderRepository.findByCustomer(principal.getId()).getId() == (finder.getId()), "not.allowed");
+		finder.setKeyWord(null);
+		finder.setKeyWord(null);
+		finder.setCategory(null);
+		finder.setMaximumFee(null);
+		finder.setCapacity(null);
+		finder.setService(null);
+		finder.setSearchMoment(null);
+		final Collection<Room> rooms = new ArrayList<Room>();
+		finder.setResults(rooms);
+		this.finderRepository.save(finder);
+	}
+
+	public void deleteExpiredFinder(final Finder finder) {
 		Date maxLivedMoment = new Date();
 		int timeChachedFind;
-
-		timeChachedFind = this.systemConfigurationService
-				.findMySystemConfiguration().getTimeResultsCached();
-		maxLivedMoment = DateUtils.addHours(new Date(System.currentTimeMillis() - 1), -timeChachedFind);
+		Date currentMoment;
+		currentMoment = new Date(System.currentTimeMillis() - 1);
+		timeChachedFind = this.systemConfigurationService.findMySystemConfiguration().getTimeResultsCached();
+		maxLivedMoment = DateUtils.addHours(currentMoment, -timeChachedFind);
 		if (finder.getSearchMoment().before(maxLivedMoment)) {
-
-			finder.setResults(new ArrayList<Room>());
 			finder.setKeyWord(null);
-			finder.setCapacity(null);
 			finder.setMaximumFee(null);
-			finder.setMaximumHour(null);
-			finder.setMinimumHour(null);
+			finder.setCategory(null);
+			finder.setCapacity(null);
+			finder.setResults(null);
+			finder.setService(null);
 			finder.setSearchMoment(null);
-
-			this.save(finder);
+			this.finderRepository.save(finder);
 		}
 	}
-//
-//	public Collection<Room> search(Finder finder) {
-//
-//		Collection<Room> results = new ArrayList<Room>();
-//		String keyWord;
-//		Double maximumPrice, minimumPrice;
-//		int nResults;
-//		int count = 0;
-//
-//		Collection<Room> resultsPageables = new ArrayList<Room>();
-//
-//		nResults = this.systemConfigurationService.findMySystemConfiguration()
-//				.getMaxResults();
-//		
-//		keyWord = (finder.getKeyWord() == null || finder.getKeyWord().isEmpty()) ? ""
-//				: finder.getKeyWord();
-//
-//		maximumPrice = (finder.getMaximumPrice() == null) ? 100000 : finder
-//				.getMaximumPrice();
-//		
-//		minimumPrice = (finder.getMinimumPrice() == null) ? 0 : finder
-//				.getMinimumPrice();
-//
-//		if ((finder.getKeyWord() == null || finder.getKeyWord().isEmpty())
-//				&& finder.getMaximumPrice() == null
-//				&& finder.getMinimumPrice() == null) {
-//			results = this.allIRobotsNotDecomissioned();
-//			
-//		} else {
-//			results = this.search(keyWord, maximumPrice, minimumPrice);
-//		}
-//
-//		for (Room p : results) {
-//			resultsPageables.add(p);
-//			count++;
-//			if (count >= nResults) {
-//				break;
-//			}
-//		}
-//		finder.setResults(resultsPageables);
-//
-//		this.save(finder);
-//
-//		return resultsPageables;
-//	}
-//	
-//	public Collection<Room> searchAnon (String keyword) {
-//		
-//		return this.finderRepository.searchAnon(keyword);
-//	}
-//	
-//	private Collection<Room> search(String keyword, Double maximumPrice, Double minimumPrice) {
-//		
-//		return this.finderRepository.search(keyword, maximumPrice, minimumPrice);
-//	}
-//	
-//	public Finder reconstruct (Finder finder, BindingResult binding) {
-//		Finder aux;
-//		Actor principal = this.utilityService.findByPrincipal();
-//		
-//		aux = this.findOne(finder.getId());
-//		
-//		Assert.isTrue(aux.getCustomer().equals(principal), "not.allowed");
-//		
-//		finder.setVersion(aux.getVersion());
-//		finder.setCustomer(aux.getCustomer());
-//		finder.setResults(aux.getResults());
-//		finder.setSearchMoment(new Date (System.currentTimeMillis() - 1));
-//
-//		this.validator.validate(finder, binding);
-//		
-//		return finder;
-//	}
-//
-//	private Collection<Room> allIRobotsNotDecomissioned() {
-//		return this.finderRepository.allIRobotsNotDecomissioned();
-//	}
-//	
-	public Finder findFinderByCustomerId(int customerId) {
-		
-		return this.finderRepository.findFinderByCustomerId(customerId);
+	public Finder search(final Finder finder) {
+		Collection<Room> results = new ArrayList<Room>();
+		String keyWord;
+		String service;
+		Double maximumFee;
+		Integer capacity;
+		String category;
+		int nResults;
+		if (finder.getMaximumFee() != null)
+			Assert.isTrue(finder.getMaximumFee() >= 0., "not.negative");
+		if (finder.getCapacity() != null)
+			Assert.isTrue(finder.getCapacity() >= 0., "not.negative");
+		final Collection<Room> resultsPageables = new ArrayList<Room>();
+		nResults = this.systemConfigurationService.findMySystemConfiguration().getMaxResults();
+		keyWord = (finder.getKeyWord() == null || finder.getKeyWord().isEmpty()) ? "" : finder.getKeyWord();
+		service = (finder.getService() == null || finder.getService().isEmpty()) ? "" : finder.getService();
+		category = (finder.getCategory() == null || finder.getCategory().isEmpty()) ? "" : finder.getCategory();
+		capacity = (finder.getCapacity() == null) ? 0 : finder.getCapacity();
+		maximumFee = (finder.getMaximumFee() == null) ? 1000000000.0 : finder.getMaximumFee();
+		results = this.finderRepository.search(keyWord, maximumFee, capacity);
+		final Collection<Room> resultService = this.finderRepository.searchByService(keyWord, maximumFee, capacity, service);
+		for (final Room r : resultService)
+			if (!results.contains(r))
+				results.add(r);
+		if (!category.isEmpty()) {
+			final Collection<Room> res = new ArrayList<Room>();
+			for (final Room r : results)
+				if (!r.getCategories().isEmpty())
+					for (final Category c : r.getCategories())
+						if (c.getTitle().get("Español") == category || c.getTitle().get("English") == category)
+							res.add(r);
+			results = res;
+		}
+		int count = 0;
+		for (final Room p : results) {
+			resultsPageables.add(p);
+			count++;
+			if (count >= nResults)
+				break;
+		}
+		finder.setResults(resultsPageables);
+		Date currentMoment;
+		currentMoment = new Date(System.currentTimeMillis() - 1);
+		finder.setSearchMoment(currentMoment);
+		//this.finderRepository.save(finder);
+		return finder;
 	}
-	
-	public Finder checkIfExpired() {
+
+	public Collection<Room> searchAnon(String keyWord) {
+
+		Collection<Room> results;
+
+		keyWord = (keyWord == null || keyWord.isEmpty()) ? "" : keyWord;
+
+		results = this.finderRepository.searchAnon(keyWord);
+
+		return results;
+	}
+
+	public void flush() {
+		this.finderRepository.flush();
+	}
+
+	protected void deleteFinder(final Customer customer) {
+		final Actor principal = this.utilityService.findByPrincipal();
+
+		this.finderRepository.delete(this.finderRepository.findByCustomer(principal.getId()));
+	}
+
+	public Finder finderByCustomer() {
+		Finder finder;
+		final Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "CUSTOMER"), "not.allowed");
+		finder = this.finderRepository.findByCustomer(principal.getId());
 		Date maxLivedMoment = new Date();
-		Actor principal = this.utilityService.findByPrincipal();
-		Finder finder = this.findFinderByCustomerId(principal.getId());
-		
-		
 		if (finder.getSearchMoment() != null) {
 			final int timeChachedFind = this.systemConfigurationService.findMySystemConfiguration().getTimeResultsCached();
 			maxLivedMoment = DateUtils.addHours(maxLivedMoment, -timeChachedFind);
-
 			if (finder.getSearchMoment().before(maxLivedMoment))
 				this.deleteExpiredFinder(finder);
 		}
-		
 		return finder;
 	}
-	
-	public void createForCustomer(Customer customer) {
-		Finder finder = new Finder();
-		
-		finder.setResults(new ArrayList<Room>());
-		finder.setCustomer(customer);
-		finder = this.save(finder);
+
+	public Finder reconstruct(final Finder finder, final BindingResult binding) {
+		final Finder find = this.create();
+		final Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "CUSTOMER"), "not.allowed");
+		final Finder orig = this.finderByCustomer();
+		find.setId(orig.getId());
+		find.setVersion(orig.getVersion());
+		find.setCustomer(orig.getCustomer());
+		find.setKeyWord(finder.getKeyWord());
+		find.setMaximumFee(finder.getMaximumFee());
+		find.setCategory(finder.getCategory());
+		find.setCapacity(finder.getCapacity());
+		find.setService(finder.getService());
+		this.validator.validate(find, binding);
+		return find;
 	}
-	
-	public void deleteFinder(int customerId){
-		Finder toDelete = this.findFinderByCustomerId(customerId);
-		this.finderRepository.delete(toDelete);
+
+	public void deleteAccountOwner(final Room r) {
+		final Collection<Finder> f = this.finderRepository.findByRoom(r.getId());
+		if (!f.isEmpty())
+			for (final Finder fi : f) {
+				fi.getResults().remove(r);
+				this.finderRepository.save(fi);
+			}
+	}
+
+	public void deleteAccountCustomer() {
+		final Actor principal = this.utilityService.findByPrincipal();
+		final Finder f = this.finderRepository.findByCustomer(principal.getId());
+		final Collection<Room> rooms = new ArrayList<Room>();
+		f.setResults(rooms);
+		this.finderRepository.save(f);
+		this.finderRepository.delete(f);
+
 	}
 }

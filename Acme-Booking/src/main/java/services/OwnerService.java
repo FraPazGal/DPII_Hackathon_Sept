@@ -55,7 +55,7 @@ public class OwnerService {
 		userAccount = new UserAccount();
 		res = new Owner();
 
-		auth.setAuthority(Authority.OWNER);
+		auth.setAuthority(Authority.ADMIN);
 		authority.add(auth);
 		userAccount.setAuthorities(authority);
 		res.setUserAccount(userAccount);
@@ -85,7 +85,7 @@ public class OwnerService {
 		if (owner.getId() == 0) {
 
 			Assert.isTrue(
-					this.utilityService.checkAuthority(principal, "OWNER"), "not.allowed");
+					this.utilityService.checkAuthority(principal, "ADMIN"), "not.allowed");
 
 			res = this.ownerRepository.save(owner);
 
@@ -131,7 +131,7 @@ public class OwnerService {
 
 		final List<Authority> authorities = new ArrayList<Authority>();
 		final Authority authority = new Authority();
-		authority.setAuthority(Authority.OWNER);
+		authority.setAuthority(Authority.ADMIN);
 		authorities.add(authority);
 		userAccount.setAuthorities(authorities);
 
@@ -147,7 +147,7 @@ public class OwnerService {
 			/* Email */
 			if (form.getEmail() != null) {
 				try {
-					Assert.isTrue(this.utilityService.checkEmail(form.getEmail(), "OWNER"));
+					Assert.isTrue(this.utilityService.checkEmail(form.getEmail(), "ADMIN"));
 
 				} catch (Throwable oops) {
 					binding.rejectValue("email", "email.error");
@@ -227,7 +227,7 @@ public class OwnerService {
 			/* Email */
 			if (actorEditionForm.getEmail() != null) {
 				try {
-					Assert.isTrue(this.utilityService.checkEmail(actorEditionForm.getEmail(), "OWNER"));
+					Assert.isTrue(this.utilityService.checkEmail(actorEditionForm.getEmail(), "ADMIN"));
 
 				} catch (Throwable oops) {
 					binding.rejectValue("email", "email.error");

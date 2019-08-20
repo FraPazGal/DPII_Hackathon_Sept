@@ -41,9 +41,6 @@ public class LoginService implements UserDetailsService {
 
 		result = this.userRepository.findByUsername(username);
 		Assert.notNull(result, "not.allowed");
-		
-		UserAccount userAcc = this.userRepository.findCheckIfBanned(username);
-		Assert.notNull(userAcc, "banned.user");
 		// WARNING: The following sentences prevent lazy initialisation
 		// problems!
 		Assert.notNull(result.getAuthorities(), "not.allowed");

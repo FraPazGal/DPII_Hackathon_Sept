@@ -29,5 +29,5 @@
 		<put-attribute name="title" value="Editar perfil" />
 		<put-attribute name="body" value="/views/administrator/edit.jsp" />
 	</definition>
-	
+
 </tiles-definitions>
