@@ -10,7 +10,7 @@
 <%@taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
 
-<security:authorize access="permitAll">
+
 <jstl:choose>
 	<jstl:when test="${range eq null }">
 		<h1><spring:message	code="room.list" /></h1>
@@ -236,4 +236,3 @@
 		</display:table>
 	</jstl:otherwise>
 </jstl:choose>
-</security:authorize>

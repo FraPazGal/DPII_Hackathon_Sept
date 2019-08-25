@@ -54,7 +54,7 @@ public class CustomerController extends AbstractController {
 	/* Display */
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
 	public ModelAndView display() {
-		final ModelAndView result = new ModelAndView("customer/display");
+		ModelAndView result = new ModelAndView("customer/display");
 
 		try {
 			final Customer customer = (Customer) this.utilityService.findByPrincipal();
@@ -62,7 +62,7 @@ public class CustomerController extends AbstractController {
 
 			result.addObject("customer", customer);
 		} catch (final Throwable oops) {
-			result.addObject("errMsg", oops.getMessage());
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 
 		return result;
@@ -72,8 +72,14 @@ public class CustomerController extends AbstractController {
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public ModelAndView registerNewAuthor() {
 		final CustomerRegistrationForm customerRegistrationForm = new CustomerRegistrationForm();
-
-		return this.createRegisterModelAndView(customerRegistrationForm);
+		ModelAndView result = null;
+		
+		try {
+			result = this.createRegisterModelAndView(customerRegistrationForm);
+		} catch (final Throwable oops) {
+			result = new ModelAndView("redirect:../welcome/index.do");
+		}
+		return result;
 	}
 
 	/* Save Registration */
@@ -110,7 +116,7 @@ public class CustomerController extends AbstractController {
 
 			result = this.createEditModelAndView(customerForm);
 		} catch (final Throwable oops) {
-			result.addObject("errMsg", oops.getMessage());
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}

@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
@@ -43,16 +44,23 @@ public class OwnerController extends AbstractController {
 
 	/* Display */
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
-	public ModelAndView display() {
-		final ModelAndView result = new ModelAndView("owner/display");
-
+	public ModelAndView display(@RequestParam (required = false) final Integer ownerId) {
+		ModelAndView result = new ModelAndView("owner/display");
+		Actor actor = null;	
+ 		boolean isPrincipal = false;
 		try {
-			final Actor actor = this.utilityService.findByPrincipal();
-			Assert.isTrue(this.utilityService.checkAuthority(actor, "OWNER"), "not.allowed");
-
-			result.addObject("admin", actor);
+			if(ownerId == null) {
+				actor = this.utilityService.findByPrincipal();
+				Assert.isTrue(this.utilityService.checkAuthority(actor, "OWNER"), "not.allowed");
+				isPrincipal = true;
+			} else {
+				actor = this.ownerService.findOne(ownerId);
+			}
+			result.addObject("isPrincipal", isPrincipal);
+			result.addObject("owner", actor);
+			
 		} catch (final Throwable oops) {
-			result.addObject("errMsg", oops.getMessage());
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}
@@ -61,8 +69,14 @@ public class OwnerController extends AbstractController {
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public ModelAndView registerNewOwner() {
 		final ActorRegistrationForm actorRegistrationForm = new ActorRegistrationForm();
-
-		return this.createRegisterModelAndView(actorRegistrationForm);
+		ModelAndView result = null;
+		
+		try {
+			result = this.createRegisterModelAndView(actorRegistrationForm);
+		} catch (final Throwable oops) {
+			result = new ModelAndView("redirect:../welcome/index.do");
+		}
+		return result;
 	}
 
 	/* Save Registration */
@@ -97,7 +111,7 @@ public class OwnerController extends AbstractController {
 
 			result = this.createEditModelAndView(actorForm);
 		} catch (final Throwable oops) {
-			result.addObject("errMsg", oops.getMessage());
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}

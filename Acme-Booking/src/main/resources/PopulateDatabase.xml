@@ -22,6 +22,7 @@
 				</bean>
 			</list>
 		</property>
+		<property name="isBanned" value="false" />
 	</bean>
 
 	<bean id="userAdmin2" class="security.UserAccount">
@@ -34,6 +35,7 @@
 				</bean>
 			</list>
 		</property>
+		<property name="isBanned" value="false" />
 	</bean>
 
 	<!-- CUSTOMERS -->
@@ -48,6 +50,7 @@
 				</bean>
 			</list>
 		</property>
+		<property name="isBanned" value="false" />
 	</bean>
 
 	<bean id="userCustomer2" class="security.UserAccount">
@@ -60,6 +63,7 @@
 				</bean>
 			</list>
 		</property>
+		<property name="isBanned" value="false" />
 	</bean>
 
 	<bean id="userCustomer3" class="security.UserAccount">
@@ -72,6 +76,7 @@
 				</bean>
 			</list>
 		</property>
+		<property name="isBanned" value="true" />
 	</bean>
 
 	<!-- OWNERS -->
@@ -86,6 +91,7 @@
 				</bean>
 			</list>
 		</property>
+		<property name="isBanned" value="false" />
 	</bean>
 
 	<bean id="userOwner2" class="security.UserAccount">
@@ -98,6 +104,7 @@
 				</bean>
 			</list>
 		</property>
+		<property name="isBanned" value="false" />
 	</bean>
 
 	<bean id="userOwner3" class="security.UserAccount">
@@ -110,6 +117,7 @@
 				</bean>
 			</list>
 		</property>
+		<property name="isBanned" value="false" />
 	</bean>
 
 	<bean id="userOwner4" class="security.UserAccount">
@@ -122,6 +130,7 @@
 				</bean>
 			</list>
 		</property>
+		<property name="isBanned" value="true" />
 	</bean>
 
 	<!-- ACTORS -->
@@ -177,6 +186,7 @@
 		<property name="address" value="C/ Phantom Blood" />
 		<property name="userAccount" ref="userCustomer2" />
 		<property name="creditCard" ref="creditCard2" />
+		<property name="isSpammer" value="false" />
 	</bean>
 
 	<bean id="customer3" class="domain.Customer">
@@ -189,6 +199,7 @@
 		<property name="address" value="C/ Phantom Blood" />
 		<property name="userAccount" ref="userCustomer3" />
 		<property name="creditCard" ref="creditCard20" />
+		<property name="isSpammer" value="true" />
 	</bean>
 
 	<!-- OWNERS -->
@@ -203,6 +214,7 @@
 		<property name="phoneNumber" value="+34697854321" />
 		<property name="address" value="C/ Amestris" />
 		<property name="userAccount" ref="userOwner1" />
+		<property name="isSpammer" value="false" />
 	</bean>
 
 	<bean id="owner2" class="domain.Owner">
@@ -226,6 +238,7 @@
 		<property name="phoneNumber" value="+34T627946333" />
 		<property name="address" value="C/ Cliparts, 99" />
 		<property name="userAccount" ref="userOwner3" />
+		<property name="isSpammer" value="true" />
 	</bean>
 
 	<bean id="owner4" class="domain.Owner">
@@ -237,6 +250,7 @@
 		<property name="phoneNumber" value="+34697421153" />
 		<property name="address" value="C/ La playa, 0" />
 		<property name="userAccount" ref="userOwner4" />
+		<property name="isSpammer" value="true" />
 	</bean>
 
 	<!-- FINDERS -->

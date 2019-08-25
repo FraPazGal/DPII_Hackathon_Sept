@@ -64,7 +64,7 @@ public class RoomController extends AbstractController {
 			result.addObject("services", this.serviceService.findServicesByRoomId(room.getId()));
 			
 		} catch (final Throwable oops) {
-			result = new ModelAndView("redirect:/welcome/index.do");
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}
@@ -143,7 +143,7 @@ public class RoomController extends AbstractController {
 			result.addObject("isPrincipal", isPrincipal);
 			result.addObject("range", range);
 		} catch (final Throwable oops) {
-			result.addObject("errMsg", oops.getMessage());
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}
@@ -158,7 +158,7 @@ public class RoomController extends AbstractController {
 			result = this.createEditDraftModelAndView(room);
 
 		} catch (final Throwable oops) {
-			result.addObject("errMsg", oops.getMessage());
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}
@@ -174,7 +174,7 @@ public class RoomController extends AbstractController {
 			result = this.createEditDraftModelAndView(room);
 
 		} catch (final Throwable oops) {
-			result.addObject("errMsg", oops.getMessage());
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}
@@ -197,7 +197,7 @@ public class RoomController extends AbstractController {
 
 				} catch (final Throwable oops) {
 					result.addObject("room", toSave);
-					result.addObject("errMsg", oops.getMessage());
+					result = new ModelAndView("redirect:../welcome/index.do");
 				}
 			result.addObject("categories", this.categoryService.findAll());
 		} catch (final Throwable oops) {
@@ -223,7 +223,7 @@ public class RoomController extends AbstractController {
 
 				} catch (final Throwable oops) {
 					result.addObject("room", toSave);
-					result.addObject("errMsg", oops.getMessage());
+					result = new ModelAndView("redirect:../welcome/index.do");
 				}
 		} catch (final Throwable oops) {
 			result = this.createEditDraftModelAndView(room, oops.getMessage());
@@ -243,7 +243,7 @@ public class RoomController extends AbstractController {
 			result = this.createEditActiveModelAndView(activeRoomForm);
 
 		} catch (final Throwable oops) {
-			result.addObject("errMsg", oops.getMessage());
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}
@@ -265,7 +265,7 @@ public class RoomController extends AbstractController {
 
 				} catch (final Throwable oops) {
 					result.addObject("activeRoomForm", toSave);
-					result.addObject("errMsg", oops.getMessage());
+					result = new ModelAndView("redirect:../welcome/index.do");
 				}
 		} catch (final Throwable oops) {
 			result = this.createEditActiveModelAndView(activeRoomForm, oops.getMessage());
@@ -273,7 +273,7 @@ public class RoomController extends AbstractController {
 		return result;
 	}
 	
-	/* Change status of a room by owner (decomission) or admin (accept/reject)*/
+	/* Change status of a room by owner (decommission) or admin (accept/reject)*/
 	@RequestMapping(value = "/action", method = RequestMethod.GET)
 	public ModelAndView actionsRoom(@RequestParam final String action, @RequestParam final int roomId) {
 		ModelAndView result = new ModelAndView("redirect:/room/list.do?range=toReview");
@@ -293,7 +293,7 @@ public class RoomController extends AbstractController {
 				result = new ModelAndView("redirect:/room/list.do?range=rejected");
 			}
 		} catch (final Throwable oops) {
-			result.addObject("errMsg", oops.getMessage());
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}
@@ -306,7 +306,7 @@ public class RoomController extends AbstractController {
 			this.roomService.deleteAsDraft(this.roomService.findOne(roomId));
 
 		} catch (final Throwable oops) {
-			result.addObject("errMsg", oops.getMessage());
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}
@@ -320,7 +320,6 @@ public class RoomController extends AbstractController {
 		ModelAndView result = new ModelAndView("room/edit");
 		result.addObject("room", room);
 		result.addObject("errMsg", messageCode);
-		//result.addObject("catId", room.getCategory().getId());
 		result.addObject("categories", this.categoryService.findAll());
 
 		return result;

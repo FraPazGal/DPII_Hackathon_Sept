@@ -43,7 +43,7 @@ public class AdministratorController extends AbstractController {
 	/* Display */
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
 	public ModelAndView display() {
-		final ModelAndView result = new ModelAndView("administrator/display");
+		ModelAndView result = new ModelAndView("administrator/display");
 
 		try {
 			final Actor actor = this.utilityService.findByPrincipal();
@@ -51,7 +51,7 @@ public class AdministratorController extends AbstractController {
 
 			result.addObject("admin", actor);
 		} catch (final Throwable oops) {
-			result.addObject("errMsg", oops.getMessage());
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}
@@ -60,8 +60,15 @@ public class AdministratorController extends AbstractController {
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public ModelAndView registerNewAdministrator() {
 		final ActorRegistrationForm actorRegistrationForm = new ActorRegistrationForm();
-
-		return this.createRegisterModelAndView(actorRegistrationForm);
+		ModelAndView result = null;
+		
+		try {
+			result = this.createRegisterModelAndView(actorRegistrationForm);
+		} catch (final Throwable oops) {
+			result = new ModelAndView("redirect:../welcome/index.do");
+		}
+		return result;
+		
 	}
 
 	/* Save Registration */
@@ -96,7 +103,7 @@ public class AdministratorController extends AbstractController {
 
 			result = this.createEditModelAndView(actorForm);
 		} catch (final Throwable oops) {
-			result.addObject("errMsg", oops.getMessage());
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}

@@ -18,18 +18,31 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
-<h1><spring:message code="administrator.list.suspicious.actors" /></h1>
 
+<h1><spring:message code="administrator.list.suspicious.actors" /></h1>
 <!-- Tabla de actores sospechosos -->
 <display:table pagesize="5" class="displaytag" name="actors"
 		requestURI="config/admin/listSA.do" id="actors">
+		
+	<jstl:choose>
+		<jstl:when test="${actors.userAccount.isBanned }">
+			<spring:message var="status" code="actor.banned" />
+		</jstl:when>
+		<jstl:otherwise>
+			<spring:message	var="status" code="actor.active" />
+		</jstl:otherwise>
+	</jstl:choose>
 
 	<display:column property="userAccount.username" titleKey="actor.username" sortable="true" />
+	
+	<display:column titleKey="actor.status" sortable="true">
+		<jstl:out value="${status}" />
+	</display:column>
 
 	<display:column property="surname" titleKey="actor.surname"	sortable="true" />
 
 	<display:column property="name" titleKey="actor.name" sortable="true" />
-
+	
 	<display:column property="email" titleKey="actor.email" />
 
 	<display:column property="userAccount.authorities" titleKey="actor.type" />

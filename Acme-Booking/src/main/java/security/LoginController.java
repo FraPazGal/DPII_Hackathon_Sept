@@ -45,9 +45,8 @@ public class LoginController extends AbstractController {
 		Assert.notNull(credentials);
 		Assert.notNull(bindingResult);
 
-		ModelAndView result;
+		ModelAndView result = new ModelAndView("security/login");
 
-		result = new ModelAndView("security/login");
 		result.addObject("credentials", credentials);
 		result.addObject("showError", showError);
 
@@ -58,11 +57,7 @@ public class LoginController extends AbstractController {
 
 	@RequestMapping("/loginFailure")
 	public ModelAndView failure() {
-		ModelAndView result;
-
-		result = new ModelAndView("redirect:login.do?showError=true");
-
-		return result;
+		return new ModelAndView("redirect:login.do?showError=true");
 	}
 
 }

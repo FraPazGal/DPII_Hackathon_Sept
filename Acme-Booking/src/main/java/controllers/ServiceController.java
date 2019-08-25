@@ -53,7 +53,7 @@ public class ServiceController extends AbstractController {
 			result.addObject("requestURI", "service/display.do?serviceId=" + serviceId);
 			
 		} catch (final Throwable oops) {
-			result = new ModelAndView("redirect:/welcome/index.do");
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}
@@ -71,7 +71,7 @@ public class ServiceController extends AbstractController {
 			result = this.createEditModelAndView(service);
 
 		} catch (final Throwable oops) {
-			result.addObject("errMsg", oops.getMessage());
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}
@@ -87,7 +87,7 @@ public class ServiceController extends AbstractController {
 			result = this.createEditModelAndView(service);
 
 		} catch (final Throwable oops) {
-			result.addObject("errMsg", oops.getMessage());
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}
@@ -109,7 +109,7 @@ public class ServiceController extends AbstractController {
 
 				} catch (final Throwable oops) {
 					result.addObject("service", toSave);
-					result.addObject("errMsg", oops.getMessage());
+					result = new ModelAndView("redirect:../welcome/index.do");
 				}
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(service, oops.getMessage());
@@ -128,7 +128,7 @@ public class ServiceController extends AbstractController {
 			this.serviceService.delete(service);
 
 		} catch (final Throwable oops) {
-			result.addObject("errMsg", oops.getMessage());
+			result = new ModelAndView("redirect:../welcome/index.do");
 		}
 		return result;
 	}

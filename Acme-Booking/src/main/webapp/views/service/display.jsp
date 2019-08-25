@@ -9,39 +9,37 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<security:authorize access="permitAll">
 
-	<h1><jstl:out value="${service.name}" /></h1>
-	<fieldset style="width: 30%">
-		<legend style="font-size: 21px">
-			<spring:message code="service.details" />
-		</legend>
-		<div style="float: left;">
-		<br>
-			<div>
-				<strong><spring:message code="service.description" />: </strong><br><br>
-				<jstl:out value="${service.description}" />
-			</div>
-			<br />
-			
-			<div>
-				<strong><spring:message code="service.price" />: </strong>
-				<jstl:out value="${service.price}" /> &#8364;
-			</div>
-			<br />
-			
-		</div>
-	</fieldset>
+<h1><jstl:out value="${service.name}" /></h1>
+<fieldset style="width: 30%">
+	<legend style="font-size: 21px">
+		<spring:message code="service.details" />
+	</legend>
+	<div style="float: left;">
 	<br>
-	
-	<jstl:if test="${isPrincipal and service.room.status == 'DRAFT'}">
-		<input type="button" name="back"
-			value="<spring:message code="mp.edit" />"
-			onclick="redirect: location.href = 'service/edit.do?serviceId=${service.id}';" />
-	</jstl:if>
+		<div>
+			<strong><spring:message code="service.description" />: </strong><br><br>
+			<jstl:out value="${service.description}" />
+		</div>
+		<br />
 		
-	<input type="button" name="back"
-		value="<spring:message code="mp.back" />"
-		onclick="window.history.back()" />
+		<div>
+			<strong><spring:message code="service.price" />: </strong>
+			<jstl:out value="${service.price}" /> &#8364;
+		</div>
+		<br />
+		
+	</div>
+</fieldset>
+<br>
 
-</security:authorize>
+<jstl:if test="${isPrincipal and service.room.status == 'DRAFT'}">
+	<input type="button" name="back"
+		value="<spring:message code="mp.edit" />"
+		onclick="redirect: location.href = 'service/edit.do?serviceId=${service.id}';" />
+</jstl:if>
+	
+<input type="button" name="back"
+	value="<spring:message code="mp.back" />"
+	onclick="window.history.back()" />
+

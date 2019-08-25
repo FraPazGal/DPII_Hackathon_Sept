@@ -142,8 +142,8 @@ public class CategoryService {
 	
 	public Category reconstruct(Category category, String nameES,
 			String nameEN, BindingResult binding) {
-		Category res = this.create();
-		Map<String,String> aux = new HashMap<String,String>();
+		Category result = this.create();
+		Map<String,String> title = new HashMap<String,String>();
 		
 		Actor principal = this.utilityService.findByPrincipal();
 		Assert.isTrue(this.utilityService.checkAuthority(principal,
@@ -155,19 +155,26 @@ public class CategoryService {
 			binding.rejectValue("title", "no.both.names");
 		}
 		
-		aux.put("Español", nameES);
-		aux.put("English", nameEN);
+		title.put("Español", nameES);
+		title.put("English", nameEN);
 		
 		if (category.getId() != 0) {
-			res = this.categoryRepository.findOne(category.getId());
+			Category aux = this.categoryRepository.findOne(category.getId());
+			
+			result.setId(aux.getId());
+			result.setVersion(aux.getVersion());
+			result.setChildCategories(aux.getChildCategories());
+			result.setRooms(aux.getRooms());
+			result.setParentCategory(aux.getParentCategory());
+			
 		} else {
-			res.setParentCategory(category.getParentCategory());
+			result.setParentCategory(category.getParentCategory());
 		}
-		res.setTitle(aux);
+		result.setTitle(title);
+		
+		this.validator.validate(result, binding);
 
-		this.validator.validate(res, binding);
-
-		return res;
+		return result;
 	}
 	
 	private void transferRooms(Category category) {

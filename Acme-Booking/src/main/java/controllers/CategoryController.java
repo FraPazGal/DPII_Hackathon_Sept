@@ -45,10 +45,8 @@ public class CategoryController extends AbstractController {
 		ModelAndView result = new ModelAndView("redirect:list.do");
 		
 		try {
-			Category category = this.categoryService.create();
+			result = this.createEditModelAndView(this.categoryService.create());
 			
-			result = this.createEditModelAndView(category);
-			result.addObject("categories", this.categoryService.findAll());
 		} catch (Throwable oops) {
 			result.addObject("errMsg", oops.getMessage());
 		}
@@ -64,7 +62,8 @@ public class CategoryController extends AbstractController {
 			Category category = this.categoryService.findOne(categoryId);
 			
 			result = this.createEditModelAndView(category);
-			result.addObject("categories", this.categoryService.findAll());
+			result.addObject("nameEN", category.getTitle().get("English"));
+			result.addObject("nameES", category.getTitle().get("Español"));
 			
 		} catch (Throwable oops) {
 			result.addObject("errMsg", oops.getMessage());
@@ -84,15 +83,16 @@ public class CategoryController extends AbstractController {
 					nameEN, binding);
 			
 			if (binding.hasErrors()) {
-				
 				result = this.createEditModelAndView(category);
+				result.addObject("nameES", nameES);
+				result.addObject("nameEN", nameEN);
 			} else {
 				this.categoryService.save(reconstructed);
 			}
 		} catch (Throwable oops) {
 			result = this.createEditModelAndView(category, oops.getMessage());
 		}
-		result.addObject("categories", this.categoryService.findAll());
+		
 		
 		return result;
 	}
@@ -120,6 +120,7 @@ public class CategoryController extends AbstractController {
 			String messageCode) {
 		ModelAndView result = new ModelAndView("category/edit");
 
+		result.addObject("categories", this.categoryService.findAll());
 		result.addObject("category", category);
 		result.addObject("errMsg", messageCode);
 

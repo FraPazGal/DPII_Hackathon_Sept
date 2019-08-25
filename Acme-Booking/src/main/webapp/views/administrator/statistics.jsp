@@ -9,173 +9,246 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 
-<security:authorize access="hasRole('ADMIN')">
+<h1><spring:message code="administrator.statistics" /></h1>	
+<table class="displayStyle" style="width:650px; line-height: 30px; font-size: 18px; " >
 
-<jstl:choose>
-	<jstl:when test="${errMsg ne null}">
-		<p>
-			<jstl:out value="${errMsg}"/>
-		</p>
-	</jstl:when>
-	<jstl:otherwise>
-		<h1><spring:message code="administrator.statistics" /></h1>	
-			<table class="displayStyle" style="width:650px; line-height: 30px; font-size: 18px; " >
+	<tr><td style="text-align: justify; font-size: 22px;font-weight: bold; ">
+		<spring:message code="administrator.statsBookingsPerRoom" />
+	</td></tr>
+	<jstl:choose>
+		<jstl:when test="${statsBookingsPerRoom[0] ne null}">
+			<tr>
+				<td style=""><spring:message code="administrator.statsBookingsPerRoom.max" /></td>
+				<td> ${statsBookingsPerRoom[0]}</td>
+			</tr>
 			
-					<tr><td style="text-align: justify; font-size: 22px;font-weight: bold; ">
-						<spring:message code="administrator.statsIRobotsPerScientist" />
-					</td></tr>
-					<jstl:choose>
-						<jstl:when test="${statsIRobotsPerScientist[0] ne null}">
-							<tr>
-								<td style=""><spring:message code="administrator.statsIRobotsPerScientist.max" /></td>
-								<td> ${statsIRobotsPerScientist[0]}</td>
-							</tr>
-							
-							<tr>
-								<td><spring:message code="administrator.statsIRobotsPerScientist.min" /></td>
-								<td> ${statsIRobotsPerScientist[1]}</td>
-							</tr>
-							
-							<tr>
-								<td><spring:message code="administrator.statsIRobotsPerScientist.avg" /></td>
-								<td> ${statsIRobotsPerScientist[2]}</td>
-							</tr>
-							
-							<tr>
-								<td><spring:message code="administrator.statsIRobotsPerScientist.stddev" /></td>
-								<td> ${statsIRobotsPerScientist[3]}</td>
-							</tr>
-						</jstl:when>
-						<jstl:otherwise>
-						<tr><td><br></td></tr>
-							<tr>
-								<td><spring:message code="administrator.statistics.noData" /></td>
-							</tr>
-						</jstl:otherwise>
-					</jstl:choose>
-		
-					<tr><td><br></td></tr>
-					
-					<tr><td style="text-align: justify; font-size: 22px;font-weight: bold; ">
-						<spring:message code="administrator.top10ScientistByPurchases" />
-					</td></tr>
-					<jstl:choose>
-						<jstl:when test="${not empty top10ScientistByPurchases}">
-							<tr>
-								<td> 
-									<jstl:set var="cont" value="1"/>
-									<jstl:forEach items="${top10ScientistByPurchases}" var="i" >
-										<jstl:out value="${cont}"/>. 
-										<jstl:out value="${i.name } ${i.surname}"/> <br>
-										<jstl:set var="cont" value="${cont + 1}"/>
-									</jstl:forEach>
-								</td>
-							</tr>
-						</jstl:when>
-						<jstl:otherwise>
-						<tr><td><br></td></tr>
-							<tr>
-								<td><spring:message code="administrator.statistics.noData" /></td>
-							</tr>
-						</jstl:otherwise>
-					</jstl:choose>
-					
-					<tr><td><br></td></tr>
-					
-					<tr><td style="text-align: justify; font-size: 22px;font-weight: bold; ">
-						<spring:message code="administrator.top10BestSellingIRobots" />
-					</td></tr>
-					<jstl:choose>
-						<jstl:when test="${not empty top10BestSellingIRobots}">
-							<tr>
-								<td> 
-									<jstl:set var="cont" value="1"/>
-									<jstl:forEach items="${top10BestSellingIRobots}" var="i" >
-										<jstl:out value="${cont}"/>. 
-										<jstl:out value="${i.title}"/> <br>
-										<jstl:set var="cont" value="${cont + 1}"/>
-									</jstl:forEach>
-								</td>
-							</tr>
-						</jstl:when>
-						<jstl:otherwise>
-						<tr><td><br></td></tr>
-							<tr>
-								<td><spring:message code="administrator.statistics.noData" /></td>
-							</tr>
-						</jstl:otherwise>
-					</jstl:choose>
-					
-					<tr><td><br></td></tr>
-					
-					<tr><td style="text-align: justify; font-size: 22px;font-weight: bold; ">
-						<spring:message code="administrator.top10IRobotByFinders" />
-					</td></tr>
-					<jstl:choose>
-						<jstl:when test="${not empty top10IRobotByFinders}">
-							<tr>
-								<td> 
-									<jstl:set var="cont" value="1"/>
-									<jstl:forEach items="${top10IRobotByFinders}" var="i" >
-										<jstl:out value="${cont}"/>. 
-										<jstl:out value="${i.title}"/> <br>
-										<jstl:set var="cont" value="${cont + 1}"/>
-									</jstl:forEach>
-								</td>
-							</tr>
-						</jstl:when>
-						<jstl:otherwise>
-						<tr><td><br></td></tr>
-							<tr>
-								<td><spring:message code="administrator.statistics.noData" /></td>
-							</tr>
-						</jstl:otherwise>
-					</jstl:choose>
-					
-					<tr><td><br></td></tr>
-					
-					<tr><td style="text-align: justify; font-size: 22px;font-weight: bold; ">
-						<spring:message code="administrator.bottom10IRobotByFinders" />
-					</td></tr>
-					<jstl:choose>
-						<jstl:when test="${not empty bottom10IRobotByFinders}">
-							<tr>
-								<td> 
-									<jstl:set var="cont" value="1"/>
-									<jstl:forEach items="${bottom10IRobotByFinders}" var="i" >
-										<jstl:out value="${cont}"/>. 
-										<jstl:out value="${i.title}"/> <br>
-										<jstl:set var="cont" value="${cont + 1}"/>
-									</jstl:forEach>
-								</td>
-							</tr>
-						</jstl:when>
-						<jstl:otherwise>
-						<tr><td><br></td></tr>
-							<tr>
-								<td><spring:message code="administrator.statistics.noData" /></td>
-							</tr>
-						</jstl:otherwise>
-					</jstl:choose>
-					
-					<tr><td><br></td></tr>
-					
-					<jstl:choose>
-						<jstl:when test="${averageResultsPerFinder ne null}">
-							<tr>
-								<td style=""><strong><spring:message code="administrator.averageResultsPerFinder" /></strong></td>
-								<td> ${averageResultsPerFinder}</td>
-							</tr>
-						</jstl:when>
-						<jstl:otherwise>
-						<tr><td><br></td></tr>
-							<tr>
-								<td><spring:message code="administrator.statistics.noData" /></td>
-							</tr>
-						</jstl:otherwise>
-					</jstl:choose>
-					
-				</table>
+			<tr>
+				<td><spring:message code="administrator.statsBookingsPerRoom.min" /></td>
+				<td> ${statsBookingsPerRoom[1]}</td>
+			</tr>
+			
+			<tr>
+				<td><spring:message code="administrator.statsBookingsPerRoom.avg" /></td>
+				<td> ${statsBookingsPerRoom[2]}</td>
+			</tr>
+			
+			<tr>
+				<td><spring:message code="administrator.statsBookingsPerRoom.stddev" /></td>
+				<td> ${statsBookingsPerRoom[3]}</td>
+			</tr>
+		</jstl:when>
+		<jstl:otherwise>
+		<tr><td><br></td></tr>
+			<tr>
+				<td><spring:message code="administrator.statistics.noData" /></td>
+			</tr>
 		</jstl:otherwise>
 	</jstl:choose>
-</security:authorize>
+	
+	<tr><td><br></td></tr>
+	
+	<tr><td style="text-align: justify; font-size: 22px;font-weight: bold; ">
+		<spring:message code="administrator.statsServicesPerRoom" />
+	</td></tr>
+	<jstl:choose>
+		<jstl:when test="${statsServicesPerRoom[0] ne null}">
+			<tr>
+				<td style=""><spring:message code="administrator.statsServicesPerRoom.max" /></td>
+				<td> ${statsServicesPerRoom[0]}</td>
+			</tr>
+			
+			<tr>
+				<td><spring:message code="administrator.statsServicesPerRoom.min" /></td>
+				<td> ${statsServicesPerRoom[1]}</td>
+			</tr>
+			
+			<tr>
+				<td><spring:message code="administrator.statsServicesPerRoom.avg" /></td>
+				<td> ${statsServicesPerRoom[2]}</td>
+			</tr>
+			
+			<tr>
+				<td><spring:message code="administrator.statsServicesPerRoom.stddev" /></td>
+				<td> ${statsServicesPerRoom[3]}</td>
+			</tr>
+		</jstl:when>
+		<jstl:otherwise>
+		<tr><td><br></td></tr>
+			<tr>
+				<td><spring:message code="administrator.statistics.noData" /></td>
+			</tr>
+		</jstl:otherwise>
+	</jstl:choose>
+	
+	<tr><td><br></td></tr>
+	
+	<tr><td style="text-align: justify; font-size: 22px;font-weight: bold; ">
+		<spring:message code="administrator.statsPricePerRoom" />
+	</td></tr>
+	<jstl:choose>
+		<jstl:when test="${statsPricePerRoom[0] ne null}">
+			<tr>
+				<td style=""><spring:message code="administrator.statsPricePerRoom.max" /></td>
+				<td> ${statsPricePerRoom[0]}</td>
+			</tr>
+			
+			<tr>
+				<td><spring:message code="administrator.statsPricePerRoom.min" /></td>
+				<td> ${statsPricePerRoom[1]}</td>
+			</tr>
+			
+			<tr>
+				<td><spring:message code="administrator.statsPricePerRoom.avg" /></td>
+				<td> ${statsPricePerRoom[2]}</td>
+			</tr>
+			
+			<tr>
+				<td><spring:message code="administrator.statsPricePerRoom.stddev" /></td>
+				<td> ${statsPricePerRoom[3]}</td>
+			</tr>
+		</jstl:when>
+		<jstl:otherwise>
+		<tr><td><br></td></tr>
+			<tr>
+				<td><spring:message code="administrator.statistics.noData" /></td>
+			</tr>
+		</jstl:otherwise>
+	</jstl:choose>
+
+	<tr><td><br></td></tr>
+	
+	<jstl:choose>
+		<jstl:when test="${ratioRevisionPendingByFinalRooms ne null}">
+			<tr>
+				<td style=""><strong><spring:message code="administrator.ratioRevisionPendingByFinalRooms" /></strong></td>
+				<td> ${ratioRevisionPendingByFinalRooms}</td>
+			</tr>
+		</jstl:when>
+		<jstl:otherwise>
+		<tr><td><br></td></tr>
+			<tr>
+				<td><spring:message code="administrator.statistics.noData" /></td>
+			</tr>
+		</jstl:otherwise>
+	</jstl:choose>
+	
+	<tr><td><br></td></tr>
+	
+	<jstl:choose>
+		<jstl:when test="${ratioAcceptedByFinalRooms ne null}">
+			<tr>
+				<td style=""><strong><spring:message code="administrator.ratioAcceptedByFinalRooms" /></strong></td>
+				<td> ${ratioAcceptedByFinalRooms}</td>
+			</tr>
+		</jstl:when>
+		<jstl:otherwise>
+		<tr><td><br></td></tr>
+			<tr>
+				<td><spring:message code="administrator.statistics.noData" /></td>
+			</tr>
+		</jstl:otherwise>
+	</jstl:choose>
+	
+	<tr><td><br></td></tr>
+	
+	<jstl:choose>
+		<jstl:when test="${ratioRejectedByFinalRooms ne null}">
+			<tr>
+				<td style=""><strong><spring:message code="administrator.ratioRejectedByFinalRooms" /></strong></td>
+				<td> ${ratioRejectedByFinalRooms}</td>
+			</tr>
+		</jstl:when>
+		<jstl:otherwise>
+		<tr><td><br></td></tr>
+			<tr>
+				<td><spring:message code="administrator.statistics.noData" /></td>
+			</tr>
+		</jstl:otherwise>
+	</jstl:choose>
+	
+	<tr><td><br></td></tr>
+	
+	<jstl:choose>
+		<jstl:when test="${ratioRoomsOutOfService ne null}">
+			<tr>
+				<td style=""><strong><spring:message code="administrator.ratioRoomsOutOfService" /></strong></td>
+				<td> ${ratioRoomsOutOfService}</td>
+			</tr>
+		</jstl:when>
+		<jstl:otherwise>
+		<tr><td><br></td></tr>
+			<tr>
+				<td><spring:message code="administrator.statistics.noData" /></td>
+			</tr>
+		</jstl:otherwise>
+	</jstl:choose>
+	
+	<tr><td><br></td></tr>
+	
+	<jstl:choose>
+		<jstl:when test="${topCategoryByRooms ne null}">
+			<tr>
+				<td style=""><strong><spring:message code="administrator.topCategoryByRooms" /></strong></td>
+				<td> ${topCategoryByRooms}</td>
+			</tr>
+		</jstl:when>
+		<jstl:otherwise>
+		<tr><td><br></td></tr>
+			<tr>
+				<td><spring:message code="administrator.statistics.noData" /></td>
+			</tr>
+		</jstl:otherwise>
+	</jstl:choose>
+	
+	<tr><td><br></td></tr>
+	
+	<tr><td style="text-align: justify; font-size: 22px;font-weight: bold; ">
+		<spring:message code="administrator.statsFinder" />
+	</td></tr>
+	<jstl:choose>
+		<jstl:when test="${statsFinder[0] ne null}">
+			<tr>
+				<td style=""><spring:message code="administrator.statsFinder.max" /></td>
+				<td> ${statsFinder[0]}</td>
+			</tr>
+			
+			<tr>
+				<td><spring:message code="administrator.statsFinder.min" /></td>
+				<td> ${statsFinder[1]}</td>
+			</tr>
+			
+			<tr>
+				<td><spring:message code="administrator.statsFinder.avg" /></td>
+				<td> ${statsFinder[2]}</td>
+			</tr>
+			
+			<tr>
+				<td><spring:message code="administrator.statsFinder.stddev" /></td>
+				<td> ${statsFinder[3]}</td>
+			</tr>
+		</jstl:when>
+		<jstl:otherwise>
+		<tr><td><br></td></tr>
+			<tr>
+				<td><spring:message code="administrator.statistics.noData" /></td>
+			</tr>
+		</jstl:otherwise>
+	</jstl:choose>
+	
+	<tr><td><br></td></tr>
+	
+	<jstl:choose>
+		<jstl:when test="${ratioFindersEmpty ne null}">
+			<tr>
+				<td style=""><strong><spring:message code="administrator.ratioFindersEmpty" /></strong></td>
+				<td> ${ratioFindersEmpty}</td>
+			</tr>
+		</jstl:when>
+		<jstl:otherwise>
+		<tr><td><br></td></tr>
+			<tr>
+				<td><spring:message code="administrator.statistics.noData" /></td>
+			</tr>
+		</jstl:otherwise>
+	</jstl:choose>
+</table>
