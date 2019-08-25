@@ -1,3 +1,4 @@
+
 package domain;
 
 import java.util.Collection;
@@ -13,7 +14,6 @@ import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,77 +25,74 @@ public class Finder extends DomainEntity {
 
 	/* Attributes */
 
-	private String keyWord, minimumHour, maximumHour;
-	private Double maximumFee;
-	private Integer capacity;
-	private Date searchMoment;
-	private Collection<Room> results;
-	private Customer customer;
+	private String				keyWord, service, category;
+	private Double				maximumFee;
+	private Integer				capacity;
+	private Date				searchMoment;
+	private Collection<Room>	results;
+	private Customer			customer;
+
 
 	/* Getters and setters */
 
+	public String getCategory() {
+		return this.category;
+	}
+
+	public void setCategory(final String category) {
+		this.category = category;
+	}
 	@Length(max = 100, message = "The keyword is too long")
 	public String getKeyWord() {
-		return keyWord;
+		return this.keyWord;
 	}
 
-	public void setKeyWord(String keyWord) {
+	public void setKeyWord(final String keyWord) {
 		this.keyWord = keyWord;
 	}
-	
-	public String getMinimumHour() {
-		return minimumHour;
+
+	public String getService() {
+		return this.service;
 	}
 
-	@Pattern(regexp="^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", message="invalid.hour")
-	public void setMinimumHour(String minimumHour) {
-		this.minimumHour = minimumHour;
-	}
-
-	public String getMaximumHour() {
-		return maximumHour;
-	}
-
-	@Pattern(regexp="^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", message="invalid.hour")
-	public void setMaximumHour(String maximumHour) {
-		this.maximumHour = maximumHour;
+	public void setService(final String service) {
+		this.service = service;
 	}
 
 	@Min(value = 0L, message = "The value must be positive")
 	public Double getMaximumFee() {
-		return maximumFee;
+		return this.maximumFee;
 	}
 
-	public void setMaximumFee(Double maximumFee) {
+	public void setMaximumFee(final Double maximumFee) {
 		this.maximumFee = maximumFee;
 	}
-	
+
 	@Min(value = 0L, message = "The value must be positive")
 	public Integer getCapacity() {
-		return capacity;
+		return this.capacity;
 	}
 
-	public void setCapacity(Integer capacity) {
+	public void setCapacity(final Integer capacity) {
 		this.capacity = capacity;
 	}
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
 	public Date getSearchMoment() {
-		return searchMoment;
+		return this.searchMoment;
 	}
 
-	public void setSearchMoment(Date searchMoment) {
+	public void setSearchMoment(final Date searchMoment) {
 		this.searchMoment = searchMoment;
 	}
 
 	@Valid
 	@ManyToMany
-	@NotNull
 	public Collection<Room> getResults() {
-		return results;
+		return this.results;
 	}
 
-	public void setResults(Collection<Room> results) {
+	public void setResults(final Collection<Room> results) {
 		this.results = results;
 	}
 
@@ -103,10 +100,10 @@ public class Finder extends DomainEntity {
 	@NotNull
 	@OneToOne(optional = false)
 	public Customer getCustomer() {
-		return customer;
+		return this.customer;
 	}
 
-	public void setCustomer(Customer customer) {
+	public void setCustomer(final Customer customer) {
 		this.customer = customer;
 	}
 }

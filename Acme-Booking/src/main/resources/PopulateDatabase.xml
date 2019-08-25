@@ -22,7 +22,6 @@
 				</bean>
 			</list>
 		</property>
-		<property name="isBanned" value="false" />
 	</bean>
 
 	<bean id="userAdmin2" class="security.UserAccount">
@@ -35,7 +34,6 @@
 				</bean>
 			</list>
 		</property>
-		<property name="isBanned" value="false" />
 	</bean>
 
 	<!-- CUSTOMERS -->
@@ -50,7 +48,6 @@
 				</bean>
 			</list>
 		</property>
-		<property name="isBanned" value="false" />
 	</bean>
 
 	<bean id="userCustomer2" class="security.UserAccount">
@@ -63,7 +60,6 @@
 				</bean>
 			</list>
 		</property>
-		<property name="isBanned" value="false" />
 	</bean>
 
 	<bean id="userCustomer3" class="security.UserAccount">
@@ -76,7 +72,6 @@
 				</bean>
 			</list>
 		</property>
-		<property name="isBanned" value="true" />
 	</bean>
 
 	<!-- OWNERS -->
@@ -103,7 +98,6 @@
 				</bean>
 			</list>
 		</property>
-		<property name="isBanned" value="false" />
 	</bean>
 
 	<bean id="userOwner3" class="security.UserAccount">
@@ -116,7 +110,6 @@
 				</bean>
 			</list>
 		</property>
-		<property name="isBanned" value="false" />
 	</bean>
 
 	<bean id="userOwner4" class="security.UserAccount">
@@ -129,7 +122,6 @@
 				</bean>
 			</list>
 		</property>
-		<property name="isBanned" value="true" />
 	</bean>
 
 	<!-- ACTORS -->
@@ -185,19 +177,18 @@
 		<property name="address" value="C/ Phantom Blood" />
 		<property name="userAccount" ref="userCustomer2" />
 		<property name="creditCard" ref="creditCard2" />
-		<property name="isSpammer" value="false" />
 	</bean>
-	
+
 	<bean id="customer3" class="domain.Customer">
 		<property name="name" value="Calliu" />
 		<property name="surname" value="Pictures" />
-		<property name="photo" value="http://2.bp.blogspot.com/-GMbk63S19wI/Ul-rdWP_YUI/AAAAAAAAW-o/byjGxrZ2GWc/s1600/caillou-xl-pictures-12.jpg" />
+		<property name="photo"
+			value="http://2.bp.blogspot.com/-GMbk63S19wI/Ul-rdWP_YUI/AAAAAAAAW-o/byjGxrZ2GWc/s1600/caillou-xl-pictures-12.jpg" />
 		<property name="email" value="calliu@outlook.com" />
 		<property name="phoneNumber" value="+34688721658" />
 		<property name="address" value="C/ Phantom Blood" />
 		<property name="userAccount" ref="userCustomer3" />
 		<property name="creditCard" ref="creditCard20" />
-		<property name="isSpammer" value="true" />
 	</bean>
 
 	<!-- OWNERS -->
@@ -212,7 +203,6 @@
 		<property name="phoneNumber" value="+34697854321" />
 		<property name="address" value="C/ Amestris" />
 		<property name="userAccount" ref="userOwner1" />
-		<property name="isSpammer" value="false" />
 	</bean>
 
 	<bean id="owner2" class="domain.Owner">
@@ -230,23 +220,23 @@
 	<bean id="owner3" class="domain.Owner">
 		<property name="name" value="Cartoon" />
 		<property name="surname" value="Man" />
-		<property name="photo" value="http://cliparts.co/cliparts/Aib/jRa/AibjRa9zT.jpg" />
+		<property name="photo"
+			value="http://cliparts.co/cliparts/Aib/jRa/AibjRa9zT.jpg" />
 		<property name="email" value="cartoon@yahoo.com" />
 		<property name="phoneNumber" value="+34T627946333" />
 		<property name="address" value="C/ Cliparts, 99" />
 		<property name="userAccount" ref="userOwner3" />
-		<property name="isSpammer" value="true" />
 	</bean>
 
 	<bean id="owner4" class="domain.Owner">
 		<property name="name" value="Barbudo" />
 		<property name="surname" value="Sandalias" />
-		<property name="photo" value="http://www.aperfectworld.org/clipart/cartoons/tourist.png" />
+		<property name="photo"
+			value="http://www.aperfectworld.org/clipart/cartoons/tourist.png" />
 		<property name="email" value="bsandalias@yahoo.com" />
 		<property name="phoneNumber" value="+34697421153" />
 		<property name="address" value="C/ La playa, 0" />
 		<property name="userAccount" ref="userOwner4" />
-		<property name="isSpammer" value="true" />
 	</bean>
 
 	<!-- FINDERS -->
@@ -266,13 +256,752 @@
 		</property>
 		<property name="customer" ref="customer2" />
 	</bean>
-	
+
 	<bean id="finderCustomer3" class="domain.Finder">
 		<property name="results">
 			<list>
 			</list>
 		</property>
 		<property name="customer" ref="customer3" />
+	</bean>
+	<!-- MESSAGEBOX -->
+
+	<!-- MESSAGE BOXES -->
+	<!-- ADMIN 1 -->
+	<bean id="inBoxAdmin1" class="domain.MessageBox">
+		<property name="name" value="In box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+			<ref bean="administrator1" />
+		</property>
+	</bean>
+
+	<bean id="spamBoxAdmin1" class="domain.MessageBox">
+		<property name="name" value="Spam box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="administrator1" />
+		</property>
+
+	</bean>
+
+	<bean id="outBoxAdmin1" class="domain.MessageBox">
+		<property name="name" value="Out box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="administrator1" />
+		</property>
+
+
+	</bean>
+
+	<bean id="trashBoxAdmin1" class="domain.MessageBox">
+		<property name="name" value="Trash box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="administrator1" />
+		</property>
+
+	</bean>
+
+	<bean id="notificationBoxAdmin1" class="domain.MessageBox">
+		<property name="name" value="Notification box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="administrator1" />
+		</property>
+
+	</bean>
+
+	<!-- ADMIN 2 -->
+	<bean id="inBoxAdmin2" class="domain.MessageBox">
+		<property name="name" value="In box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+			<ref bean="administrator2" />
+		</property>
+	</bean>
+
+
+	<bean id="spamBoxAdmin2" class="domain.MessageBox">
+		<property name="name" value="Spam box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="administrator2" />
+		</property>
+
+	</bean>
+
+	<bean id="outBoxAdmin2" class="domain.MessageBox">
+		<property name="name" value="Out box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+			<ref bean="administrator2" />
+		</property>
+
+	</bean>
+
+	<bean id="trashBoxAdmin2" class="domain.MessageBox">
+		<property name="name" value="Trash box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="administrator2" />
+		</property>
+	</bean>
+
+	<bean id="notificationBoxAdmin2" class="domain.MessageBox">
+		<property name="name" value="Notification box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="administrator2" />
+		</property>
+
+	</bean>
+
+	<!-- CUSTOMER 1 -->
+
+	<bean id="inBoxCustomer1" class="domain.MessageBox">
+		<property name="name" value="In box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+			<ref bean="customer1" />
+		</property>
+
+
+	</bean>
+
+	<bean id="spamBoxCustomer1" class="domain.MessageBox">
+		<property name="name" value="Spam box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+
+		<property name="owner">
+
+			<ref bean="customer1" />
+		</property>
+	</bean>
+
+	<bean id="outBoxCustomer1" class="domain.MessageBox">
+		<property name="name" value="Out box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="customer1" />
+		</property>
+	</bean>
+
+	<bean id="trashBoxCustomer1" class="domain.MessageBox">
+		<property name="name" value="Trash box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="customer1" />
+		</property>
+	</bean>
+
+	<bean id="notificationBoxCustomer1" class="domain.MessageBox">
+		<property name="name" value="Notification box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="customer1" />
+		</property>
+	</bean>
+
+	<!-- CUSTOMER 2 -->
+
+	<bean id="inBoxCustomer2" class="domain.MessageBox">
+		<property name="name" value="In box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="customer2" />
+		</property>
+
+	</bean>
+
+	<bean id="spamBoxCustomer2" class="domain.MessageBox">
+		<property name="name" value="Spam box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="customer2" />
+		</property>
+	</bean>
+
+	<bean id="outBoxCustomer2" class="domain.MessageBox">
+		<property name="name" value="Out box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="customer2" />
+		</property>
+
+	</bean>
+
+	<bean id="trashBoxCustomer2" class="domain.MessageBox">
+		<property name="name" value="Trash box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="customer2" />
+		</property>
+
+	</bean>
+
+	<bean id="notificationBoxCustomer2" class="domain.MessageBox">
+		<property name="name" value="Notification box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="customer2" />
+		</property>
+	</bean>
+
+	<!-- CUSTOMER 2 -->
+
+	<bean id="inBoxCustomer3" class="domain.MessageBox">
+		<property name="name" value="In box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="customer3" />
+		</property>
+
+	</bean>
+
+	<bean id="spamBoxCustomer3" class="domain.MessageBox">
+		<property name="name" value="Spam box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="customer3" />
+		</property>
+	</bean>
+
+	<bean id="outBoxCustomer3" class="domain.MessageBox">
+		<property name="name" value="Out box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="customer3" />
+		</property>
+
+	</bean>
+
+	<bean id="trashBoxCustomer3" class="domain.MessageBox">
+		<property name="name" value="Trash box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="customer3" />
+		</property>
+
+	</bean>
+
+	<bean id="notificationBoxCustomer3" class="domain.MessageBox">
+		<property name="name" value="Notification box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="customer3" />
+		</property>
+	</bean>
+
+	<!-- OWNER 1 -->
+
+	<bean id="inBoxOwner1" class="domain.MessageBox">
+		<property name="name" value="In box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+
+		<property name="owner">
+
+			<ref bean="owner1" />
+		</property>
+	</bean>
+
+	<bean id="spamBoxOwner1" class="domain.MessageBox">
+		<property name="name" value="Spam box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="owner1" />
+		</property>
+	</bean>
+
+	<bean id="outBoxOwner1" class="domain.MessageBox">
+		<property name="name" value="Out box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="owner1" />
+		</property>
+	</bean>
+
+	<bean id="trashBoxOwner1" class="domain.MessageBox">
+		<property name="name" value="Trash box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="owner1" />
+		</property>
+	</bean>
+
+	<bean id="notificationBoxOwner1" class="domain.MessageBox">
+		<property name="name" value="Notification box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="owner1" />
+		</property>
+	</bean>
+
+	<!-- OWNER2 -->
+
+	<bean id="inBoxOwner2" class="domain.MessageBox">
+		<property name="name" value="In box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="owner2" />
+		</property>
+	</bean>
+
+	<bean id="spamBoxOwner2" class="domain.MessageBox">
+		<property name="name" value="Spam box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="owner2" />
+		</property>
+	</bean>
+
+	<bean id="outBoxOwner2" class="domain.MessageBox">
+		<property name="name" value="Out box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="owner2" />
+		</property>
+	</bean>
+
+	<bean id="trashBoxOwner2" class="domain.MessageBox">
+		<property name="name" value="Trash box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="owner2" />
+		</property>
+	</bean>
+
+	<bean id="notificationBoxOwner2" class="domain.MessageBox">
+		<property name="name" value="Notification box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="owner2" />
+		</property>
+	</bean>
+
+	<!-- OWNER 3 -->
+
+	<bean id="inBoxOwner3" class="domain.MessageBox">
+		<property name="name" value="In box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="owner3" />
+		</property>
+
+
+	</bean>
+
+	<bean id="spamBoxOwner3" class="domain.MessageBox">
+		<property name="name" value="Spam box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="owner3" />
+		</property>
+
+	</bean>
+
+	<bean id="outBoxOwner3" class="domain.MessageBox">
+		<property name="name" value="Out box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="owner3" />
+		</property>
+
+
+	</bean>
+
+	<bean id="trashBoxOwner3" class="domain.MessageBox">
+		<property name="name" value="Trash box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="owner3" />
+		</property>
+
+	</bean>
+
+	<bean id="notificationBoxOwner3" class="domain.MessageBox">
+		<property name="name" value="Notification box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="owner3" />
+		</property>
+
+	</bean>
+
+	<!-- OWNER 4 -->
+
+	<bean id="inBoxOwner4" class="domain.MessageBox">
+		<property name="name" value="In box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="owner4" />
+		</property>
+
+
+	</bean>
+
+	<bean id="spamBoxOwner4" class="domain.MessageBox">
+		<property name="name" value="Spam box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="owner4" />
+		</property>
+
+	</bean>
+
+	<bean id="outBoxOwner4" class="domain.MessageBox">
+		<property name="name" value="Out box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="owner4" />
+		</property>
+
+
+	</bean>
+
+	<bean id="trashBoxOwner4" class="domain.MessageBox">
+		<property name="name" value="Trash box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="owner4" />
+		</property>
+
+	</bean>
+
+	<bean id="notificationBoxOwner4" class="domain.MessageBox">
+		<property name="name" value="Notification box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="owner4" />
+		</property>
+
 	</bean>
 
 
@@ -313,7 +1042,7 @@
 		<property name="expirationYear" value="28" />
 		<property name="CVV" value="479" />
 	</bean>
-	
+
 	<bean id="creditCard5" class="domain.CreditCard">
 		<property name="holder" value="Cartoon Man" />
 		<property name="make" value="VISA" />
@@ -367,7 +1096,7 @@
 		<property name="expirationYear" value="20" />
 		<property name="CVV" value="808" />
 	</bean>
-	
+
 	<bean id="creditCard11" class="domain.CreditCard">
 		<property name="holder" value="Sydnee Adams" />
 		<property name="make" value="VISA" />
@@ -376,7 +1105,7 @@
 		<property name="expirationYear" value="26" />
 		<property name="CVV" value="640" />
 	</bean>
-	
+
 	<bean id="creditCard12" class="domain.CreditCard">
 		<property name="holder" value="Amya Rodriguez" />
 		<property name="make" value="VISA" />
@@ -385,7 +1114,7 @@
 		<property name="expirationYear" value="28" />
 		<property name="CVV" value="546" />
 	</bean>
-	
+
 	<bean id="creditCard13" class="domain.CreditCard">
 		<property name="holder" value="Frieza" />
 		<property name="make" value="VISA" />
@@ -394,7 +1123,7 @@
 		<property name="expirationYear" value="22" />
 		<property name="CVV" value="177" />
 	</bean>
-	
+
 	<bean id="creditCard14" class="domain.CreditCard">
 		<property name="holder" value="Frieza" />
 		<property name="make" value="VISA" />
@@ -403,7 +1132,7 @@
 		<property name="expirationYear" value="22" />
 		<property name="CVV" value="177" />
 	</bean>
-	
+
 	<bean id="creditCard15" class="domain.CreditCard">
 		<property name="holder" value="Frieza" />
 		<property name="make" value="VISA" />
@@ -412,7 +1141,7 @@
 		<property name="expirationYear" value="22" />
 		<property name="CVV" value="177" />
 	</bean>
-	
+
 	<bean id="creditCard16" class="domain.CreditCard">
 		<property name="holder" value="Dio Brando" />
 		<property name="make" value="MASTERCARD" />
@@ -421,7 +1150,7 @@
 		<property name="expirationYear" value="20" />
 		<property name="CVV" value="366" />
 	</bean>
-	
+
 	<bean id="creditCard17" class="domain.CreditCard">
 		<property name="holder" value="Dio Brando" />
 		<property name="make" value="MASTERCARD" />
@@ -430,7 +1159,7 @@
 		<property name="expirationYear" value="20" />
 		<property name="CVV" value="366" />
 	</bean>
-	
+
 	<bean id="creditCard18" class="domain.CreditCard">
 		<property name="holder" value="Calliu Pictures" />
 		<property name="make" value="VISA" />
@@ -439,7 +1168,7 @@
 		<property name="expirationYear" value="20" />
 		<property name="CVV" value="128" />
 	</bean>
-	
+
 	<bean id="creditCard19" class="domain.CreditCard">
 		<property name="holder" value="Calliu Pictures" />
 		<property name="make" value="VISA" />
@@ -448,7 +1177,7 @@
 		<property name="expirationYear" value="20" />
 		<property name="CVV" value="128" />
 	</bean>
-	
+
 	<bean id="creditCard20" class="domain.CreditCard">
 		<property name="holder" value="Calliu Pictures" />
 		<property name="make" value="VISA" />
@@ -457,7 +1186,6 @@
 		<property name="expirationYear" value="20" />
 		<property name="CVV" value="128" />
 	</bean>
-	
 	<!-- CATEGORIES -->
 
 	<!-- CATEGORY -->
@@ -785,17 +1513,19 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<!-- MEETING ROOMS -->
-	
+
 	<bean id="room1" class="domain.Room">
 		<property name="title" value="Presentaciones de estudiantes" />
 		<property name="status" value="ACTIVE" />
 		<property name="ticker" value="MMMAAA-5D8D46" />
-		<property name="description" value="Esta es la mejor sala que encontrarás para presentar tu trabajo de tfg"/>
+		<property name="description"
+			value="Esta es la mejor sala que encontrarás para presentar tu trabajo de tfg" />
 		<property name="openingHour" value="08:30" />
 		<property name="closingHour" value="22:00" />
-		<property name="scheduleDetails" value="Las llaves se recojen en consejería y se entregan en el buzón de la sala" />
+		<property name="scheduleDetails"
+			value="Las llaves se recojen en consejería y se entregan en el buzón de la sala" />
 		<property name="address" value="C/ En un país multicolor" />
 		<property name="proveOfOwnership" value="http://registrodepropescaneado.com" />
 		<property name="pricePerHour" value="22" />
@@ -808,20 +1538,23 @@
 		<property name="owner" ref="owner1" />
 		<property name="administrator" ref="administrator1" />
 	</bean>
-	
+
 	<bean id="room2" class="domain.Room">
 		<property name="title" value="Reuniones" />
 		<property name="status" value="DRAFT" />
 		<property name="ticker" value="MMMAAA-5D8D46" />
-		<property name="description" value="Sala de reuniones pero que como solo puedo elegir una categoría tengo que elegir si quiero que salga en enterprise->meeting o study->meeting"/>
+		<property name="description"
+			value="Sala de reuniones pero que como solo puedo elegir una categoría tengo que elegir si quiero que salga en enterprise->meeting o study->meeting" />
 		<property name="openingHour" value="06:30" />
 		<property name="closingHour" value="17:45" />
-		<property name="scheduleDetails" value="Para ampliar el horario, contacte por email o teléfono" />
+		<property name="scheduleDetails"
+			value="Para ampliar el horario, contacte por email o teléfono" />
 		<property name="address" value="C/ Nació una abeja bajo el sol" />
 		<property name="proveOfOwnership" value="http://urlcondocweno.com" />
 		<property name="pricePerHour" value="40" />
 		<property name="capacity" value="124" />
-		<property name="photos" value="https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823__340.jpg,https://image.freepik.com/foto-gratis/hojas-tropicales-flores-colores-follaje-oscuro-fondo-naturaleza-follaje-verde-oscuro_34998-128.jpg" />
+		<property name="photos"
+			value="https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823__340.jpg,https://image.freepik.com/foto-gratis/hojas-tropicales-flores-colores-follaje-oscuro-fondo-naturaleza-follaje-verde-oscuro_34998-128.jpg" />
 		<property name="categories">
 			<list>
 				<ref bean="meetingE" />
@@ -831,12 +1564,13 @@
 		</property>
 		<property name="owner" ref="owner1" />
 	</bean>
-	
+
 	<bean id="room3" class="domain.Room">
 		<property name="title" value="No se aceptará" />
 		<property name="status" value="REVISION-PENDING" />
 		<property name="ticker" value="MMMAAA-5D8D46" />
-		<property name="description" value="En verda no es una sala y en verda no es mía, pero si cuela cuela"/>
+		<property name="description"
+			value="En verda no es una sala y en verda no es mía, pero si cuela cuela" />
 		<property name="openingHour" value="00:00" />
 		<property name="closingHour" value="00:00" />
 		<property name="scheduleDetails" value="Abierta 24/7 los 365 del año" />
@@ -851,42 +1585,98 @@
 		</property>
 		<property name="owner" ref="owner2" />
 	</bean>
-	
+
 	<!-- SERVICE -->
-	
+
 	<bean id="service1" class="domain.Service">
 		<property name="name" value="Limpieza" />
-		<property name="description" value="Así os ahorrais tener que limpiar la sala al terminar la presentación ;)" />
+		<property name="description"
+			value="Así os ahorrais tener que limpiar la sala al terminar la presentación ;)" />
 		<property name="price" value="10" />
 		<property name="room" ref="room1" />
 	</bean>
-	
+
 	<bean id="service2" class="domain.Service">
 		<property name="name" value="Catering básico" />
-		<property name="description" value="Sacan unos aperitivos y un refresco para cada asistente" />
+		<property name="description"
+			value="Sacan unos aperitivos y un refresco para cada asistente" />
 		<property name="price" value="200" />
 		<property name="room" ref="room2" />
 	</bean>
-	
+
 	<bean id="service3" class="domain.Service">
 		<property name="name" value="Catering weno" />
-		<property name="description" value="Sacan unos aparitivos, unos sanwiches de jamón y DOS refrescos para cada asistente" />
+		<property name="description"
+			value="Sacan unos aparitivos, unos sanwiches de jamón y DOS refrescos para cada asistente" />
 		<property name="price" value="300" />
-		<property name="room" ref="room2" />
+		<property name="room" ref="room1" />
 	</bean>
-	
+	<!-- BOOKING -->
+	<bean id="booking1" class="domain.Booking">
+		<property name="title" value="Estudiar" />
+		<property name="bookingReason" value="Para un grupo de estudio para las finales" />
+		<property name="status" value="ACCEPTED" />
+		<property name="expectedAttendance" value="10" />
+		<property name="duration" value="1" />
+		<property name="reservationPrice" value="32.0" />
+		<property name="requestedMoment" value="19/04/2019 16:15" />
+		<property name="reservationDate" value="01/09/2019 16:15" />
+		<property name="customer" ref="customer1" />
+		<property name="room" ref="room1" />
+		<property name="services">
+			<list>
+				<ref bean="service1" />
+			</list>
+		</property>
+	</bean>
+	<bean id="booking2" class="domain.Booking">
+		<property name="title" value="Estudiar" />
+		<property name="bookingReason" value="Para un examen" />
+		<property name="rejectionReason" value="La sala no estará disponible para ese día" />
+		<property name="status" value="REJECTED" />
+		<property name="expectedAttendance" value="2" />
+		<property name="duration" value="1" />
+		<property name="reservationPrice" value="32.0" />
+		<property name="requestedMoment" value="19/08/2019 16:15" />
+		<property name="reservationDate" value="02/09/2019 16:15" />
+		<property name="customer" ref="customer1" />
+		<property name="room" ref="room1" />
+		<property name="services">
+			<list>
+				<ref bean="service1" />
+			</list>
+		</property>
+	</bean>
+	<bean id="booking3" class="domain.Booking">
+		<property name="title" value="Trabajo universitario" />
+		<property name="bookingReason" value="Para hacer DP" />
+		<property name="status" value="PENDING" />
+		<property name="expectedAttendance" value="11" />
+		<property name="duration" value="2" />
+		<property name="reservationPrice" value="54.0" />
+		<property name="requestedMoment" value="20/08/2019 16:15" />
+		<property name="reservationDate" value="03/09/2019 16:15" />
+		<property name="customer" ref="customer2" />
+		<property name="room" ref="room1" />
+		<property name="services">
+			<list>
+				<ref bean="service1" />
+			</list>
+		</property>
+	</bean>
 	<!-- SYSTEM CONFIGURATION -->
 
 	<bean id="systemConfiguration" class="domain.SystemConfiguration">
 		<property name="systemName" value="Acme-Booking" />
-		<property name="banner" value="http://seawatchtours.ca/wp-content/uploads/2017/08/book-a-session.png" />
-		<property name="countryCode" value="+034"/>
-		<property name="VATTax" value="0.21"/>
-		<property name="makers" value="VISA,MASTERCARD,DINNERS,AMEX"/>
+		<property name="banner"
+			value="http://seawatchtours.ca/wp-content/uploads/2017/08/book-a-session.png" />
+		<property name="countryCode" value="+034" />
+		<property name="VATTax" value="0.21" />
+		<property name="makers" value="VISA,MASTERCARD,DINNERS,AMEX" />
 		<property name="spamWords"
 			value="sex,viagra,cialis,one million,you've been selected,nigeria,sexo,un millón,un millon,has sido seleccionado" />
 		<property name="welcomeMessage">
-			<util:map id="utilmap99" map-class="java.util.HashMap"
+			<util:map id="utilmap14" map-class="java.util.HashMap"
 				key-type="java.lang.String" value-type="java.lang.String">
 				<entry key="English"
 					value="Welcome to Acme Booking! Welcome to a new era of room renting" />

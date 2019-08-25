@@ -48,6 +48,20 @@
 			<td><jstl:out value="${config.maxResults}"></jstl:out></td>
 		</tr>
 
+		<tr>
+			<td><strong> <spring:message code="config.VATTax" /> :
+			</strong></td>
+			<td><jstl:out value="${config.VATTax}"></jstl:out></td>
+		</tr>
+		<tr>
+			<td><strong><spring:message code="config.makers" />: </strong></td>
+			<td><jstl:out value="${config.makers}" /></td>
+		</tr>
+		<tr>
+			<td><strong><spring:message code="config.spamWords" />: </strong></td>
+			<td><jstl:out value="${config.spamWords}" /></td>
+		</tr>
+
 	</table>
 
 	<jstl:if test="${not empty welcome}">
@@ -65,7 +79,7 @@
 
 		</table>
 	</jstl:if>
-	
+
 	<jstl:if test="${not empty breach}">
 		<table class="displayStyle">
 

@@ -21,8 +21,8 @@
 		<bean class="converters.OwnerToStringConverter" />
 		<bean class="converters.StringToOwnerConverter" />
 
-		<bean class="converters.RequestToStringConverter" />
-		<bean class="converters.StringToRequestConverter" />
+		<bean class="converters.BookingToStringConverter" />
+		<bean class="converters.StringToBookingConverter" />
 
 		<bean class="converters.RoomToStringConverter" />
 		<bean class="converters.StringToRoomConverter" />
@@ -38,19 +38,27 @@
 
 		<bean class="converters.ActorToStringConverter" />
 		<bean class="converters.StringToActorConverter" />
-		
+
 		<bean class="converters.CategoryToStringConverter" />
 		<bean class="converters.StringToCategoryConverter" />
-		
+
 		<bean class="converters.ServiceToStringConverter" />
 		<bean class="converters.StringToServiceConverter" />
-		
+
 		<bean class="converters.MessageToStringConverter" />
 		<bean class="converters.StringToMessageConverter" />
-		
+
 		<bean class="converters.MessageBoxToStringConverter" />
 		<bean class="converters.StringToMessageBoxConverter" />
-		
+
+		<bean class="converters.RoomToStringConverter" />
+		<bean class="converters.StringToRoomConverter" />
+
+		<bean class="converters.CategoryToStringConverter" />
+		<bean class="converters.StringToCategoryConverter" />
+
+		<bean class="converters.ServiceToStringConverter" />
+		<bean class="converters.StringToServiceConverter" />
 	</util:list>
 
 </beans>

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import services.ActorService;
 import services.SystemConfigurationService;
 import services.UtilityService;
 import domain.SystemConfiguration;
@@ -23,9 +22,6 @@ public class SystemConfigurationController extends AbstractController {
 
 	@Autowired
 	private UtilityService utilityService;
-	
-	@Autowired
-	private ActorService actorService;
 
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
 	public ModelAndView display() {
@@ -91,47 +87,4 @@ public class SystemConfigurationController extends AbstractController {
 		}
 		return result;
 	}
-	
-	/* List of spammers */
-	@RequestMapping(value = "/listSA", method = RequestMethod.GET)
-	public ModelAndView listSuspiciousActors() {
-		ModelAndView result = new ModelAndView("config/listSA");
-
-		try {
-			result.addObject("actors", this.actorService.findAllExceptPrincipal());
-			
-		} catch (final Throwable oops) {
-			result = new ModelAndView("redirect:/welcome/index.do");
-		} 
-		return result;
-	}
-
-	/* Ban actor */
-	@RequestMapping(value = "/ban", method = RequestMethod.GET, params = "actorId")
-	public ModelAndView banActor(@RequestParam int actorId) {
-		ModelAndView result = new ModelAndView("redirect:listSA.do");
-		
-		try {
-			this.actorService.ban(actorId);
-	
-		} catch (final Throwable oops) {
-			result = new ModelAndView("redirect:/welcome/index.do");
-		} 
-		return result;
-	}
-
-	/* Unban actor */
-	@RequestMapping(value = "/unban", method = RequestMethod.GET, params = "actorId")
-	public ModelAndView unbanActor(@RequestParam int actorId) {
-		ModelAndView result = new ModelAndView("redirect:listSA.do");
-
-		try {
-			this.actorService.unban(actorId);
-	
-		} catch (final Throwable oops) {
-			result = new ModelAndView("redirect:/welcome/index.do");
-		} 
-		return result;
-	}
-
 }

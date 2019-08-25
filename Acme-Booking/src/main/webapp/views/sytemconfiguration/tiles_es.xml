@@ -20,10 +20,5 @@
 		<put-attribute name="body"
 			value="/views/sytemconfiguration/edit.jsp" />
 	</definition>
-	
-	<definition name="config/listSA" extends="master.page">
-		<put-attribute name="title" value="Gestion de usuarios" />
-		<put-attribute name="body" value="/views/sytemconfiguration/listSA.jsp" />
-	</definition>
 
 </tiles-definitions>

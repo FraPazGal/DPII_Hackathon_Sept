@@ -1,3 +1,4 @@
+
 package converters;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,8 @@ import domain.Finder;
 public class StringToFinderConverter implements Converter<String, Finder> {
 
 	@Autowired
-	FinderRepository finderRepository;
+	FinderRepository	finderRepository;
+
 
 	@Override
 	public Finder convert(final String text) {

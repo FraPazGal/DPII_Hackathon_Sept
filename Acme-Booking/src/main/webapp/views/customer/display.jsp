@@ -21,11 +21,6 @@
 				<strong><spring:message code="actor.name" />: </strong>
 				<jstl:out value="${customer.name}" />
 			</div><br/>
-			
-			<div>
-				<strong><spring:message code="actor.middleName" />: </strong>
-				<jstl:out value="${customer.middleName}" />
-			</div><br />
 
 			<div>
 				<strong><spring:message code="actor.surname" />: </strong>
@@ -102,6 +97,8 @@
 		</fieldset>
 	</jstl:if>
 	<br>
-	<input type="button" name="edit" value="<spring:message code="mp.edit" />" onclick="javascript: relativeRedir('/customer/edit.do')" />&nbsp;
+	<input type="button" name="back" value="<spring:message code="mp.edit" />" onclick="javascript: relativeRedir('/customer/edit.do')" />&nbsp;
+	
 	<input type="button" name="back" value="<spring:message code="mp.back" />" onclick="window.history.back()" />&nbsp;
+	<br>
 </security:authorize>
