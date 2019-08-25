@@ -332,4 +332,8 @@ public class RoomService {
 			}
 		}
 	}
+	
+	public Collection<Room> findRoomsMine(int ownerId) {
+		return this.roomRepository.findRoomsMine(ownerId);
+	}
 }
