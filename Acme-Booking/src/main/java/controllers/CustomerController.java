@@ -85,7 +85,7 @@ public class CustomerController extends AbstractController {
 	/* Save Registration */
 	@RequestMapping(value = "/register", method = RequestMethod.POST, params = "save")
 	public ModelAndView register(@Valid final CustomerRegistrationForm customerRegistrationForm, final BindingResult binding) {
-		ModelAndView result = new ModelAndView("redirect:/");
+		ModelAndView result = new ModelAndView("redirect:../welcome/index.do");
 
 		try {
 			final Customer customer = this.customerService.reconstruct(customerRegistrationForm, binding);

@@ -164,17 +164,44 @@
 				code="service.details" />
 			</a>
 		</display:column>
+		
+		<jstl:if test="${isPrincipal }">
+			<jstl:if test="${room.status == 'DRAFT'}">
+				<display:column>
+					<a href="service/edit.do?serviceId=${service.id}"> <spring:message
+						code="service.edit" />
+					</a>
+				</display:column>
+				<display:column>
+					<a href="service/delete.do?serviceId=${service.id}"
+						onclick="return confirm('<spring:message code="service.confirm.delete"/>')"> 
+						<spring:message	code="service.delete" />
+					</a>
+				</display:column>
+			</jstl:if>
+			<jstl:if test="${room.status == 'ACTIVE'}">
+				<display:column>
+					<a href="service/decommission.do?serviceId=${service.id}"
+						onclick="return confirm('<spring:message code="service.confirm.decommission"/>')"> 
+						<spring:message code="service.decommission" />
+					</a>
+				</display:column>
+			</jstl:if>
+		</jstl:if>
 	</display:table>
 </jstl:if>
 		
+<input type="button"
+	onclick="redirect: location.href = 'service/create.do?roomId=${room.id}';"
+	value="<spring:message code='service.create' />" /><br>
+<br>
 <jstl:if test="${room.status == 'DRAFT'}">
-	
-	<input type="button"
-		onclick="redirect: location.href = 'service/create.do?roomId=${room.id}';"
-		value="<spring:message code='service.create' />" /><br>
-	<br>
+	<input type="button" name="back"
+		value="<spring:message code="mp.back" />"
+		onclick="redirect: location.href = 'room/list.do?range=mineD'" />
 </jstl:if>
-
-<input type="button" name="back"
-	value="<spring:message code="mp.back" />"
-	onclick="window.history.back()" />
+<jstl:if test="${room.status == 'ACTIVE'}">
+	<input type="button" name="back"
+		value="<spring:message code="mp.back" />"
+		onclick="redirect: location.href = 'room/list.do?range=mineA'" />
+</jstl:if>

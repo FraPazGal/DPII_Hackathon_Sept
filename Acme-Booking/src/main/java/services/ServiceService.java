@@ -25,6 +25,9 @@ public class ServiceService {
 
 	@Autowired
 	private UtilityService utilityService;
+	
+	@Autowired
+	private RoomService roomService;
 
 	@Autowired
 	private Validator validator;
@@ -50,7 +53,14 @@ public class ServiceService {
 	
 	public domain.Service save (domain.Service service) {
 		
-		this.allowedService(service);
+		if(service.getId() != 0) {
+			this.allowedService(service);
+		} else {
+			this.roomService.assertOwnership(service.getRoom());
+		}
+		
+		Assert.isTrue(service.getRoom().getStatus().equals("DRAFT") ||
+				service.getRoom().getStatus().equals("ACTIVE"), "not.allowed");
 		
 		domain.Service result = this.serviceRepository.save(service);
 		Assert.notNull(result, "commit.error");
@@ -68,17 +78,21 @@ public class ServiceService {
 	// Other business methods -------------------------------
 	
 	public domain.Service reconstruct(final domain.Service service, BindingResult binding) {
-
-		this.allowedService(service);
 		
 		domain.Service result = this.create();
 		
 		if (service.getId() != 0) {
+			this.allowedService(service);
+			Assert.isTrue(service.getRoom().getStatus().equals("DRAFT") ||
+					service.getRoom().getStatus().equals("ACTIVE"), "not.allowed");
+			
 			domain.Service aux = this.findOne(service.getId());
 			
 			result.setId(aux.getId());
 			result.setVersion(aux.getVersion());
-		} 
+		}  else {
+			this.roomService.assertOwnership(service.getRoom());
+		}
 		
 		result.setName(service.getName());
 		result.setDescription(service.getDescription());
@@ -108,5 +122,16 @@ public class ServiceService {
 		for(domain.Service service : toDelete) {
 			this.delete(service);
 		}
+	}
+	
+	public void decommission (domain.Service toDecommission) {
+		Assert.notNull(toDecommission.getRoom(), "already.decomissioned");
+		
+		Owner principal = (Owner) this.utilityService.findByPrincipal();
+		Assert.isTrue(toDecommission.getRoom().getOwner().equals(principal), "not.allowed");
+		
+		toDecommission.setRoom(null);
+		this.serviceRepository.save(toDecommission);
+		
 	}
 }

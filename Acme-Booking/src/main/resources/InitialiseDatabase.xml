@@ -65,5 +65,327 @@
 		<property name="timeResultsCached" value="1" />
 		<property name="maxResults" value="10" />
 	</bean>
+	
+	<!-- CATEGORY -->
+	
+	<bean id="CATEGORY" class="domain.Category">
+		<property name="title">
+			<util:map id="utilmap" map-class="java.util.HashMap"
+				key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="Español" value="CATEGORIA" />
+				<entry key="English" value="CATEGORY" />
+			</util:map>
+		</property>
+		<property name="parentCategory">
+			<null />
+		</property>
+		<property name="childCategories">
+			<list>
+				<ref bean="recreation" />
+				<ref bean="enterprise" />
+				<ref bean="study" />
+				<ref bean="culture" />
+			</list>
+		</property>
+		<property name="rooms">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Recreation -->
+	<bean id="recreation" class="domain.Category">
+		<property name="title">
+			<util:map id="utilmap100" map-class="java.util.HashMap"
+				key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="Español" value="Ocio" />
+				<entry key="English" value="Recreation" />
+			</util:map>
+		</property>
+		<property name="parentCategory">
+			<ref bean="CATEGORY" />
+		</property>
+		<property name="childCategories">
+			<list>
+				<ref bean="party" />
+				<ref bean="cinema" />
+			</list>
+		</property>
+		<property name="rooms">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Enterprise -->
+	<bean id="enterprise" class="domain.Category">
+		<property name="title">
+			<util:map id="utilmap2" map-class="java.util.HashMap"
+				key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="Español" value="Empresa" />
+				<entry key="English" value="Enterprise" />
+			</util:map>
+		</property>
+		<property name="parentCategory">
+			<ref bean="CATEGORY" />
+		</property>
+		<property name="childCategories">
+			<list>
+				<ref bean="conference" />
+				<ref bean="coworkingE" />
+				<ref bean="meetingE" />
+			</list>
+		</property>
+		<property name="rooms">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Study -->
+	<bean id="study" class="domain.Category">
+		<property name="title">
+			<util:map id="utilmap3" map-class="java.util.HashMap"
+				key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="Español" value="Estudio" />
+				<entry key="English" value="Study" />
+			</util:map>
+		</property>
+		<property name="parentCategory">
+			<ref bean="CATEGORY" />
+		</property>
+		<property name="childCategories">
+			<list>
+				<ref bean="meetingS" />
+				<ref bean="coworkingS" />
+				<ref bean="presentation" />
+			</list>
+		</property>
+		<property name="rooms">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Culture -->
+	<bean id="culture" class="domain.Category">
+		<property name="title">
+			<util:map id="utilmap4" map-class="java.util.HashMap"
+				key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="Español" value="Cultura" />
+				<entry key="English" value="Culture" />
+			</util:map>
+		</property>
+		<property name="parentCategory">
+			<ref bean="CATEGORY" />
+		</property>
+		<property name="childCategories">
+			<list>
+				<ref bean="projection" />
+			</list>
+		</property>
+		<property name="rooms">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Party -->
+	<bean id="party" class="domain.Category">
+		<property name="title">
+			<util:map id="utilmap5" map-class="java.util.HashMap"
+				key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="Español" value="Fiesta" />
+				<entry key="English" value="Party" />
+			</util:map>
+		</property>
+		<property name="parentCategory">
+			<ref bean="recreation" />
+		</property>
+		<property name="childCategories">
+			<list>
+			</list>
+		</property>
+		<property name="rooms">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Cinema -->
+	<bean id="cinema" class="domain.Category">
+		<property name="title">
+			<util:map id="utilmap6" map-class="java.util.HashMap"
+				key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="Español" value="Cine" />
+				<entry key="English" value="Cinema" />
+			</util:map>
+		</property>
+		<property name="parentCategory">
+			<ref bean="recreation" />
+		</property>
+		<property name="childCategories">
+			<list>
+			</list>
+		</property>
+		<property name="rooms">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Conference -->
+	<bean id="conference" class="domain.Category">
+		<property name="title">
+			<util:map id="utilmap7" map-class="java.util.HashMap"
+				key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="Español" value="Conferencia" />
+				<entry key="English" value="Conference" />
+			</util:map>
+		</property>
+		<property name="parentCategory">
+			<ref bean="enterprise" />
+		</property>
+		<property name="childCategories">
+			<list>
+			</list>
+		</property>
+		<property name="rooms">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Coworking enterprise -->
+	<bean id="coworkingE" class="domain.Category">
+		<property name="title">
+			<util:map id="utilmap8" map-class="java.util.HashMap"
+				key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="Español" value="Trabajo en equipo" />
+				<entry key="English" value="Coworking" />
+			</util:map>
+		</property>
+		<property name="parentCategory">
+			<ref bean="enterprise" />
+		</property>
+		<property name="childCategories">
+			<list>
+			</list>
+		</property>
+		<property name="rooms">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Meeting enterprise -->
+	<bean id="meetingE" class="domain.Category">
+		<property name="title">
+			<util:map id="utilmap9" map-class="java.util.HashMap"
+				key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="Español" value="Reuniones" />
+				<entry key="English" value="Meeting" />
+			</util:map>
+		</property>
+		<property name="parentCategory">
+			<ref bean="enterprise" />
+		</property>
+		<property name="childCategories">
+			<list>
+			</list>
+		</property>
+		<property name="rooms">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Coworking study -->
+	<bean id="coworkingS" class="domain.Category">
+		<property name="title">
+			<util:map id="utilmap10" map-class="java.util.HashMap"
+				key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="Español" value="Trabajo en equipo" />
+				<entry key="English" value="Coworking" />
+			</util:map>
+		</property>
+		<property name="parentCategory">
+			<ref bean="study" />
+		</property>
+		<property name="childCategories">
+			<list>
+			</list>
+		</property>
+		<property name="rooms">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Meeting study -->
+	<bean id="meetingS" class="domain.Category">
+		<property name="title">
+			<util:map id="utilmap11" map-class="java.util.HashMap"
+				key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="Español" value="Reuniones" />
+				<entry key="English" value="Meeting" />
+			</util:map>
+		</property>
+		<property name="parentCategory">
+			<ref bean="study" />
+		</property>
+		<property name="childCategories">
+			<list>
+			</list>
+		</property>
+		<property name="rooms">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Projection -->
+	<bean id="projection" class="domain.Category">
+		<property name="title">
+			<util:map id="utilmap12" map-class="java.util.HashMap"
+				key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="Español" value="Proyección" />
+				<entry key="English" value="Projection" />
+			</util:map>
+		</property>
+		<property name="parentCategory">
+			<ref bean="culture" />
+		</property>
+		<property name="childCategories">
+			<list>
+			</list>
+		</property>
+		<property name="rooms">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Presentation -->
+	<bean id="presentation" class="domain.Category">
+		<property name="title">
+			<util:map id="utilmap13" map-class="java.util.HashMap"
+				key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="Español" value="Presentación" />
+				<entry key="English" value="Presentation" />
+			</util:map>
+		</property>
+		<property name="parentCategory">
+			<ref bean="study" />
+		</property>
+		<property name="childCategories">
+			<list>
+			</list>
+		</property>
+		<property name="rooms">
+			<list>
+			</list>
+		</property>
+	</bean>
 
 </beans>

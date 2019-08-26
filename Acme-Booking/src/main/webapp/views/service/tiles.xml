@@ -11,7 +11,7 @@
 <tiles-definitions>
 
 	<definition name="service/display" extends="master.page">
-		<put-attribute name="title" value="Service Overview" />
+		<put-attribute name="title" value="Service overview" />
 		<put-attribute name="body" value="/views/service/display.jsp" />
 	</definition>
 

@@ -168,25 +168,21 @@ public class AdministratorService {
 
 	public Administrator save(final Administrator administrator) {
 		Administrator res;
-		Actor principal;
-
 		Assert.notNull(administrator, "not.allowed");
 
-		principal = this.utilityService.findByPrincipal();
+		Actor principal = this.utilityService.findByPrincipal();
 
 		if (administrator.getId() == 0) {
 
-			Assert.isTrue(
-					this.utilityService.checkAuthority(principal, "ADMIN"), "not.allowed");
-
-			res = this.administratorRepository.save(administrator);
+			Assert.isTrue(this.utilityService.checkAuthority(principal, "ADMIN"), "not.allowed");
 
 		} else {
-
 			administrator.setUserAccount(principal.getUserAccount());
 
 			res = this.administratorRepository.save(administrator);
 		}
+		
+		res = this.administratorRepository.save(administrator);
 
 		return res;
 	}

@@ -183,7 +183,7 @@ public class RoomController extends AbstractController {
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView saveDraft(Room room, BindingResult binding) {
 		ModelAndView result = new ModelAndView("room/edit");
-
+		
 		try {
 			Room toSave = this.roomService.reconstructDraft(room, binding);
 			if (binding.hasErrors()) {

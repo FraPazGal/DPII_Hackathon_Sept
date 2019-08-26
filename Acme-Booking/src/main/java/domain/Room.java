@@ -131,7 +131,7 @@ public class Room extends DomainEntity {
 	}
 
 	@NotNull
-	@Min(value = 0L, message = "The value must be positive")
+	@Min(value = 0L)
 	public Double getPricePerHour() {
 		return pricePerHour;
 	}
@@ -141,7 +141,7 @@ public class Room extends DomainEntity {
 	}
 	
 	@NotNull
-	@Min(value = 0L, message = "The value must be positive")
+	@Min(value = 1L)
 	public Integer getCapacity() {
 		return capacity;
 	}

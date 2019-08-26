@@ -74,7 +74,7 @@ public class AdministratorController extends AbstractController {
 	/* Save Registration */
 	@RequestMapping(value = "/register", method = RequestMethod.POST, params = "save")
 	public ModelAndView register(@Valid final ActorRegistrationForm actorRegistrationForm, final BindingResult binding) {
-		ModelAndView result = new ModelAndView("redirect:/");
+		ModelAndView result = new ModelAndView("redirect:../welcome/index.do");
 		try {
 			final Administrator administrator = this.administratorService.reconstruct(actorRegistrationForm, binding);
 

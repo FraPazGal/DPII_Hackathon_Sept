@@ -76,25 +76,15 @@ public class OwnerService {
 
 	public Owner save(final Owner owner) {
 		Owner res;
-		Actor principal;
-
 		Assert.notNull(owner, "not.allowed");
 
-		principal = this.utilityService.findByPrincipal();
-
-		if (owner.getId() == 0) {
-
-			Assert.isTrue(
-					this.utilityService.checkAuthority(principal, "OWNER"), "not.allowed");
-
-			res = this.ownerRepository.save(owner);
-
-		} else {
-
+		if (owner.getId() != 0) {
+			Actor principal = this.utilityService.findByPrincipal();
+			
 			owner.setUserAccount(principal.getUserAccount());
-
-			res = this.ownerRepository.save(owner);
 		}
+		
+		res = this.ownerRepository.save(owner);
 
 		return res;
 	}
@@ -112,7 +102,7 @@ public class OwnerService {
 	
 	public Owner reconstruct(ActorRegistrationForm form, BindingResult binding) {
 
-		/* Creating admin */
+		/* Creating owner */
 		Owner res = this.create();
 
 		res.setName(form.getName());
@@ -203,7 +193,7 @@ public class OwnerService {
 
 	public Owner reconstruct(ActorForm actorEditionForm, BindingResult binding) {
 
-		/* Creating admin */
+		/* Creating owner */
 		Owner res = this.create();
 		Actor principal = this.utilityService.findByPrincipal();
 		Assert.isTrue(principal.getId() == actorEditionForm.getId(), "not.allowed");

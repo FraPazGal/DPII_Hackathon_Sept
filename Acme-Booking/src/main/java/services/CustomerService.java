@@ -81,18 +81,15 @@ public class CustomerService {
 
 	public Customer save(final Customer customer) {
 		Customer res;
-		Actor principal;
-
 		Assert.notNull(customer, "not.allowed");
 
 		if (customer.getId() != 0) {
-			principal = this.utilityService.findByPrincipal();
+			Actor principal = this.utilityService.findByPrincipal();
 
 			customer.setUserAccount(principal.getUserAccount());
+		}
+		res = this.customerRepository.save(customer);
 
-			res = this.customerRepository.save(customer);
-		} else
-			res = this.customerRepository.save(customer);
 		return res;
 	}
 

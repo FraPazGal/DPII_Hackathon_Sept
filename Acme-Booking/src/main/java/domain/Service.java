@@ -44,7 +44,7 @@ public class Service extends DomainEntity {
 	}
 
 	@NotNull
-	@Min(value = 0L, message = "The value must be positive")
+	@Min(value = 0L)
 	public Double getPrice() {
 		return price;
 	}
@@ -63,7 +63,4 @@ public class Service extends DomainEntity {
 		this.room = room;
 	}
 	
-	
-
-
 }

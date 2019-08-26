@@ -19,6 +19,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
+
 <h1><spring:message	code="category.title.list" /></h1>
 <display:table style="width: 80%" class="displaytag" name="categories" pagesize="5" 
 	requestURI="category/list.do" id="category">

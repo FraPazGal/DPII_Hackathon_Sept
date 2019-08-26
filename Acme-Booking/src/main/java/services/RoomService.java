@@ -133,6 +133,12 @@ public class RoomService {
 		result.setScheduleDetails(room.getScheduleDetails());
 		result.setOpeningHour(room.getOpeningHour());
 		result.setClosingHour(room.getClosingHour());
+		
+		try {
+			this.checkIfUrl(result.getPhotos());
+		} catch (final Exception e) {
+			binding.rejectValue("photos", "photo.error");
+		}
 
 		this.validator.validate(result, binding);
 		
@@ -281,6 +287,13 @@ public class RoomService {
 		
 		Assert.isTrue(room.getOwner().equals(principal), "not.allowed");
 		Assert.isTrue(room.getStatus().contains(status), "wrong.status");
+	}
+	
+	public void assertOwnership (Room room) {
+		Assert.notNull(room, "wrong.room.id");
+		Owner principal = (Owner) this.utilityService.findByPrincipal();
+		
+		Assert.isTrue(room.getOwner().equals(principal), "not.allowed");
 	}
 	
 	public void assertAdminAndEditable (Room room) {

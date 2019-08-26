@@ -65,7 +65,7 @@ public class ServiceController extends AbstractController {
 		try {
 			Service service = this.serviceService.create();
 			Room room = this.roomService.findOne(roomId);
-			this.roomService.assertOwnershipAndStatus(room, "DRAFT");
+			this.roomService.assertOwnership(room);
 			
 			service.setRoom(room);
 			result = this.createEditModelAndView(service);
@@ -105,7 +105,7 @@ public class ServiceController extends AbstractController {
 			} else
 				try {
 					this.serviceService.save(toSave);
-					result = new ModelAndView("redirect:room/display.do?roomId=" + toSave.getRoom().getId());
+					result = new ModelAndView("redirect:../room/display.do?roomId=" + toSave.getRoom().getId());
 
 				} catch (final Throwable oops) {
 					result.addObject("service", toSave);
@@ -123,9 +123,25 @@ public class ServiceController extends AbstractController {
 		ModelAndView result = null;
 		try {
 			Service service = this.serviceService.findOne(serviceId);
-			result = new ModelAndView("redirect:room/display.do?roomId=" + service.getRoom().getId());
+			result = new ModelAndView("redirect:../room/display.do?roomId=" + service.getRoom().getId());
 			
 			this.serviceService.delete(service);
+
+		} catch (final Throwable oops) {
+			result = new ModelAndView("redirect:../welcome/index.do");
+		}
+		return result;
+	}
+	
+	/* Decommission */
+	@RequestMapping(value = "/decommission", method = RequestMethod.GET)
+	public ModelAndView decommision(@RequestParam final int serviceId) {
+		ModelAndView result = null;
+		try {
+			Service service = this.serviceService.findOne(serviceId);
+			result = new ModelAndView("redirect:../room/display.do?roomId=" + service.getRoom().getId());
+			
+			this.serviceService.decommission(service);
 
 		} catch (final Throwable oops) {
 			result = new ModelAndView("redirect:../welcome/index.do");

@@ -12,7 +12,7 @@
 
 
 <jstl:if test="${service.id == 0 }">
-	<h1><spring:message	code="service.create" /><jstl:out value="${service.room.title }"/></h1>
+	<h1><spring:message	code="service.title.create" /><i><jstl:out value="${service.room.title }"/></i></h1>
 </jstl:if>
 <jstl:if test="${service.id != 0 }">
 	<h1><spring:message	code="service.title.edit" /><jstl:out value="${service.room.title }"/></h1>
@@ -34,6 +34,6 @@
 	<br>
 	
 	<acme:submit code="mp.save" name="save" />&nbsp;
-	<acme:cancel url="service/list.do?range=mineA" code="mp.cancel" />
+	<acme:cancel url="room/display.do?roomId=${service.room.id }" code="mp.cancel" />
 	<br />
 </form:form>

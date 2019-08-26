@@ -16,7 +16,7 @@
 	</definition>
 
 	<definition name="owner/register" extends="master.page">
-		<put-attribute name="title" value="Register admin" />
+		<put-attribute name="title" value="Register owner" />
 		<put-attribute name="body" value="/views/owner/register.jsp" />
 	</definition>
 

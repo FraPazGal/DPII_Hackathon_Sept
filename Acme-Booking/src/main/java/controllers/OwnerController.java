@@ -82,7 +82,7 @@ public class OwnerController extends AbstractController {
 	/* Save Registration */
 	@RequestMapping(value = "/register", method = RequestMethod.POST, params = "save")
 	public ModelAndView register(@Valid final ActorRegistrationForm actorRegistrationForm, final BindingResult binding) {
-		ModelAndView result = new ModelAndView("redirect:/");
+		ModelAndView result = new ModelAndView("redirect:../welcome/index.do");
 		try {
 			final Owner owner = this.ownerService.reconstruct(actorRegistrationForm, binding);
 
