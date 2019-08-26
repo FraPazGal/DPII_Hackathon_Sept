@@ -29,7 +29,7 @@
 		onsubmit="javascript: return checkPhone('${confirmTelephone}');">
 
 		<!-- User Account Attributes -->
-		<h1><spring:message	code="actor.register.admin" /></h1>
+		<h1><spring:message	code="actor.register.owner" /></h1>
 		<fieldset style="width: 25%">
 			<legend style="font-size: 21px">
 				<spring:message code="actor.userAccount" />

@@ -57,7 +57,7 @@
 			<acme:textbox code="actor.address" path="address" size="40px"/><br/>
 
 		</fieldset>
-		<br /><br>
+		<br />
 		
 		<fieldset style="width: 25%">
 			<legend style="font-size: 21px">

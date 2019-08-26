@@ -48,11 +48,6 @@
 			<strong><spring:message code="actor.address" />: </strong>
 			<jstl:out value="${customer.address}" />
 		</div><br/>
-		
-		<div>
-			<strong><spring:message code="actor.VATNumber" />: </strong>
-			<jstl:out value="${customer.VATNumber}" />
-		</div><br/>
 	</div>
 
 	<div style="float: right;">

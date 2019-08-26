@@ -1678,6 +1678,23 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="booking4" class="domain.Booking">
+		<property name="title" value="Trabajo de carrera" />
+		<property name="bookingReason" value="Por que quiero estudiar" />
+		<property name="status" value="PENDING" />
+		<property name="expectedAttendance" value="5" />
+		<property name="duration" value="3" />
+		<property name="reservationPrice" value="40.0" />
+		<property name="requestedMoment" value="22/08/2019 16:15" />
+		<property name="reservationDate" value="05/09/2019 16:15" />
+		<property name="customer" ref="customer2" />
+		<property name="room" ref="room3" />
+		<property name="services">
+			<list>
+			</list>
+		</property>
+	</bean>
 	<!-- SYSTEM CONFIGURATION -->
 
 	<bean id="systemConfiguration" class="domain.SystemConfiguration">
