@@ -1,3 +1,4 @@
+
 package domain;
 
 import java.util.Map;
@@ -23,42 +24,43 @@ public class SystemConfiguration extends DomainEntity {
 
 	/* Attributes */
 
-	private String systemName, banner, countryCode, makers, spamWords;
-	private Map<String, String> welcomeMessage, breachNotification;
-	private Integer timeResultsCached, maxResults;
-	private Double VATTax;
+	private String				systemName, banner, countryCode, makers, spamWords;
+	private Map<String, String>	welcomeMessage;
+	private Integer				timeResultsCached, maxResults;
+	private Double				VATTax;
+
 
 	/* Getters and setters */
 
 	@NotBlank
 	public String getSystemName() {
-		return systemName;
+		return this.systemName;
 	}
 
-	public void setSystemName(String systemName) {
+	public void setSystemName(final String systemName) {
 		this.systemName = systemName;
 	}
 
 	@NotBlank
 	@URL
 	public String getBanner() {
-		return banner;
+		return this.banner;
 	}
 
-	public void setBanner(String banner) {
+	public void setBanner(final String banner) {
 		this.banner = banner;
 	}
 
 	@NotBlank
 	@Pattern(regexp = "[+]\\d{3}")
 	public String getCountryCode() {
-		return countryCode;
+		return this.countryCode;
 	}
 
-	public void setCountryCode(String countryCode) {
+	public void setCountryCode(final String countryCode) {
 		this.countryCode = countryCode;
 	}
-	
+
 	@NotBlank
 	public String getMakers() {
 		return this.makers;
@@ -71,58 +73,49 @@ public class SystemConfiguration extends DomainEntity {
 	@NotEmpty
 	@ElementCollection
 	public Map<String, String> getWelcomeMessage() {
-		return welcomeMessage;
+		return this.welcomeMessage;
 	}
 
-	public void setWelcomeMessage(Map<String, String> welcomeMessage) {
+	public void setWelcomeMessage(final Map<String, String> welcomeMessage) {
 		this.welcomeMessage = welcomeMessage;
 	}
-	
-	@ElementCollection
-	public Map<String, String> getBreachNotification() {
-		return breachNotification;
-	}
 
-	public void setBreachNotification(Map<String, String> breachNotification) {
-		this.breachNotification = breachNotification;
-	}
-	
 	public String getSpamWords() {
-		return spamWords;
+		return this.spamWords;
 	}
 
-	public void setSpamWords(String spamWords) {
+	public void setSpamWords(final String spamWords) {
 		this.spamWords = spamWords;
 	}
 
 	@NotNull
 	@Range(min = 1, max = 24)
 	public Integer getTimeResultsCached() {
-		return timeResultsCached;
+		return this.timeResultsCached;
 	}
 
-	public void setTimeResultsCached(Integer timeResultsCached) {
+	public void setTimeResultsCached(final Integer timeResultsCached) {
 		this.timeResultsCached = timeResultsCached;
 	}
 
 	@NotNull
 	@Range(min = 0, max = 100)
 	public Integer getMaxResults() {
-		return maxResults;
+		return this.maxResults;
 	}
 
-	public void setMaxResults(Integer maxResults) {
+	public void setMaxResults(final Integer maxResults) {
 		this.maxResults = maxResults;
 	}
 
 	@NotNull
 	@Range(min = 0, max = 1)
 	public Double getVATTax() {
-		return VATTax;
+		return this.VATTax;
 	}
 
-	public void setVATTax(Double vATTax) {
-		VATTax = vATTax;
+	public void setVATTax(final Double vATTax) {
+		this.VATTax = vATTax;
 	}
-	
+
 }

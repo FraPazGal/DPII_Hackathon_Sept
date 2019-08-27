@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import services.CategoryService;
 import services.FinderService;
-import services.RoomService;
 import domain.Finder;
 import domain.Room;
 
@@ -23,7 +23,7 @@ public class FinderController extends AbstractController {
 
 	// Services
 	@Autowired
-	private RoomService		roomService;
+	private CategoryService	categoryService;
 
 	@Autowired
 	private FinderService	finderService;
@@ -44,6 +44,7 @@ public class FinderController extends AbstractController {
 			final Finder finder = this.finderService.finderByCustomer();
 			result = new ModelAndView("finder/search");
 			result.addObject("finder", finder);
+			result.addObject("categories", this.categoryService.findAll());
 			result.addObject("rooms", finder.getResults());
 			result.addObject("requestUri", "finder/customer/list.do");
 		} catch (final Throwable oops) {
@@ -77,6 +78,7 @@ public class FinderController extends AbstractController {
 			final Finder finder = this.finderService.finderByCustomer();
 			result = new ModelAndView("finder/search");
 			result.addObject("finder", finder);
+			result.addObject("categories", this.categoryService.findAll());
 			result.addObject("rooms", finder.getResults());
 			result.addObject("requestUri", "finder/customer/search.do");
 		} catch (final Throwable oopsie) {
@@ -95,6 +97,7 @@ public class FinderController extends AbstractController {
 			result = new ModelAndView("finder/anon/search");
 			rooms = this.finderService.searchAnon(keyWord);
 			result.addObject("rooms", rooms);
+			result.addObject("categories", this.categoryService.findAll());
 			result.addObject("requestUri", "finder/anon/search.do");
 			result.addObject("anon", true);
 		} catch (final Throwable oopsie) {

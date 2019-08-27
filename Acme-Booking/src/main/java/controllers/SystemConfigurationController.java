@@ -1,3 +1,4 @@
+
 package controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,27 +20,27 @@ import domain.SystemConfiguration;
 public class SystemConfigurationController extends AbstractController {
 
 	@Autowired
-	private SystemConfigurationService sysconfigService;
+	private SystemConfigurationService	sysconfigService;
 
 	@Autowired
-	private UtilityService utilityService;
-	
-	@Autowired	
-	private ActorService actorService;
+	private UtilityService				utilityService;
+
+	@Autowired
+	private ActorService				actorService;
+
 
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
 	public ModelAndView display() {
-		ModelAndView result = new ModelAndView("config/display");
+		final ModelAndView result = new ModelAndView("config/display");
 
 		try {
 			Assert.isTrue(this.utilityService.checkAuthority(this.utilityService.findByPrincipal(), "ADMIN"), "not.allowed");
 
-			SystemConfiguration config = this.sysconfigService.findMySystemConfiguration();
+			final SystemConfiguration config = this.sysconfigService.findMySystemConfiguration();
 
 			result.addObject("config", config);
 			result.addObject("welcome", config.getWelcomeMessage());
-			result.addObject("breach", config.getBreachNotification());
-		} catch (Throwable oops) {
+		} catch (final Throwable oops) {
 			result.addObject("errMsg", oops.getMessage());
 		}
 		return result;
@@ -47,90 +48,83 @@ public class SystemConfigurationController extends AbstractController {
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit() {
-		ModelAndView result = new ModelAndView("config/edit");
+		final ModelAndView result = new ModelAndView("config/edit");
 
 		try {
 			Assert.isTrue(this.utilityService.checkAuthority(this.utilityService.findByPrincipal(), "ADMIN"), "not.allowed");
 
-			SystemConfiguration config = this.sysconfigService.findMySystemConfiguration();
+			final SystemConfiguration config = this.sysconfigService.findMySystemConfiguration();
 
 			result.addObject("systemConfiguration", config);
 			result.addObject("welcome", config.getWelcomeMessage());
-			result.addObject("breach", config.getBreachNotification());
-		} catch (Throwable oops) {
+		} catch (final Throwable oops) {
 			result.addObject("errMsg", oops.getMessage());
 		}
 		return result;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(SystemConfiguration config,
-			@RequestParam(value = "welcomeES") String welcomeES,
-			@RequestParam(value = "welcomeEN") String welcomeEN,
-			@RequestParam(value = "breachES") String breachES,
-			@RequestParam(value = "breachEN") String breachEN,
-			BindingResult binding) {
-		
+	public ModelAndView save(final SystemConfiguration config, @RequestParam(value = "welcomeES") final String welcomeES, @RequestParam(value = "welcomeEN") final String welcomeEN, final BindingResult binding) {
+
 		ModelAndView result = new ModelAndView("config/edit");
 
 		try {
-			SystemConfiguration reconstructed = this.sysconfigService.reconstruct(config, welcomeES, welcomeEN, breachES, breachEN, binding);
+			final SystemConfiguration reconstructed = this.sysconfigService.reconstruct(config, welcomeES, welcomeEN, binding);
 
 			if (binding.hasErrors()) {
 
 				result.addObject("systemConfiguration", config);
 				result.addObject("welcome", reconstructed.getWelcomeMessage());
-				result.addObject("breach", reconstructed.getBreachNotification());
 			} else {
 				this.sysconfigService.save(reconstructed);
 
 				result = new ModelAndView("redirect:display.do");
 			}
-		} catch (Throwable oops) {
+		} catch (final Throwable oops) {
 			result.addObject("errMsg", oops.getMessage());
 		}
 		return result;
 	}
-	
-	/* List of spammers */	
-	@RequestMapping(value = "/listSA", method = RequestMethod.GET)	
-	public ModelAndView listSuspiciousActors() {	
-		ModelAndView result = new ModelAndView("config/listSA");	
 
- 		try {	
-			result.addObject("actors", this.actorService.findAllExceptPrincipal());	
+	/* List of spammers */
+	@RequestMapping(value = "/listSA", method = RequestMethod.GET)
+	public ModelAndView listSuspiciousActors() {
+		ModelAndView result = new ModelAndView("config/listSA");
 
- 		} catch (final Throwable oops) {	
-			result = new ModelAndView("redirect:/welcome/index.do");	
-		} 	
-		return result;	
-	}	
+		try {
+			result.addObject("actors", this.actorService.findAllExceptPrincipal());
 
- 	/* Ban actor */	
-	@RequestMapping(value = "/ban", method = RequestMethod.GET, params = "actorId")	
-	public ModelAndView banActor(@RequestParam int actorId) {	
-		ModelAndView result = new ModelAndView("redirect:listSA.do");	
+		} catch (final Throwable oops) {
+			result = new ModelAndView("redirect:/welcome/index.do");
+		}
+		return result;
+	}
 
- 		try {	
-			this.actorService.ban(actorId);	
+	/* Ban actor */
+	@RequestMapping(value = "/ban", method = RequestMethod.GET, params = "actorId")
+	public ModelAndView banActor(@RequestParam final int actorId) {
+		ModelAndView result = new ModelAndView("redirect:listSA.do");
 
- 		} catch (final Throwable oops) {	
-			result = new ModelAndView("redirect:/welcome/index.do");	
-		} 	
-		return result;	
-	}	
+		try {
+			this.actorService.ban(actorId);
 
- 	/* Unban actor */	
-	@RequestMapping(value = "/unban", method = RequestMethod.GET, params = "actorId")	
-	public ModelAndView unbanActor(@RequestParam int actorId) {	
-		ModelAndView result = new ModelAndView("redirect:listSA.do");	
+		} catch (final Throwable oops) {
+			result = new ModelAndView("redirect:/welcome/index.do");
+		}
+		return result;
+	}
 
- 		try {	
-			this.actorService.unban(actorId);	
+	/* Unban actor */
+	@RequestMapping(value = "/unban", method = RequestMethod.GET, params = "actorId")
+	public ModelAndView unbanActor(@RequestParam final int actorId) {
+		ModelAndView result = new ModelAndView("redirect:listSA.do");
 
- 		} catch (final Throwable oops) {	
-			result = new ModelAndView("redirect:/welcome/index.do");	
-		} 	
-		return result;	
-	}	
+		try {
+			this.actorService.unban(actorId);
+
+		} catch (final Throwable oops) {
+			result = new ModelAndView("redirect:/welcome/index.do");
+		}
+		return result;
+	}
 }

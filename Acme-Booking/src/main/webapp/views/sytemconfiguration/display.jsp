@@ -80,22 +80,6 @@
 		</table>
 	</jstl:if>
 
-	<jstl:if test="${not empty breach}">
-		<table class="displayStyle">
-
-			<tr>
-				<td><strong><spring:message code="breach.es" /></strong></td>
-				<td><jstl:out value="${breach.get('Español')}" /></td>
-			</tr>
-
-			<tr>
-				<td><strong><spring:message code="breach.en" /></strong></td>
-				<td><jstl:out value="${breach.get('English')}" /></td>
-			</tr>
-
-		</table>
-	</jstl:if>
-
 	<input type="button"
 		onclick="redirect: location.href = 'config/admin/edit.do';"
 		value="<spring:message code='sysconfig.edit' />" />

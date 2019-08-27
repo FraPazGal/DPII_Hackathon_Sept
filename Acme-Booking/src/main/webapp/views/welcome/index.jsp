@@ -18,22 +18,6 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
-
-<security:authorize access="isAuthenticated()">
-	<jstl:if test="${breachNotif ne null }">
-		<jstl:if test="${pageContext.response.locale.language == 'es'}">
-			<h1>
-				<strong style="color: red;"><jstl:out value="${breachNotif.get('Spanish')}"/></strong>
-			</h1>
-		</jstl:if>
-		<jstl:if test="${pageContext.response.locale.language == 'en'}">
-			<h1>
-				<strong style="color: red;"><jstl:out value="${breachNotif.get('English')}"/></strong>
-			</h1>
-		</jstl:if>
-	</jstl:if>
-</security:authorize>
-
 <jstl:if test="${pageContext.response.locale.language == 'es'}">
 	<h3>
 		<jstl:out value="${welcomeMsg.get('Español')}"/>

@@ -21,9 +21,10 @@ import services.SystemConfigurationService;
 
 @Controller
 public class AbstractController {
-	
+
 	@Autowired
 	private SystemConfigurationService	systemConfigurationService;
+
 
 	// Methods
 
@@ -33,25 +34,17 @@ public class AbstractController {
 		final String urlBanner = this.systemConfigurationService.findMySystemConfiguration().getBanner();
 		return urlBanner;
 	}
-	
-//	@ModelAttribute("breachNotification")
-//	public Map<String, String> getBreachNotification(final Model model) {
-//		final Map<String, String> res = this.systemConfigurationService.findBreachNotification();
-//
-//		return res;
-//	}
-	
 
 	// Panic handler ----------------------------------------------------------
 
 	@ExceptionHandler(Throwable.class)
 	public ModelAndView panic(final Throwable oops) {
-		ModelAndView result = new ModelAndView("redirect:/welcome/index.do");
+		final ModelAndView result = new ModelAndView("redirect:/welcome/index.do");
 
-//		result = new ModelAndView("misc/panic");
-//		result.addObject("name", ClassUtils.getShortName(oops.getClass()));
-//		result.addObject("exception", oops.getMessage());
-//		result.addObject("stackTrace", ExceptionUtils.getStackTrace(oops));
+		//		result = new ModelAndView("misc/panic");
+		//		result.addObject("name", ClassUtils.getShortName(oops.getClass()));
+		//		result.addObject("exception", oops.getMessage());
+		//		result.addObject("stackTrace", ExceptionUtils.getStackTrace(oops));
 
 		return result;
 	}

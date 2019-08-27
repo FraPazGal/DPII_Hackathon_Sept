@@ -115,6 +115,7 @@ public class BookingController extends AbstractController {
 		try {
 			booking = this.bookingService.findOneMode(Id);
 			Assert.isTrue(this.utilityService.checkAuthority(this.utilityService.findByPrincipal(), "OWNER"));
+			Assert.isTrue(booking.getRejectionReason() == null);
 			result = new ModelAndView("booking/edit");
 			result.addObject("booking", booking);
 		} catch (final Throwable opps) {

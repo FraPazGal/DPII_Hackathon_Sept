@@ -98,7 +98,7 @@ public class Booking extends DomainEntity {
 	}
 
 	@NotNull
-	@Min(value = 1L, message = "The value must be positive")
+	@Min(value = 1L)
 	public Integer getExpectedAttendance() {
 		return this.expectedAttendance;
 	}
@@ -108,7 +108,7 @@ public class Booking extends DomainEntity {
 	}
 
 	@NotNull
-	@Min(value = 1L, message = "The value must be positive")
+	@Min(value = 1L)
 	public Integer getDuration() {
 		return this.duration;
 	}
@@ -118,7 +118,7 @@ public class Booking extends DomainEntity {
 	}
 
 	@NotNull
-	@Min(value = 0L, message = "The value must be positive")
+	@Min(value = 0L)
 	public Double getReservationPrice() {
 		return this.reservationPrice;
 	}

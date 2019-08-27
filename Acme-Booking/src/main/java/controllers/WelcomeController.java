@@ -27,14 +27,15 @@ import domain.Actor;
 @Controller
 @RequestMapping("/welcome")
 public class WelcomeController extends AbstractController {
-	
+
 	// Services ---------------------------------------------------------------
-	
+
 	@Autowired
-	private UtilityService utilityService;
-	
+	private UtilityService				utilityService;
+
 	@Autowired
 	private SystemConfigurationService	systemConfigurationService;
+
 
 	// Constructors -----------------------------------------------------------
 
@@ -45,23 +46,22 @@ public class WelcomeController extends AbstractController {
 	// Index ------------------------------------------------------------------		
 
 	@RequestMapping(value = "/index")
-	public ModelAndView index(@RequestParam(required = false, defaultValue = "John Doe") String name) {
-		ModelAndView result = new ModelAndView("welcome/index");
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		String moment = formatter.format(new Date());
+	public ModelAndView index(@RequestParam(required = false, defaultValue = "John Doe") final String name) {
+		final ModelAndView result = new ModelAndView("welcome/index");
+		final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		final String moment = formatter.format(new Date());
 
 		try {
-			Actor principal = this.utilityService.findByPrincipal();
+			final Actor principal = this.utilityService.findByPrincipal();
 			Assert.isTrue(principal != null);
 
 			result.addObject("name", principal.getName() + " " + principal.getSurname());
-		} catch (Throwable oops) {
+		} catch (final Throwable oops) {
 			result.addObject("name", name);
 		}
-		
+
 		result.addObject("moment", moment);
 		result.addObject("welcomeMsg", this.systemConfigurationService.findMySystemConfiguration().getWelcomeMessage());
-		result.addObject("breachNotif", this.systemConfigurationService.findMySystemConfiguration().getBreachNotification());
 
 		return result;
 	}

@@ -34,6 +34,9 @@ public class FinderService {
 	private UtilityService				utilityService;
 
 	@Autowired
+	private CategoryService				categoryService;
+
+	@Autowired
 	private SystemConfigurationService	systemConfigurationService;
 
 	@Autowired
@@ -163,12 +166,12 @@ public class FinderService {
 		for (final Room r : resultService)
 			if (!results.contains(r))
 				results.add(r);
-		if (!category.isEmpty()) {
+		if (category != "") {
 			final Collection<Room> res = new ArrayList<Room>();
 			for (final Room r : results)
 				if (!r.getCategories().isEmpty())
 					for (final Category c : r.getCategories())
-						if (c.getTitle().get("Español") == category || c.getTitle().get("English") == category)
+						if (c.getTitle().get("Español").equals(category) || c.getTitle().get("English").equals(category))
 							res.add(r);
 			results = res;
 		}

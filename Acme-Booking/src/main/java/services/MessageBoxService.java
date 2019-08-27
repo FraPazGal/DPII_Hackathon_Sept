@@ -163,15 +163,21 @@ public class MessageBoxService {
 				binding.rejectValue("name", "name.error");
 			}
 		}
+		if (result.getParentMessageBoxes() != null)
+			try {
+				Assert.isTrue(this.findByOwnerFirst().contains(result.getParentMessageBoxes()));
+			} catch (final Throwable oops) {
+				binding.rejectValue("parentMessageBoxes", "parentMessageBoxes.error");
+			}
 		return result;
 	}
 
 	public MessageBox save(final MessageBox box) {
 		// We search boxes from logged actor
 		MessageBox saved;
-		final Actor actor = this.utilityService.findByPrincipal();
 
 		if (box.getId() != 0) {
+			final Actor actor = this.utilityService.findByPrincipal();
 			final MessageBox boxBD = this.findOne(box.getId());
 			Assert.isTrue(actor.equals(box.getOwner()) || actor.equals(boxBD.getOwner()));
 			final Collection<MessageBox> boxes = this.findByOwnerFirst();

@@ -42,7 +42,7 @@ public class Finder extends DomainEntity {
 	public void setCategory(final String category) {
 		this.category = category;
 	}
-	@Length(max = 100, message = "The keyword is too long")
+	@Length(max = 100)
 	public String getKeyWord() {
 		return this.keyWord;
 	}
@@ -59,7 +59,7 @@ public class Finder extends DomainEntity {
 		this.service = service;
 	}
 
-	@Min(value = 0L, message = "The value must be positive")
+	@Min(value = 0L)
 	public Double getMaximumFee() {
 		return this.maximumFee;
 	}
@@ -68,7 +68,7 @@ public class Finder extends DomainEntity {
 		this.maximumFee = maximumFee;
 	}
 
-	@Min(value = 0L, message = "The value must be positive")
+	@Min(value = 0L)
 	public Integer getCapacity() {
 		return this.capacity;
 	}

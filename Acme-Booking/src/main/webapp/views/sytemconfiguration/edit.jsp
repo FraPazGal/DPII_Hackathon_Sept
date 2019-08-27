@@ -103,23 +103,6 @@
 			<br>
 			<form:errors cssClass="error" path="welcomeMessage" />
 			<br />
-			<strong><spring:message code="breach.es" /></strong>
-			<br>
-			<input type="text" name="breachES" id="breachES" size="150%"
-				value="${breach.get('Español')}"
-				placeholder="<spring:message code='sysconfig.breach.message.es' />">
-
-			<br>
-			<br>
-			<strong><spring:message code="breach.en" /></strong>
-			<br>
-			<input type="text" name="breachEN" id="breachEN" size="150%"
-				value="${breach.get('English')}"
-				placeholder="<spring:message code='sysconfig.breach.message.en' />">
-
-			<br>
-			<br>
-			<form:errors cssClass="error" path="breachNotification" />
 
 			<form:errors cssClass="error" code="${message}" />
 			<acme:submit code="mp.save" name="save" />

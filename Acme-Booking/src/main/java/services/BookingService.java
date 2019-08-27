@@ -17,6 +17,7 @@ import org.springframework.validation.Validator;
 import repositories.BookingRepository;
 import domain.Actor;
 import domain.Booking;
+import domain.CreditCard;
 import domain.Customer;
 import domain.Room;
 
@@ -191,6 +192,21 @@ public class BookingService {
 
 			} catch (final Throwable oops) {
 				binding.rejectValue("reservationDate", "reservationDate.error.future");
+			}
+		if (this.utilityService.checkAuthority(principal, "CUSTOMER"))
+			try {
+				final Customer customer = (Customer) principal;
+				final CreditCard card = customer.getCreditCard();
+				final Integer month = card.getExpirationMonth();
+				final Integer year = card.getExpirationYear() + 2000;
+				final Date now = new Date();
+				final Calendar calendar = Calendar.getInstance();
+				calendar.set(year, month, 1);
+				final Date timeCard = calendar.getTime();
+				Assert.isTrue(timeCard.after(now));
+
+			} catch (final Throwable oops) {
+				binding.rejectValue("services", "creditcard.error");
 			}
 		return result;
 	}
