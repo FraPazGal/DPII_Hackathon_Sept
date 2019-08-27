@@ -1525,6 +1525,7 @@
 		<property name="rooms">
 			<list>
 				<ref bean="room1" />
+				<ref bean="room5" />
 			</list>
 		</property>
 	</bean>
@@ -1620,7 +1621,28 @@
 		</property>
 		<property name="owner" ref="owner2" />
 	</bean>
-
+<bean id="room5" class="domain.Room">
+		<property name="title" value="Proyecciones de estudiantes" />
+		<property name="status" value="ACTIVE" />
+		<property name="ticker" value="MMMAAA-5D9D46" />
+		<property name="description"
+			value="Esta es la mejor sala que encontrarás para proyectar cosas" />
+		<property name="openingHour" value="08:30" />
+		<property name="closingHour" value="22:00" />
+		<property name="scheduleDetails"
+			value="Las llaves se recojen en consejería y se entregan en el buzón de la sala" />
+		<property name="address" value="C/ Puño en Rostro" />
+		<property name="proveOfOwnership" value="http://registrodepropescaneado.com" />
+		<property name="pricePerHour" value="20" />
+		<property name="capacity" value="30" />
+		<property name="categories">
+			<list>
+				<ref bean="presentation" />
+			</list>
+		</property>
+		<property name="owner" ref="owner2" />
+		<property name="administrator" ref="administrator1" />
+	</bean>
 	<!-- SERVICE -->
 
 	<bean id="service1" class="domain.Service">
@@ -1646,6 +1668,14 @@
 		<property name="price" value="300" />
 		<property name="room" ref="room1" />
 	</bean>
+			<bean id="service4" class="domain.Service">
+		<property name="name" value="Limpieza" />
+		<property name="description"
+			value="Así os ahorrais tener que limpiar la sala al terminar la presentación ;)" />
+		<property name="price" value="10" />
+		<property name="room" ref="room4" />
+	</bean>
+	
 	<!-- BOOKING -->
 	<bean id="booking1" class="domain.Booking">
 		<property name="title" value="Estudiar" />
