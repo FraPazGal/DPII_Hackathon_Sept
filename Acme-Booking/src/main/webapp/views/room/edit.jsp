@@ -37,10 +37,10 @@
 		<br/>
 
 		<form:hidden path="id" />
-		<acme:textbox code="room.title" path="title" size="100px" /><br/> <br/>
+		<acme:textbox code="room.title" path="title" size="100px" /><br/>
 		<acme:textarea code="room.description" path="description" cols="71px" rows="4"/><br/> 
-		<acme:textbox code="room.address" path="address" size="100px" /><br/> <br/>
-		<acme:textbox code="room.capacity" path="capacity" size="20px"/><br/> <br/>
+		<acme:textbox code="room.address" path="address" size="100px" /><br/> 
+		<acme:textbox code="room.capacity" path="capacity" size="20px"/><br/> 
 		<acme:textbox code="room.pricePerHour" path="pricePerHour" size="20px" placeholder="price.placeholder"/><br/> 
 		<acme:textbox code="room.openingHour" path="openingHour" size="20px" placeholder="hour.placeholder"/><br/> 
 		<acme:textbox code="room.closingHour" path="closingHour" size="20px" placeholder="hour.placeholder"/><br/> 

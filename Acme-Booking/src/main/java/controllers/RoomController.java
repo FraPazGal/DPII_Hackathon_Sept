@@ -181,7 +181,7 @@ public class RoomController extends AbstractController {
 
 	/* Save */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView saveDraft(Room room, BindingResult binding) {
+	public ModelAndView saveDraft (Room room, BindingResult binding) {
 		ModelAndView result = new ModelAndView("room/edit");
 		
 		try {
@@ -189,7 +189,6 @@ public class RoomController extends AbstractController {
 			if (binding.hasErrors()) {
 
 				result.addObject("room", room);
-				//result.addObject("catId", room.getCategory().getId());
 			} else
 				try {
 					this.roomService.save(toSave);
