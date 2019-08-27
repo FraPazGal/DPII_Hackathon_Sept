@@ -34,6 +34,9 @@ public class FinderService {
 	private UtilityService				utilityService;
 
 	@Autowired
+	private CategoryService				categoryService;
+
+	@Autowired
 	private SystemConfigurationService	systemConfigurationService;
 
 	@Autowired
@@ -158,17 +161,16 @@ public class FinderService {
 		category = (finder.getCategory() == null || finder.getCategory().isEmpty()) ? "" : finder.getCategory();
 		capacity = (finder.getCapacity() == null) ? 0 : finder.getCapacity();
 		maximumFee = (finder.getMaximumFee() == null) ? 1000000000.0 : finder.getMaximumFee();
-		results = this.finderRepository.search(keyWord, maximumFee, capacity);
-		final Collection<Room> resultService = this.finderRepository.searchByService(keyWord, maximumFee, capacity, service);
-		for (final Room r : resultService)
-			if (!results.contains(r))
-				results.add(r);
-		if (!category.isEmpty()) {
+		if (service == "")
+			results = this.finderRepository.search(keyWord, maximumFee, capacity);
+		else
+			results = this.finderRepository.searchByService(keyWord, maximumFee, capacity, service);
+		if (category != "") {
 			final Collection<Room> res = new ArrayList<Room>();
 			for (final Room r : results)
 				if (!r.getCategories().isEmpty())
 					for (final Category c : r.getCategories())
-						if (c.getTitle().get("Español") == category || c.getTitle().get("English") == category)
+						if (c.getTitle().get("Español").equals(category) || c.getTitle().get("English").equals(category))
 							res.add(r);
 			results = res;
 		}
