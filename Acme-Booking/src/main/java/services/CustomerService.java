@@ -35,6 +35,9 @@ public class CustomerService {
 
 	@Autowired
 	private SystemConfigurationService	systemConfigurationService;
+	
+	@Autowired
+	private BookingService				bookingService;
 
 	@Autowired
 	private UtilityService				utilityService;
@@ -101,7 +104,7 @@ public class CustomerService {
 		Assert.isTrue(this.utilityService.checkAuthority(principal, "CUSTOMER"), "not.allowed");
 
 		this.finderService.deleteAccountCustomer();
-
+		this.bookingService.deleteFromCustomerId(customer.getId());
 		this.customerRepository.delete(customer.getId());
 	}
 

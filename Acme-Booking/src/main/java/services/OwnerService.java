@@ -37,6 +37,9 @@ public class OwnerService {
 
 	@Autowired
 	private UtilityService utilityService;
+	
+	@Autowired
+	private RoomService roomService;
 
 	@Autowired
 	private Validator validator;
@@ -95,6 +98,7 @@ public class OwnerService {
 		Assert.notNull(owner, "not.allowed");
 		Assert.isTrue(principal.getId() == owner.getId(), "not.allowed");
 
+		this.roomService.deleteRooms(owner.getId());
 		this.ownerRepository.delete(owner);
 	}
 

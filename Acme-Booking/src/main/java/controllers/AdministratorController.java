@@ -131,17 +131,12 @@ public class AdministratorController extends AbstractController {
 	public ModelAndView deleteRookie(final ActorForm actorForm, final BindingResult binding, final HttpSession session) {
 		ModelAndView result = new ModelAndView("redirect:/welcome/index.do");
 
-		final Administrator administrator = this.administratorService.findOne(actorForm.getId());
-
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(actorForm);
-		else
-			try {
-				this.administratorService.delete(administrator);
-				session.invalidate();
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(actorForm, oops.getMessage());
-			}
+		try {
+			this.administratorService.delete((Administrator) this.utilityService.findByPrincipal());
+			session.invalidate();
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(actorForm, oops.getMessage());
+		}
 		return result;
 	}
 

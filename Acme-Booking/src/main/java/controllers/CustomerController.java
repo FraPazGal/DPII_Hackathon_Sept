@@ -148,19 +148,14 @@ public class CustomerController extends AbstractController {
 	/* Delete */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
 	public ModelAndView deleteRookie(final CustomerForm customerForm, final BindingResult binding, final HttpSession session) {
-
 		ModelAndView result = new ModelAndView("redirect:/welcome/index.do");
-		final Customer customer = this.customerService.findOne(customerForm.getId());
 
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(customerForm);
-		else
-			try {
-				this.customerService.delete(customer);
-				session.invalidate();
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(customerForm, oops.getMessage());
-			}
+		try {
+			this.customerService.delete((Customer) this.utilityService.findByPrincipal());
+			session.invalidate();
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(customerForm, oops.getMessage());
+		}
 		return result;
 	}
 

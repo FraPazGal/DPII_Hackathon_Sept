@@ -137,20 +137,15 @@ public class OwnerController extends AbstractController {
 
 	/* Delete */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView deleteRookie(final ActorForm actorForm, final BindingResult binding, final HttpSession session) {
+	public ModelAndView delete(final ActorForm actorForm, final BindingResult binding, final HttpSession session) {
 		ModelAndView result = new ModelAndView("redirect:/welcome/index.do");
 
-		final Owner owner = this.ownerService.findOne(actorForm.getId());
-
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(actorForm);
-		else
-			try {
-				this.ownerService.delete(owner);
-				session.invalidate();
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(actorForm, oops.getMessage());
-			}
+		try {
+			this.ownerService.delete((Owner) this.utilityService.findByPrincipal());
+			session.invalidate();
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(actorForm, oops.getMessage());
+		}
 		return result;
 	}
 

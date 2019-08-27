@@ -38,4 +38,10 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
 	@Query("select case when (count(r) = 0) then true else false end from Room r where r.ticker = ?1")
 	boolean uniqueTicket(String ticker);
 	
+	@Query("select r from Room r where r.owner.id = ?1")
+	Collection<Room> deleteRooms (Integer ownerId);
+	
+	@Query("select case when (count(b) = 0) then true else false end from Booking b where b.room.id = ?1")
+	boolean canBeDeleted(Integer roomId);
+	
 }

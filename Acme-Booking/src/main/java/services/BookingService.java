@@ -285,5 +285,31 @@ public class BookingService {
 		final Date moment = new Date();
 		this.messageService.changeStatusNotfication(booking, principal, moment);
 	}
+	
+	public void deleteFromCustomerId (Integer customerId) {
+		Collection<Booking> toDelete = this.bookingRepository.deleteFromCustomerId(customerId);
+		for(Booking booking : toDelete) {
+			this.delete(booking.getId());
+		}
+	}
+	
+	public Collection<Booking> futureBookingsOfRoom(Integer roomId) {
+		Date now = new Date(System.currentTimeMillis() - 1);
+		
+		return this.bookingRepository.futureBookingsOfRoom(roomId, now);
+	}
+	
+	public void changeStatus(Booking booking, String newStatus) {
+		Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER") || this.utilityService.checkAuthority(principal, "ADMIN"));
+		Assert.isTrue((newStatus == "PENDING" || newStatus == "ACCEPTED" || newStatus == "REJECTED"), "invalid.status");
+		
+		booking.setStatus(newStatus);
+		this.bookingRepository.save(booking);
+	}
+	
+	public Collection<Booking> pendingByRoomId (Integer roomId) {
+		return this.bookingRepository.pendingByRoomId(roomId);
+	}
 
 }

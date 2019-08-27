@@ -13,7 +13,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
 import repositories.RoomRepository;
+import domain.Actor;
 import domain.Administrator;
+import domain.Booking;
 import domain.Category;
 import domain.Owner;
 import domain.Room;
@@ -35,6 +37,9 @@ public class RoomService {
 	
 	@Autowired
 	private CategoryService categoryService;
+	
+	@Autowired
+	private BookingService bookingService;
 	
 	@Autowired
 	private UtilityService utilityService;
@@ -316,6 +321,9 @@ public class RoomService {
 	}
 	
 	private void changeStatus(Room room, String newStatus) {
+		Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "ADMIN") || this.utilityService.checkAuthority(principal, "OWNER"),"not.allowed");
+		
 		Assert.isTrue((newStatus == "DRAFT" || newStatus == "REVISION-PENDING" || newStatus == "ACTIVE" ||
 				newStatus == "REJECTED" || newStatus == "OUT-OF-SERVICE"), "invalid.status");
 		
@@ -348,5 +356,38 @@ public class RoomService {
 	
 	public Collection<Room> findRoomsMine(int ownerId) {
 		return this.roomRepository.findRoomsMine(ownerId);
+	}
+	
+	public void deleteRooms(Integer ownerId) {
+		Collection<Room> toDelete = this.roomRepository.deleteRooms(ownerId);
+		for(Room room : toDelete) {
+			boolean canBeDeleted = false;
+			boolean isActiveOrOut = room.getStatus().equals("ACTIVE") || room.getStatus().equals("OUT-OF-SERVICE");
+			
+			if(isActiveOrOut) {
+				canBeDeleted = this.canBeDeleted(room.getId());
+			}
+			if(!isActiveOrOut || canBeDeleted) {
+				this.serviceService.deleteServicesOfRoom(room.getId());
+				this.categoryService.deleteRoomFromCats(room);
+				this.delete(room);
+			} else {
+				this.changeStatus(room, "OUT-OF-SERVICE");
+				Collection<Booking> toReject = this.bookingService.futureBookingsOfRoom(room.getId());
+				toReject.addAll(this.bookingService.pendingByRoomId(room.getId()));
+				for(Booking booking : toReject) {
+					if(!booking.getStatus().equals("REJECTED")) {
+						booking.setStatus("REJECTED");
+						booking.setRejectionReason("This room is no longer avalaible as owner room deleted their account.");
+					}
+				}
+				room.setOwner(null);
+				this.roomRepository.save(room);
+			}
+		}
+	}
+	
+	private boolean canBeDeleted (Integer roomId) {
+		return this.roomRepository.canBeDeleted(roomId);
 	}
 }
