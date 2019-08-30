@@ -28,7 +28,6 @@
 			<jstl:out value="${service.price}" /> &#8364;
 		</div>
 		<br />
-		
 	</div>
 </fieldset>
 <br>
@@ -41,5 +40,5 @@
 	
 <input type="button" name="back"
 	value="<spring:message code="mp.back" />"
-	onclick="window.history.back()" />
+	onclick="redirect: location.href = 'room/display.do?roomId=${service.room.id}';" />
 

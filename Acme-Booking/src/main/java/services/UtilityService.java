@@ -161,4 +161,16 @@ public class UtilityService {
 	private boolean checkForUniqueTicket(final String ticker) {
 		return this.roomService.uniqueTicket(ticker);
 	}
+	
+	public boolean isValidCCMake (String toValidate) {
+		boolean isValid = false;
+		String[] aux = this.systemConfigurationService.findMySystemConfiguration().getMakers().split(",");
+		for(String validMake : aux) {
+			if(toValidate.contentEquals(validMake)) {
+				isValid = true;
+				break;
+			}
+		}
+		return isValid;
+	}
 }

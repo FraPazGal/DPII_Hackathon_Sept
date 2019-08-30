@@ -139,22 +139,15 @@ public class RoomService {
 		result.setOpeningHour(room.getOpeningHour());
 		result.setClosingHour(room.getClosingHour());
 		
-		try {
-			this.checkIfUrl(result.getPhotos());
-		} catch (final Exception e) {
-			binding.rejectValue("photos", "photo.error");
-		}
-
-		this.validator.validate(result, binding);
-		
-		if(!binding.hasErrors()) {
+		if(result.getPhotos() != null) {
 			try {
 				this.checkIfUrl(result.getPhotos());
 			} catch (final Exception e) {
 				binding.rejectValue("photos", "photo.error");
 			}
 		}
-
+		this.validator.validate(result, binding);
+		
 		return result;
 	}
 	

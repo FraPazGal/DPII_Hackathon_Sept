@@ -28,7 +28,7 @@
 		<form:hidden path="room" />
 		<acme:textbox code="service.name" path="name" size="40px"/><br/> 
 		<acme:textarea code="service.description" path="description" cols="71px" rows="4"/><br/>
-		<acme:textbox code="service.price" path="price" size="20px"/><br/> 
+		<acme:textbox code="service.price" path="price" size="20px" placeholder="price.placeholder"/><br/> 
 		
 	</fieldset>
 	<br>

@@ -2,6 +2,7 @@ package controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,7 +51,6 @@ public class ServiceController extends AbstractController {
 				
 			result.addObject("service", service);
 			result.addObject("isPrincipal", isPrincipal);
-			result.addObject("requestURI", "service/display.do?serviceId=" + serviceId);
 			
 		} catch (final Throwable oops) {
 			result = new ModelAndView("redirect:../welcome/index.do");
@@ -66,6 +66,8 @@ public class ServiceController extends AbstractController {
 			Service service = this.serviceService.create();
 			Room room = this.roomService.findOne(roomId);
 			this.roomService.assertOwnership(room);
+			
+			Assert.isTrue(room.getStatus().equals("DRAFT") || room.getStatus().equals("ACTIVE"), "not.allowed");
 			
 			service.setRoom(room);
 			result = this.createEditModelAndView(service);
@@ -95,22 +97,17 @@ public class ServiceController extends AbstractController {
 	/* Save */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(Service service, BindingResult binding) {
-		ModelAndView result = new ModelAndView("service/edit");
+		ModelAndView result;
 
 		try {
 			Service toSave = this.serviceService.reconstruct(service, binding);
+			
 			if (binding.hasErrors()) {
-
-				result.addObject("service", service);
-			} else
-				try {
-					this.serviceService.save(toSave);
-					result = new ModelAndView("redirect:../room/display.do?roomId=" + toSave.getRoom().getId());
-
-				} catch (final Throwable oops) {
-					result.addObject("service", toSave);
-					result = new ModelAndView("redirect:../welcome/index.do");
-				}
+				result = this.createEditModelAndView(service);
+			} else {
+				this.serviceService.save(toSave);
+				result = new ModelAndView("redirect:../room/display.do?roomId=" + toSave.getRoom().getId());
+			} 
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(service, oops.getMessage());
 		}

@@ -1277,6 +1277,7 @@
 		</property>
 		<property name="rooms">
 			<list>
+				<ref bean="room8" />
 			</list>
 		</property>
 	</bean>
@@ -1347,6 +1348,7 @@
 		</property>
 		<property name="rooms">
 			<list>
+				<ref bean="room5" />
 			</list>
 		</property>
 	</bean>
@@ -1369,6 +1371,7 @@
 		</property>
 		<property name="rooms">
 			<list>
+				<ref bean="room6" />
 			</list>
 		</property>
 	</bean>
@@ -1525,6 +1528,7 @@
 		<property name="rooms">
 			<list>
 				<ref bean="room1" />
+				<ref bean="room7" />
 			</list>
 		</property>
 	</bean>
@@ -1619,6 +1623,90 @@
 			</list>
 		</property>
 		<property name="owner" ref="owner2" />
+		<property name="administrator" ref="administrator1" />
+	</bean>
+	
+	<bean id="room5" class="domain.Room">
+		<property name="title" value="Test Draft" />
+		<property name="status" value="DRAFT" />
+		<property name="ticker" value="MMMAAA-96AUY3" />
+		<property name="description" value="Sala para el owner 2 en modo draft" />
+		<property name="openingHour" value="10:00" />
+		<property name="closingHour" value="18:25" />
+		<property name="scheduleDetails" value="Abierta L-X" />
+		<property name="address" value="C/ Mi calle" />
+		<property name="proveOfOwnership" value="http://secreto.com" />
+		<property name="pricePerHour" value="26" />
+		<property name="capacity" value="12" />
+		<property name="categories">
+			<list>
+				<ref bean="party" />
+			</list>
+		</property>
+		<property name="owner" ref="owner2" />
+	</bean>
+	
+	<bean id="room6" class="domain.Room">
+		<property name="title" value="Test Rejected" />
+		<property name="status" value="REJECTED" />
+		<property name="ticker" value="MMMAAA-732LLI" />
+		<property name="description" value="Sala para el owner 1 rechazada" />
+		<property name="openingHour" value="10:00" />
+		<property name="closingHour" value="18:25" />
+		<property name="scheduleDetails" value="Abierta L-V" />
+		<property name="address" value="C/ La calle" />
+		<property name="proveOfOwnership" value="http://secreto.com" />
+		<property name="pricePerHour" value="10" />
+		<property name="capacity" value="5" />
+		<property name="categories">
+			<list>
+				<ref bean="cinema" />
+			</list>
+		</property>
+		<property name="owner" ref="owner1" />
+		<property name="administrator" ref="administrator1" />
+	</bean>
+	
+	<bean id="room7" class="domain.Room">
+		<property name="title" value="Pending de testeo reject" />
+		<property name="status" value="REVISION-PENDING" />
+		<property name="ticker" value="MMMAAA-37LY9H" />
+		<property name="description" value="Sala para el testeo de assign y demases" />
+		<property name="openingHour" value="09:00" />
+		<property name="closingHour" value="20:00" />
+		<property name="scheduleDetails" value="24/7" />
+		<property name="address" value="C/ Reina Mercedes s/n" />
+		<property name="proveOfOwnership" value="http://secreto.com" />
+		<property name="pricePerHour" value="30" />
+		<property name="capacity" value="10" />
+		<property name="categories">
+			<list>
+				<ref bean="presentation" />
+			</list>
+		</property>
+		<property name="owner" ref="owner1" />
+		<property name="administrator" ref="administrator1" />
+	</bean>
+	
+	<bean id="room8" class="domain.Room">
+		<property name="title" value="Pending de testeo accept" />
+		<property name="status" value="REVISION-PENDING" />
+		<property name="ticker" value="MMMAAA-9lINM4" />
+		<property name="description" value="Hacen falta dos salas para testear bien el accept/reject" />
+		<property name="openingHour" value="14:00" />
+		<property name="closingHour" value="14:14" />
+		<property name="scheduleDetails" value="Lunes de semanas pares" />
+		<property name="address" value="La cartuja" />
+		<property name="proveOfOwnership" value="http://secreto.com" />
+		<property name="pricePerHour" value="1500" />
+		<property name="capacity" value="800" />
+		<property name="categories">
+			<list>
+				<ref bean="conference" />
+			</list>
+		</property>
+		<property name="owner" ref="owner1" />
+		<property name="administrator" ref="administrator1" />
 	</bean>
 
 	<!-- SERVICE -->
@@ -1646,6 +1734,15 @@
 		<property name="price" value="300" />
 		<property name="room" ref="room1" />
 	</bean>
+	
+	<bean id="service4" class="domain.Service">
+		<property name="name" value="Madre mía" />
+		<property name="description"
+			value="Me hace falta un servicio para alguna sala del owner 2" />
+		<property name="price" value="10" />
+		<property name="room" ref="room3" />
+	</bean>
+	
 	<!-- BOOKING -->
 	<bean id="booking1" class="domain.Booking">
 		<property name="title" value="Estudiar" />

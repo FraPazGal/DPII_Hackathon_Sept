@@ -31,7 +31,6 @@ public class Category extends DomainEntity {
 
 	/* Getters and setters */
 
-	@NotNull
 	@NotEmpty
 	@ElementCollection
 	public Map<String, String> getTitle() {

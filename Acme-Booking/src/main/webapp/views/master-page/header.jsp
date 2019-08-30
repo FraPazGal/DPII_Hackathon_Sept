@@ -31,7 +31,7 @@
 					<li class="arrow"></li>
 					<security:authorize access="!hasAnyRole('OWNER','ADMIN')">
 						<li><a href="room/list.do"><spring:message
-									code="master.page.room.list" /></a></li>
+									code="room.list" /></a></li>
 					</security:authorize>
 
 					<security:authorize access="hasRole('OWNER')">

@@ -1,6 +1,5 @@
 package controllers;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +48,10 @@ public class RoomController extends AbstractController {
 				Actor principal = this.utilityService.findByPrincipal();
 				if (room.getOwner().equals(principal)) {
 					isPrincipal = true;
+					
 				} else if (room.getAdministrator() == null && room.getStatus().equals("REVISION-PENDING") ||
 						room.getAdministrator().equals(principal)) {
+					Assert.isTrue(this.utilityService.checkAuthority(principal, "ADMIN"), "not.allowed");
 				} else {
 					room = this.roomService.findOneToDisplay(roomId);
 				}
@@ -73,7 +74,7 @@ public class RoomController extends AbstractController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(@RequestParam(required = false) final String range) {
 		ModelAndView result = new ModelAndView("room/list");
-		Collection<Room> rooms = new ArrayList<>();
+		Collection<Room> rooms = null;
 		String isPrincipal = null;
 		boolean listConf = false;
 		try {
@@ -138,6 +139,8 @@ public class RoomController extends AbstractController {
 					}
 				}
 			} 
+			Assert.notNull(rooms, "not.allowed");
+			
 			result.addObject("rooms", rooms);
 			result.addObject("listConf", listConf);
 			result.addObject("isPrincipal", isPrincipal);
@@ -182,23 +185,15 @@ public class RoomController extends AbstractController {
 	/* Save */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView saveDraft (Room room, BindingResult binding) {
-		ModelAndView result = new ModelAndView("room/edit");
-		
+		ModelAndView result = new ModelAndView("redirect:list.do?range=mineD");
 		try {
 			Room toSave = this.roomService.reconstructDraft(room, binding);
 			if (binding.hasErrors()) {
 
-				result.addObject("room", room);
-			} else
-				try {
-					this.roomService.save(toSave);
-					result = new ModelAndView("redirect:list.do?range=mineD");
-
-				} catch (final Throwable oops) {
-					result.addObject("room", toSave);
-					result = new ModelAndView("redirect:../welcome/index.do");
-				}
-			result.addObject("categories", this.categoryService.findAll());
+				result = this.createEditDraftModelAndView(room);
+			} else {
+				this.roomService.save(toSave);
+			}
 		} catch (final Throwable oops) {
 			result = this.createEditDraftModelAndView(room, oops.getMessage());
 		}
@@ -208,22 +203,17 @@ public class RoomController extends AbstractController {
 	/* Save as Final */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "saveFinal")
 	public ModelAndView saveDraftFinal(Room room, BindingResult binding) {
-		ModelAndView result = new ModelAndView("room/edit");
+		ModelAndView result = new ModelAndView("redirect:list.do?range=mineI");
 		try {
 			Room toSave = this.roomService.reconstructDraft(room, binding);
 			if (binding.hasErrors()) {
 
-				result.addObject("room", room);
-			} else
-				try {
-					toSave.setStatus("REVISION-PENDING");
-					this.roomService.saveAsFinal(toSave);
-					result = new ModelAndView("redirect:list.do?range=mineI");
-
-				} catch (final Throwable oops) {
-					result.addObject("room", toSave);
-					result = new ModelAndView("redirect:../welcome/index.do");
-				}
+				result = this.createEditDraftModelAndView(room);
+			} else {
+				
+				toSave.setStatus("REVISION-PENDING");
+				this.roomService.saveAsFinal(toSave);
+			}
 		} catch (final Throwable oops) {
 			result = this.createEditDraftModelAndView(room, oops.getMessage());
 		}
@@ -250,22 +240,16 @@ public class RoomController extends AbstractController {
 	/* Save active room*/
 	@RequestMapping(value = "/editA", method = RequestMethod.POST, params = "save")
 	public ModelAndView saveActive(ActiveRoomForm activeRoomForm, BindingResult binding) {
-		ModelAndView result = new ModelAndView("room/editA");
+		ModelAndView result = new ModelAndView("redirect:list.do?range=mineA");
 
 		try {
 			Room toSave = this.roomService.reconstructActive(activeRoomForm, binding);
+			
 			if (binding.hasErrors()) {
-
-				result.addObject("activeRoomForm", activeRoomForm);
-			} else
-				try {
-					this.roomService.save(toSave);
-					result = new ModelAndView("redirect:list.do?range=mineA");
-
-				} catch (final Throwable oops) {
-					result.addObject("activeRoomForm", toSave);
-					result = new ModelAndView("redirect:../welcome/index.do");
-				}
+				result = this.createEditActiveModelAndView(activeRoomForm);
+			} else {
+				this.roomService.save(toSave);
+			}
 		} catch (final Throwable oops) {
 			result = this.createEditActiveModelAndView(activeRoomForm, oops.getMessage());
 		}

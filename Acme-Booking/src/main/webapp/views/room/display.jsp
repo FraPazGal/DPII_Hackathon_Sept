@@ -38,7 +38,7 @@
 	
 	<div>
 		<strong><spring:message code="room.pricePerHour" />: </strong>
-		<jstl:out value="${room.pricePerHour}" />
+		<jstl:out value="${room.pricePerHour}" /> &#8364;
 	</div>
 	<br />
 	
@@ -156,7 +156,7 @@
 		</display:column>	
 		
 		<display:column titleKey="service.price">
-			<jstl:out value="${service.price}" />
+			<jstl:out value="${service.price}" /> &#8364;
 		</display:column>
 		
 		<display:column>
@@ -190,18 +190,12 @@
 		</jstl:if>
 	</display:table>
 </jstl:if>
-		
-<input type="button"
-	onclick="redirect: location.href = 'service/create.do?roomId=${room.id}';"
-	value="<spring:message code='service.create' />" /><br>
-<br>
-<jstl:if test="${room.status == 'DRAFT'}">
-	<input type="button" name="back"
-		value="<spring:message code="mp.back" />"
-		onclick="redirect: location.href = 'room/list.do?range=mineD'" />
+<jstl:if test="${room.status == 'DRAFT' or room.status == 'ACTIVE' and isPrincipal}">
+	<input type="button"
+		onclick="redirect: location.href = 'service/create.do?roomId=${room.id}';"
+		value="<spring:message code='service.create' />" /><br>
+	<br>
 </jstl:if>
-<jstl:if test="${room.status == 'ACTIVE'}">
-	<input type="button" name="back"
-		value="<spring:message code="mp.back" />"
-		onclick="redirect: location.href = 'room/list.do?range=mineA'" />
-</jstl:if>
+<input type="button" name="back"
+	value="<spring:message code="mp.back" />"
+	onclick="redirect: location.href = 'room/list.do'" />

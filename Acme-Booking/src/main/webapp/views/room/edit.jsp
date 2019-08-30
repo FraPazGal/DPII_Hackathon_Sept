@@ -79,10 +79,10 @@
 			<input name="photos" value="${photo}" />
 		</jstl:forEach>
 		<form:errors path="photos" cssClass="error" />
-		<br><br>
+		<br>
 	
 	</fieldset>
-	<br><br>
+	<br>
 	
 	<acme:submit code="mp.save" name="save" />&nbsp;
 	<acme:submit code="mp.saveFinal" name="saveFinal" />&nbsp;
