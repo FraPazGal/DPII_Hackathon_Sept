@@ -88,7 +88,7 @@
 			<br />
 		</div>
 	</fieldset>
-
+	<b><spring:message code="booking.room" />: <a href="room/display.do?roomId=${booking.room.id}"> ${booking.room.title}</a></b>
 	<jstl:if test="${not empty booking.services}">
 		<h2>
 			<strong><spring:message code="room.services" /></strong>
