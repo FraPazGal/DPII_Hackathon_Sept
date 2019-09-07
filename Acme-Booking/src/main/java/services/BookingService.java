@@ -115,7 +115,7 @@ public class BookingService {
 			result.setId(orig.getId());
 		} else {
 			final Integer duration = (bookingF.getDuration() == null) ? 0 : bookingF.getDuration();
-
+			Assert.isTrue(this.utilityService.checkAuthority(principal, "CUSTOMER"));
 			result.setCustomer((Customer) principal);
 			result.setBookingReason(bookingF.getBookingReason());
 			result.setDuration(duration);
@@ -285,30 +285,29 @@ public class BookingService {
 		final Date moment = new Date();
 		this.messageService.changeStatusNotfication(booking, principal, moment);
 	}
-	
-	public void deleteFromCustomerId (Integer customerId) {
-		Collection<Booking> toDelete = this.bookingRepository.deleteFromCustomerId(customerId);
-		for(Booking booking : toDelete) {
+
+	public void deleteFromCustomerId(final Integer customerId) {
+		final Collection<Booking> toDelete = this.bookingRepository.deleteFromCustomerId(customerId);
+		for (final Booking booking : toDelete)
 			this.delete(booking.getId());
-		}
 	}
-	
-	public Collection<Booking> futureBookingsOfRoom(Integer roomId) {
-		Date now = new Date(System.currentTimeMillis() - 1);
-		
+
+	public Collection<Booking> futureBookingsOfRoom(final Integer roomId) {
+		final Date now = new Date(System.currentTimeMillis() - 1);
+
 		return this.bookingRepository.futureBookingsOfRoom(roomId, now);
 	}
-	
-	public void changeStatus(Booking booking, String newStatus) {
-		Actor principal = this.utilityService.findByPrincipal();
+
+	public void changeStatus(final Booking booking, final String newStatus) {
+		final Actor principal = this.utilityService.findByPrincipal();
 		Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER") || this.utilityService.checkAuthority(principal, "ADMIN"));
 		Assert.isTrue((newStatus == "PENDING" || newStatus == "ACCEPTED" || newStatus == "REJECTED"), "invalid.status");
-		
+
 		booking.setStatus(newStatus);
 		this.bookingRepository.save(booking);
 	}
-	
-	public Collection<Booking> pendingByRoomId (Integer roomId) {
+
+	public Collection<Booking> pendingByRoomId(final Integer roomId) {
 		return this.bookingRepository.pendingByRoomId(roomId);
 	}
 

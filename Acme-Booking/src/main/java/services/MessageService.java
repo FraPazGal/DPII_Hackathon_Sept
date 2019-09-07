@@ -114,6 +114,7 @@ public class MessageService {
 
 		principal = this.utilityService.findByPrincipal();
 		Assert.notNull(principal);
+		Assert.isTrue(message.getSender().equals(principal) || message.getReceiver().equals(principal));
 
 		Assert.notNull(message);
 		Assert.isTrue(message.getId() != 0);
@@ -323,23 +324,20 @@ public class MessageService {
 
 	public Message reconstruct(final MessageForm message, final BindingResult binding) {
 		Message result = this.create();
-
+		final Actor principal = this.utilityService.findByPrincipal();
 		if (message.getId() == 0) {
 			result.setSubject(message.getSubject());
 			result.setBody(message.getBody());
 			result.setPriority(message.getPriority());
 			result.setReceiver(message.getReceiver());
-
-			this.validator.validate(result, binding);
-
 		} else {
 			final Message m = this.messageRepository.findOne(message.getId());
 			result = m;
 			result.setMessageBoxes(message.getMessageBoxes());
-
-			this.validator.validate(result, binding);
-
+			Assert.isTrue(m.getSender().equals(principal) || m.getReceiver().equals(principal));
 		}
+		this.validator.validate(result, binding);
+
 		return result;
 	}
 

@@ -173,11 +173,12 @@ public class MessageBoxService {
 
 		if (box.getId() != 0) {
 			final MessageBox boxBD = this.findOne(box.getId());
-			Assert.isTrue(actor.equals(box.getOwner()) || actor.equals(boxBD.getOwner()));
+			Assert.isTrue(actor.equals(box.getOwner()) && actor.equals(boxBD.getOwner()));
 			final Collection<MessageBox> boxes = this.findByOwnerFirst();
-			Assert.isTrue(boxes.contains(box.getParentMessageBoxes()));
-			if (boxBD.getIsPredefined() == false)
-				boxBD.setName(box.getName());
+			if (box.getParentMessageBoxes() != null)
+				Assert.isTrue(boxes.contains(box.getParentMessageBoxes()));
+			Assert.isTrue(boxBD.getIsPredefined() == false);
+			boxBD.setName(box.getName());
 			Assert.isTrue(this.checkParentBox(boxBD, box));
 			boxBD.setParentMessageBoxes(box.getParentMessageBoxes());
 			boxBD.setMessages(box.getMessages());
@@ -190,8 +191,9 @@ public class MessageBoxService {
 	public boolean checkParentBox(final MessageBox boxBD, final MessageBox box) {
 		boolean bool = true;
 		final Collection<MessageBox> boxes = this.messageBoxRepository.findByParent(boxBD.getId());
-		if (boxes.contains(box.getParentMessageBoxes()))
-			bool = false;
+		if (box.getParentMessageBoxes() != null)
+			if (boxes.contains(box.getParentMessageBoxes()))
+				bool = false;
 		return bool;
 
 	}

@@ -278,9 +278,24 @@
 		</property>
 		<property name="customer" ref="customer3" />
 	</bean>
-	<!-- MESSAGEBOX -->
+	<!-- MESSAGE -->
+	<bean id="message1" class="domain.Message">
+		<property name="sentMoment" value="04/19/2019 16:15" />
+		<property name="subject" value="Welcome" />
+		<property name="body" value="Hello budy" />
+		<property name="receiver" ref="owner1" />
+		<property name="sender" ref="administrator1" />
+		<property name="messageBoxes">
+			<list>
+				<ref bean="outBoxAdmin1" />
+				<ref bean="inBoxOwner1" />
+			</list>
+		</property>
+		<property name="isSpam" value="false" />
+		<property name="priority" value="HIGH" />
 
-	<!-- MESSAGE BOXES -->
+	</bean>
+	<!-- MESSAGEBOXES -->
 	<!-- ADMIN 1 -->
 	<bean id="inBoxAdmin1" class="domain.MessageBox">
 		<property name="name" value="In box" />
@@ -319,10 +334,12 @@
 			<null />
 		</property>
 		<property name="messages">
-			<null />
+			<list>
+						<ref bean="message1" />
+			
+			</list>
 		</property>
 		<property name="owner">
-
 			<ref bean="administrator1" />
 		</property>
 
@@ -348,6 +365,23 @@
 	<bean id="notificationBoxAdmin1" class="domain.MessageBox">
 		<property name="name" value="Notification box" />
 		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="administrator1" />
+		</property>
+
+	</bean>
+
+	<bean id="personalBoxAdmin1" class="domain.MessageBox">
+		<property name="name" value="Personal box" />
+		<property name="isPredefined" value="false" />
 		<property name="parentMessageBoxes">
 			<null />
 		</property>
@@ -696,8 +730,10 @@
 			<null />
 		</property>
 		<property name="messages">
-			<null />
-
+			<list>
+						<ref bean="message1" />
+			
+			</list>
 		</property>
 
 		<property name="owner">
@@ -1605,12 +1641,13 @@
 		</property>
 		<property name="owner" ref="owner2" />
 	</bean>
-	
+
 	<bean id="room4" class="domain.Room">
 		<property name="title" value="Descatalogada :(" />
 		<property name="status" value="OUT-OF-SERVICE" />
 		<property name="ticker" value="MMMAAA-8DS75A" />
-		<property name="description" value="Unos okupas vieron la sala en la web y ahí siguen" />
+		<property name="description"
+			value="Unos okupas vieron la sala en la web y ahí siguen" />
 		<property name="openingHour" value="00:00" />
 		<property name="closingHour" value="00:00" />
 		<property name="scheduleDetails" value="Abierta 24/7 los 365 del año (okupas y tal)" />
@@ -1626,7 +1663,7 @@
 		<property name="owner" ref="owner2" />
 		<property name="administrator" ref="administrator1" />
 	</bean>
-	
+
 	<bean id="room5" class="domain.Room">
 		<property name="title" value="Test Draft" />
 		<property name="status" value="DRAFT" />
@@ -1646,7 +1683,7 @@
 		</property>
 		<property name="owner" ref="owner2" />
 	</bean>
-	
+
 	<bean id="room6" class="domain.Room">
 		<property name="title" value="Test Rejected" />
 		<property name="status" value="REJECTED" />
@@ -1667,7 +1704,7 @@
 		<property name="owner" ref="owner1" />
 		<property name="administrator" ref="administrator1" />
 	</bean>
-	
+
 	<bean id="room7" class="domain.Room">
 		<property name="title" value="Pending de testeo reject" />
 		<property name="status" value="REVISION-PENDING" />
@@ -1688,12 +1725,13 @@
 		<property name="owner" ref="owner1" />
 		<property name="administrator" ref="administrator1" />
 	</bean>
-	
+
 	<bean id="room8" class="domain.Room">
 		<property name="title" value="Pending de testeo accept" />
 		<property name="status" value="REVISION-PENDING" />
 		<property name="ticker" value="MMMAAA-9lINM4" />
-		<property name="description" value="Hacen falta dos salas para testear bien el accept/reject" />
+		<property name="description"
+			value="Hacen falta dos salas para testear bien el accept/reject" />
 		<property name="openingHour" value="14:00" />
 		<property name="closingHour" value="14:14" />
 		<property name="scheduleDetails" value="Lunes de semanas pares" />
@@ -1709,7 +1747,7 @@
 		<property name="owner" ref="owner1" />
 		<property name="administrator" ref="administrator1" />
 	</bean>
-	
+
 	<bean id="room9" class="domain.Room">
 		<property name="title" value="Proyecciones de estudiantes" />
 		<property name="status" value="ACTIVE" />
@@ -1757,7 +1795,7 @@
 		<property name="price" value="300" />
 		<property name="room" ref="room1" />
 	</bean>
-	
+
 	<bean id="service4" class="domain.Service">
 		<property name="name" value="Madre mía" />
 		<property name="description"
@@ -1765,7 +1803,7 @@
 		<property name="price" value="10" />
 		<property name="room" ref="room3" />
 	</bean>
-	
+
 	<bean id="service5" class="domain.Service">
 		<property name="name" value="Limpieza" />
 		<property name="description"
@@ -1773,7 +1811,7 @@
 		<property name="price" value="10" />
 		<property name="room" ref="room4" />
 	</bean>
-	
+
 	<!-- BOOKING -->
 	<bean id="booking1" class="domain.Booking">
 		<property name="title" value="Estudiar" />
@@ -1827,7 +1865,7 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean id="booking4" class="domain.Booking">
 		<property name="title" value="Trabajo de carrera" />
 		<property name="bookingReason" value="Por que quiero estudiar" />
@@ -1844,7 +1882,7 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean id="booking5" class="domain.Booking">
 		<property name="title" value="Testeo" />
 		<property name="bookingReason" value="Para el delete rooms" />

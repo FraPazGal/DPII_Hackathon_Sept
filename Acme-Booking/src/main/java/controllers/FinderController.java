@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import services.CategoryService;
 import services.FinderService;
 import services.RoomService;
 import domain.Finder;
@@ -27,6 +28,9 @@ public class FinderController extends AbstractController {
 
 	@Autowired
 	private FinderService	finderService;
+
+	@Autowired
+	private CategoryService	categoryService;
 
 
 	// Constructors
@@ -44,6 +48,7 @@ public class FinderController extends AbstractController {
 			final Finder finder = this.finderService.finderByCustomer();
 			result = new ModelAndView("finder/search");
 			result.addObject("finder", finder);
+			result.addObject("categories", this.categoryService.findAll());
 			result.addObject("rooms", finder.getResults());
 			result.addObject("requestUri", "finder/customer/list.do");
 		} catch (final Throwable oops) {
@@ -78,6 +83,7 @@ public class FinderController extends AbstractController {
 			result = new ModelAndView("finder/search");
 			result.addObject("finder", finder);
 			result.addObject("rooms", finder.getResults());
+			result.addObject("categories", this.categoryService.findAll());
 			result.addObject("requestUri", "finder/customer/search.do");
 		} catch (final Throwable oopsie) {
 			result = new ModelAndView("redirect:/");
@@ -112,6 +118,7 @@ public class FinderController extends AbstractController {
 			if (binding.hasErrors()) {
 				result = new ModelAndView("finder/search");
 				result.addObject("finder", finder);
+				result.addObject("categories", this.categoryService.findAll());
 				result.addObject("requestUri", "finder/customer/list.do");
 
 			} else {

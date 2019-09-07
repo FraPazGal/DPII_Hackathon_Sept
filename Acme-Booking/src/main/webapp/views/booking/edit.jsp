@@ -79,8 +79,7 @@
 
 			<jstl:if test="${not empty services}">
 				<form:select path="services">
-					<form:options items="${services}" itemLabel="name"
-						itemValue="id" />
+					<form:options items="${services}" itemLabel="name" itemValue="id" />
 				</form:select>
 				<form:errors cssClass="error" path="services" />
 				<br />
@@ -110,8 +109,9 @@
 		</fieldset>
 		<br>
 		<br>
-
-		<acme:submit code="mp.save" name="save" />&nbsp;
+		<input type="submit" name="save"
+			value="<spring:message code="mp.save"/>"
+			onclick="return confirm('<spring:message code="booking.confirm.save"/>')" />
 		<acme:cancel url="booking/list.do" code="mp.cancel" />
 		<br />
 	</form:form>
