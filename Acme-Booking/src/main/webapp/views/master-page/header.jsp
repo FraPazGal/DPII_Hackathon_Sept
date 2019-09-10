@@ -17,7 +17,7 @@
 
 <div>
 	<a href="#"><img src="${banner}" alt="Acme-Booking Co., Inc."
-		style="margin-bottom: 0.5em; max-height: 150px;" /></a>
+		style="margin-bottom: 0.5em; max-height: 120px;" /></a>
 </div>
 
 <div>

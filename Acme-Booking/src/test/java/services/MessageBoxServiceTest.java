@@ -30,20 +30,20 @@ public class MessageBoxServiceTest extends AbstractTest {
 	 * Total coverage of all tests
 	 * 
 	 * 
-	 * Coverage of the total project (%):
+	 * Coverage of the total project (%): 65'1
 	 * 
 	 * 
-	 * Coverage of the total project (lines of codes):
+	 * Coverage of the total project (lines of codes): 16.418
 	 * 
 	 * ################################################################
 	 * 
 	 * Total coverage by exclusively executing this test class
 	 * 
 	 * 
-	 * Coverage of the total project (%):
+	 * Coverage of the total project (%): 5'6
 	 * 
 	 * 
-	 * Coverage of the total project (lines of codes):
+	 * Coverage of the total project (lines of codes): 1.418
 	 * 
 	 * ################################################################
 	 * 

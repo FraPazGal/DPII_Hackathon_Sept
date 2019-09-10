@@ -122,6 +122,7 @@ public class CategoryService {
 				this.utilityService.checkAuthority(principal, "ADMIN"),
 				"not.allowed");
 		
+		Assert.isTrue(!category.getTitle().containsValue("CATEGORY"), "not.allowed");
 		Assert.notNull(category, "not.allowed");
 		Assert.isTrue(category.getId() != 0, "not.allowed");
 		

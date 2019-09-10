@@ -34,9 +34,6 @@ public class FinderService {
 	private UtilityService				utilityService;
 
 	@Autowired
-	private CategoryService				categoryService;
-
-	@Autowired
 	private SystemConfigurationService	systemConfigurationService;
 
 	@Autowired
@@ -258,6 +255,10 @@ public class FinderService {
 		f.setResults(rooms);
 		this.finderRepository.save(f);
 		this.finderRepository.delete(f);
-
+	}
+	
+	public Finder findFinderByCustomerId(int customerId) {
+		
+		return this.finderRepository.findFinderByCustomerId(customerId);
 	}
 }

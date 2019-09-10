@@ -1541,6 +1541,8 @@
 		</property>
 		<property name="rooms">
 			<list>
+				<ref bean="room10" />
+				<ref bean="room11" />
 			</list>
 		</property>
 	</bean>
@@ -1741,11 +1743,10 @@
 		<property name="capacity" value="800" />
 		<property name="categories">
 			<list>
-				<ref bean="conference" />
+				<ref bean="enterprise" />
 			</list>
 		</property>
 		<property name="owner" ref="owner1" />
-		<property name="administrator" ref="administrator1" />
 	</bean>
 
 	<bean id="room9" class="domain.Room">
@@ -1769,6 +1770,48 @@
 		</property>
 		<property name="owner" ref="owner2" />
 		<property name="administrator" ref="administrator1" />
+	</bean>
+	
+	<bean id="room10" class="domain.Room">
+		<property name="title" value="Pending de testeo accept" />
+		<property name="status" value="REVISION-PENDING" />
+		<property name="ticker" value="MMMAAA-964NP4" />
+		<property name="description"
+			value="Hacen falta salas para testear bien el accept/reject" />
+		<property name="openingHour" value="14:00" />
+		<property name="closingHour" value="14:14" />
+		<property name="scheduleDetails" value="Lunes de semanas pares" />
+		<property name="address" value="La cartuja" />
+		<property name="proveOfOwnership" value="http://secreto.com" />
+		<property name="pricePerHour" value="1500" />
+		<property name="capacity" value="800" />
+		<property name="categories">
+			<list>
+				<ref bean="projection" />
+			</list>
+		</property>
+		<property name="owner" ref="owner1" />
+	</bean>
+	
+	<bean id="room11" class="domain.Room">
+		<property name="title" value="Pending de testeo accept" />
+		<property name="status" value="REVISION-PENDING" />
+		<property name="ticker" value="MMMAAA-A6IYT2" />
+		<property name="description"
+			value="Hacen falta 1020510 salas para testear bien el accept/reject" />
+		<property name="openingHour" value="14:00" />
+		<property name="closingHour" value="14:14" />
+		<property name="scheduleDetails" value="Lunes de semanas pares" />
+		<property name="address" value="La cartuja" />
+		<property name="proveOfOwnership" value="http://secreto.com" />
+		<property name="pricePerHour" value="1500" />
+		<property name="capacity" value="800" />
+		<property name="categories">
+			<list>
+				<ref bean="projection" />
+			</list>
+		</property>
+		<property name="owner" ref="owner1" />
 	</bean>
 	<!-- SERVICE -->
 
@@ -1810,6 +1853,29 @@
 			value="Así os ahorrais tener que limpiar la sala al terminar la presentación ;)" />
 		<property name="price" value="10" />
 		<property name="room" ref="room4" />
+	</bean>
+	
+	<bean id="service6" class="domain.Service">
+		<property name="name" value="Chocolatinas" />
+		<property name="description" value="De las buenas, mars y twix" />
+		<property name="price" value="20" />
+		<property name="room" ref="room5" />
+	</bean>
+
+	<bean id="service7" class="domain.Service">
+		<property name="name" value="Cantante" />
+		<property name="description"
+			value="Para animar un poco la fiesta" />
+		<property name="price" value="120.00" />
+		<property name="room" ref="room9" />
+	</bean>
+
+	<bean id="service8" class="domain.Service">
+		<property name="name" value="Limpieza con paño seco" />
+		<property name="description"
+			value="Así os ahorrais tener que limpiar la sala" />
+		<property name="price" value="50.50" />
+		<property name="room" ref="room8" />
 	</bean>
 
 	<!-- BOOKING -->
@@ -1904,7 +1970,7 @@
 	<bean id="systemConfiguration" class="domain.SystemConfiguration">
 		<property name="systemName" value="Acme-Booking" />
 		<property name="banner"
-			value="http://seawatchtours.ca/wp-content/uploads/2017/08/book-a-session.png" />
+			value="https://i.ibb.co/sqG7pgs/Acme-Booking.jpg" />
 		<property name="countryCode" value="+034" />
 		<property name="VATTax" value="0.21" />
 		<property name="makers" value="VISA,MASTERCARD,DINNERS,AMEX" />

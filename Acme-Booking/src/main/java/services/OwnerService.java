@@ -17,7 +17,9 @@ import repositories.OwnerRepository;
 import security.Authority;
 import security.UserAccount;
 import domain.Actor;
+import domain.Category;
 import domain.Owner;
+import domain.Room;
 import forms.ActorForm;
 import forms.ActorRegistrationForm;
 
@@ -40,6 +42,9 @@ public class OwnerService {
 	
 	@Autowired
 	private RoomService roomService;
+	
+	@Autowired
+	private ServiceService serviceService;
 
 	@Autowired
 	private Validator validator;
@@ -93,10 +98,11 @@ public class OwnerService {
 	}
 	
 	public void delete(final Owner owner) {
-		Actor principal = this.utilityService.findByPrincipal();
-		
 		Assert.notNull(owner, "not.allowed");
-		Assert.isTrue(principal.getId() == owner.getId(), "not.allowed");
+		
+		Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER"), "not.allowed");
+		Assert.isTrue(owner.equals((Owner) principal), "not.allowed");
 
 		this.roomService.deleteRooms(owner.getId());
 		this.ownerRepository.delete(owner);
@@ -198,6 +204,7 @@ public class OwnerService {
 		/* Creating owner */
 		Owner res = this.create();
 		Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER"), "not.allowed");
 		Assert.isTrue(principal.getId() == actorEditionForm.getId(), "not.allowed");
 
 		res.setId(actorEditionForm.getId());
@@ -251,5 +258,77 @@ public class OwnerService {
 
 	public void flush() {
 		this.ownerRepository.flush();
+	}
+	
+	public String exportData() {
+		Actor owner = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(owner, "OWNER"), "not.allowed");
+		
+		String res;
+		
+		res = "Data of your user account:";
+		res += "\r\n\r\n";
+		res += "Name: " + owner.getName()
+				+ " \r\n" + "Middle Name: " + owner.getMiddleName() + " \r\n"
+				+ " \r\n" + "Surname: "	+ owner.getSurname() + " \r\n"
+				+ " \r\n" + "Photo: " + owner.getPhoto() + " \r\n" + "Email: "
+				+ owner.getEmail() + " \r\n" + "Phone Number: "
+				+ owner.getPhoneNumber() + " \r\n" + "Address: "
+				+ owner.getAddress() + " \r\n" + " \r\n" + "\r\n";
+		
+		res += "\r\n\r\n";
+		res += "----------------------------------------";
+		res += "\r\n\r\n";
+
+		res += "Rooms::";
+		res += "\r\n\r\n";
+		Collection<Room> rooms = this.roomService.findRoomsMine(owner.getId());
+		for (Room room : rooms) {
+			res += "Room: " + "\r\n\r\n";
+			res += "Title: " + room.getTitle()+ "\r\n\r\n";
+			res += "Ticker: " + room.getTicker()+ "\r\n\r\n";
+			res += "Status: " + room.getStatus()+ "\r\n\r\n";
+			res += "Addres: " + room.getAddress()+ "\r\n\r\n";
+			res += "Schedule details: " + room.getScheduleDetails()+ "\r\n\r\n";
+			res += "Opening hour: " + room.getOpeningHour()+ "\r\n\r\n";
+			res += "Closing hour" + room.getClosingHour()+ "\r\n\r\n";
+			res += "Prove of ownership: " + room.getProveOfOwnership()+ "\r\n\r\n";
+			res += "Photos: " + room.getPhotos()+ "\r\n\r\n";
+			res += "Capacity: " + room.getCapacity()+ "\r\n\r\n";
+			res += "Administrator: " + room.getAdministrator()+ "\r\n\r\n";
+			res += "Categories: ";
+			
+			Collection<Category> categoriesOfRoom = room.getCategories();
+			res+= " -- ";
+			for(Category category : categoriesOfRoom) {
+				res+= category.getTitle().get("English");
+				res+= " -- ";
+			}
+			res+= "\r\n\r\n\r\n\r\n";
+			
+			res += "Services: " + "\r\n\r\n";
+			
+			Collection<domain.Service> servicesOfRoom = this.serviceService.findServicesByRoomId(room.getId());
+			
+			for(domain.Service service : servicesOfRoom) {
+				res += "Service: " + "\r\n\r\n";
+				res += "Name: " + service.getName()+ "\r\n\r\n";
+				res += "Description: " + service.getDescription()+ "\r\n\r\n";
+				res += "Price: " + service.getPrice()+ "\r\n\r\n";
+				
+				res+= "\r\n\r\n";
+				res += "------";
+				res+= "\r\n\r\n";
+			}
+			res+= "\r\n\r\n";
+			res += "-----------";
+			res+= "\r\n\r\n";
+			
+		}
+		
+		res += "\r\n\r\n";
+		res += "----------------------------------------";
+		
+		return res;
 	}
 }

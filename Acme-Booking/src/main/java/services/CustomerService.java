@@ -227,6 +227,7 @@ public class CustomerService {
 		final Customer res = this.create();
 
 		final Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "CUSTOMER"), "not.allowed");
 		Assert.isTrue(principal.getId() == form.getId(), "not.allowed");
 
 		res.setId(form.getId());
@@ -300,6 +301,47 @@ public class CustomerService {
 
 	public void flush() {
 		this.customerRepository.flush();
+	}
+	
+	public String exportData() {
+		Customer customer = (Customer) this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(customer, "CUSTOMER"), "not.allowed");
+		
+		String res;
+		
+		res = "Data of your user account:";
+		res += "\r\n\r\n";
+		res += "Name: " + customer.getName() 
+				+ " \r\n" + "Middle Name: " + customer.getMiddleName() + " \r\n"
+				+ " \r\n" + "Surname: "	+ customer.getSurname() + " \r\n"
+				+ " \r\n" + "Photo: " + customer.getPhoto() + " \r\n" + "Email: "
+				+ customer.getEmail() + " \r\n" + "Phone Number: "
+				+ customer.getPhoneNumber() + " \r\n" + "Address: "
+				+ customer.getAddress() + " \r\n" + " \r\n" + "\r\n"
+				
+				+ "Credit Card:" + "\r\n" + "Holder:"
+				+ customer.getCreditCard().getHolder() + "\r\n" +
+				"Make:" + customer.getCreditCard().getMake() + "\r\n" + "Number:"
+				+ customer.getCreditCard().getNumber() + "\r\n"
+				+ "Date expiration:"
+				+ customer.getCreditCard().getExpirationMonth() + "/"
+				+ customer.getCreditCard().getExpirationYear() + "\r\n" + "CVV:"
+				+ customer.getCreditCard().getCVV();
+		
+		res += "\r\n\r\n";
+		res += "----------------------------------------";
+		res += "\r\n\r\n";
+		
+		res += "Finder:";
+		res += "\r\n";
+		res += "Results in last search:" + "\r\n" 
+				+ this.finderService.findFinderByCustomerId(customer.getId()).getResults()
+				+ "\r\n\r\n";
+
+		res += "\r\n\r\n";
+		res += "----------------------------------------";
+		
+		return res;
 	}
 
 }

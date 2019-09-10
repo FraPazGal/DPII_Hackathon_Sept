@@ -16,6 +16,9 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
 	
 	@Query("select r from Room r where r.owner.id = ?1")
 	Collection<Room> findRoomsMine(Integer ownerId);
+	
+	@Query("select r from Room r where r.status = ?2 and r.owner.id = ?1")
+	Collection<Room> findRoomsStatusAndMine(Integer ownerId, String status);
 
 	@Query("select r from Room r where r.status = 'DRAFT' and r.owner.id = ?1")
 	Collection<Room> findRoomsDraftAndMine(Integer ownerId);

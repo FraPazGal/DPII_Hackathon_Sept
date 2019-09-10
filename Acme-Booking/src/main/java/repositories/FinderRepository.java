@@ -28,4 +28,7 @@ public interface FinderRepository extends JpaRepository<Finder, Integer> {
 
 	@Query("select f from Finder f where ?1 MEMBER OF f.results ")
 	Collection<Finder> findByRoom(int id);
+	
+	@Query("select f from Finder f where f.customer.id = ?1")
+	Finder findFinderByCustomerId(int customerId);
 }

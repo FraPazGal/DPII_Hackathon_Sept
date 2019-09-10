@@ -31,20 +31,20 @@ public class BookingServiceTest extends AbstractTest {
 	 * Total coverage of all tests
 	 * 
 	 * 
-	 * Coverage of the total project (%):
+	 * Coverage of the total project (%): 65'1
 	 * 
 	 * 
-	 * Coverage of the total project (lines of codes):
+	 * Coverage of the total project (lines of codes): 16.418
 	 * 
 	 * ################################################################
 	 * 
 	 * Total coverage by exclusively executing this test class
 	 * 
 	 * 
-	 * Coverage of the total project (%):
+	 * Coverage of the total project (%): 6'2
 	 * 
 	 * 
-	 * Coverage of the total project (lines of codes):
+	 * Coverage of the total project (lines of codes): 1.552
 	 * 
 	 * ################################################################
 	 * 

@@ -117,18 +117,31 @@ public class ServiceService {
 		return this.serviceRepository.findServicesByRoomId(roomId);
 	}
 	
-	public void deleteServicesOfRoom (Integer roomId) {
+	public void deleteServicesOfRoom (Integer roomId, String roomStatus) {
 		Collection<domain.Service> toDelete = this.serviceRepository.findServicesByRoomId(roomId);
-		for(domain.Service service : toDelete) {
-			this.delete(service);
+		if(roomStatus == "DRAFT") {
+			for(domain.Service service : toDelete) {
+				this.delete(service);
+			}
+		} else {
+			for(domain.Service service : toDelete) {
+				this.deleteServiceToDeleteOwner(service);
+			}
 		}
+	}
+	
+	private void deleteServiceToDeleteOwner (domain.Service service) {
+		Assert.notNull(service, "not.allowed");
+		Owner principal = (Owner) this.utilityService.findByPrincipal();
+
+		Assert.isTrue(service.getRoom().getOwner().equals(principal),"not.allowed");
+		
+		this.serviceRepository.delete(service);
 	}
 	
 	public void decommission (domain.Service toDecommission) {
 		Assert.notNull(toDecommission.getRoom(), "already.decomissioned");
-		
-		Owner principal = (Owner) this.utilityService.findByPrincipal();
-		Assert.isTrue(toDecommission.getRoom().getOwner().equals(principal), "not.allowed");
+		this.roomService.assertOwnershipAndStatus(toDecommission.getRoom(), "ACTIVE");
 		
 		toDecommission.setRoom(null);
 		this.serviceRepository.save(toDecommission);

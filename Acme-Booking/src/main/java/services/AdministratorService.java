@@ -199,6 +199,8 @@ public class AdministratorService {
 	// Other business methods -------------------------------
 	
 	public Administrator reconstruct(ActorRegistrationForm form, BindingResult binding) {
+		Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "ADMIN"), "not.allowed");
 
 		/* Creating admin */
 		Administrator res = this.create();
@@ -293,6 +295,7 @@ public class AdministratorService {
 		Administrator res = this.create();
 		Actor principal = this.utilityService.findByPrincipal();
 		Assert.isTrue(principal.getId() == actorEditionForm.getId(), "not.allowed");
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "ADMIN"), "not.allowed");
 
 		res.setId(actorEditionForm.getId());
 		res.setVersion(actorEditionForm.getVersion());
@@ -344,6 +347,28 @@ public class AdministratorService {
 
 	public void flush() {
 		this.administratorRepository.flush();
+	}
+	
+	public String exportData() {
+		Actor actor = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(actor, "ADMIN"), "not.allowed");
+		
+		String res;
+		
+		res = "Data of your user account:";
+		res += "\r\n\r\n";
+		res += "Name: " + actor.getName()
+				+ " \r\n" + "Middle Name: " + actor.getMiddleName() + " \r\n"
+				+ " \r\n" + "Surname: "	+ actor.getSurname() + " \r\n"
+				+ " \r\n" + "Photo: " + actor.getPhoto() + " \r\n" + "Email: "
+				+ actor.getEmail() + " \r\n" + "Phone Number: "
+				+ actor.getPhoneNumber() + " \r\n" + "Address: "
+				+ actor.getAddress() + " \r\n" + " \r\n" + "\r\n";
+		
+		res += "\r\n\r\n";
+		res += "----------------------------------------";
+		
+		return res;
 	}
 
 }

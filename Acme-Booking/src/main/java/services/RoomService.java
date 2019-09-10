@@ -52,13 +52,13 @@ public class RoomService {
 	public Room create() {
 		Room result;
 		
-		Owner principal = (Owner) this.utilityService.findByPrincipal();
+		Actor principal = this.utilityService.findByPrincipal();
 		Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER"),"not.allowed");
 
 		result = new Room();
-		result.setTicker(this.utilityService.generateTicker(principal));
+		result.setTicker(this.utilityService.generateTicker((Owner) principal));
 		result.setCategories(new ArrayList<Category>());
-		result.setOwner(principal);
+		result.setOwner((Owner) principal);
 		result.setStatus("DRAFT");
 		
 		return result;
@@ -199,27 +199,52 @@ public class RoomService {
 		return this.roomRepository.findRoomsForBooking();
 	}
 	
+//	public Collection<Room> findRoomsStatusAndMine (int ownerId, String status) {
+//		return this.roomRepository.findRoomsStatusAndMine(ownerId, status);
+//	}
+	
 	public Collection<Room> findRoomsDraftAndMine (int ownerId) {
+		Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER"),"not.allowed");
+		
 		return this.roomRepository.findRoomsDraftAndMine(ownerId);
 	}
 	
 	public Collection<Room> findRoomsRevisionPendingAndMine (int actorId) {
+		Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER") || 
+				this.utilityService.checkAuthority(principal, "ADMIN"),"not.allowed");
+		
 		return this.roomRepository.findRoomsRevisionPendingAndMine(actorId);
 	}
 	
 	public Collection<Room> findRoomsActiveAndMine (int actorId) {
+		Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER") || 
+				this.utilityService.checkAuthority(principal, "ADMIN"),"not.allowed");
+		
 		return this.roomRepository.findRoomsActiveAndMine(actorId);
 	}
 	
 	public Collection<Room> findRoomsRejectedAndMine (int actorId) {
+		Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER") || 
+				this.utilityService.checkAuthority(principal, "ADMIN"),"not.allowed");
+		
 		return this.roomRepository.findRoomsRejectedAndMine(actorId);
 	}
 	
 	public Collection<Room> findRoomsOutOfServiceAndMine (int ownerId) {
+		Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER"),"not.allowed");
+		
 		return this.roomRepository.findRoomsOutOfServiceAndMine(ownerId);
 	}
 	
 	public Collection<Room> findRoomsToAssign () {
+		Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "ADMIN"),"not.allowed");
+		
 		return this.roomRepository.findRoomsToAssign();
 	}
 	
@@ -254,7 +279,7 @@ public class RoomService {
 	public void deleteAsDraft(Room room) {
 		
 		this.assertOwnershipAndStatus(room, "DRAFT");
-		this.serviceService.deleteServicesOfRoom(room.getId());
+		this.serviceService.deleteServicesOfRoom(room.getId(), "DRAFT");
 		this.delete(room);
 	}
 	
@@ -264,47 +289,51 @@ public class RoomService {
 		Assert.isTrue(room.getStatus().contains("REVISION-PENDING"), "wrong.status");
 		Assert.isTrue((room.getAdministrator() == null), "already.assigned");
 		
-		Administrator principal = (Administrator) this.utilityService.findByPrincipal();
+		Actor principal = this.utilityService.findByPrincipal();
 		Assert.isTrue(this.utilityService.checkAuthority(principal, "ADMIN"),"not.allowed");
 		
-		room.setAdministrator(principal);
+		room.setAdministrator((Administrator) principal);
 		this.roomRepository.save(room);
 	}
 	
 	public void assertOwnershipAndEditable (Room room) {
 		Assert.notNull(room, "wrong.room.id");
-		Owner principal = (Owner) this.utilityService.findByPrincipal();
+		Actor principal =  this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER"));
 		
-		Assert.isTrue(room.getOwner().equals(principal), "not.allowed");
+		Assert.isTrue(room.getOwner().equals((Owner)principal), "not.allowed");
 		Assert.isTrue(room.getStatus().contains("DRAFT") || room.getStatus().contains("ACTIVE"), "wrong.status");
 	}
 	
 	public void assertOwnershipAndStatus (Room room, String status) {
 		Assert.notNull(room, "wrong.room.id");
-		Owner principal = (Owner) this.utilityService.findByPrincipal();
+		Actor principal =  this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER"));
 		
-		Assert.isTrue(room.getOwner().equals(principal), "not.allowed");
+		Assert.isTrue(room.getOwner().equals((Owner) principal), "not.allowed");
 		Assert.isTrue(room.getStatus().contains(status), "wrong.status");
 	}
 	
 	public void assertOwnership (Room room) {
 		Assert.notNull(room, "wrong.room.id");
-		Owner principal = (Owner) this.utilityService.findByPrincipal();
+		Actor principal = this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER"));
 		
-		Assert.isTrue(room.getOwner().equals(principal), "not.allowed");
+		Assert.isTrue(room.getOwner().equals((Owner) principal), "not.allowed");
 	}
 	
 	public void assertAdminAndEditable (Room room) {
 		Assert.notNull(room, "wrong.room.id");
-		Administrator principal = (Administrator) this.utilityService.findByPrincipal();
+		Actor principal =  this.utilityService.findByPrincipal();
+		Assert.isTrue(this.utilityService.checkAuthority(principal, "ADMIN"));
 		
-		Assert.isTrue(room.getAdministrator().equals(principal), "not.allowed");
+		Assert.isTrue(room.getAdministrator().equals((Administrator) principal), "not.allowed");
 		Assert.isTrue(room.getStatus().contains("REVISION-PENDING"), "wrong.status");
 	}
 	
 	public Room saveChangeCat (Room room) {
 		Assert.notNull(room, "not.allowed");
-		Administrator principal = (Administrator) this.utilityService.findByPrincipal();
+		Actor principal = this.utilityService.findByPrincipal();
 		Assert.isTrue(this.utilityService.checkAuthority(principal, "ADMIN"),"not.allowed");
 		
 		Room result = this.roomRepository.save(room);
@@ -361,7 +390,7 @@ public class RoomService {
 				canBeDeleted = this.canBeDeleted(room.getId());
 			}
 			if(!isActiveOrOut || canBeDeleted) {
-				this.serviceService.deleteServicesOfRoom(room.getId());
+				this.serviceService.deleteServicesOfRoom(room.getId(),"NOTDRAFT");
 				this.categoryService.deleteRoomFromCats(room);
 				this.delete(room);
 			} else {
