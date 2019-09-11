@@ -23,7 +23,7 @@
 	<jstl:if test="${breachNotif ne null }">
 		<jstl:if test="${pageContext.response.locale.language == 'es'}">
 			<h1>
-				<strong style="color: red;"><jstl:out value="${breachNotif.get('Spanish')}"/></strong>
+				<strong style="color: red;"><jstl:out value="${breachNotif.get('Español')}"/></strong>
 			</h1>
 		</jstl:if>
 		<jstl:if test="${pageContext.response.locale.language == 'en'}">
