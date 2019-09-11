@@ -48,13 +48,37 @@
 			<br>
 			<acme:textbox code="config.countryCode" path="countryCode" />
 			<br>
-			<acme:textbox code="config.cache" path="timeResultsCached" />
-			<br>
-			<acme:textbox code="config.maxResults" path="maxResults" />
+
+			<div>
+				<form:label path="timeResultsCached">
+					<spring:message code="config.cache" />: 
+					</form:label>
+				<form:input type="number" path="timeResultsCached" />
+				<p>
+					<form:errors path="timeResultsCached" cssClass="error" />
+				</p>
+			</div>
+
+			<div>
+				<form:label path="maxResults">
+					<spring:message code="config.maxResults" />: 
+					</form:label>
+				<form:input type="number" path="maxResults" />
+				<p>
+					<form:errors path="maxResults" cssClass="error" />
+				</p>
+			</div>
+			<div>
+				<form:label path="VATTax">
+					<spring:message code="config.VATTax" />: 
+					</form:label>
+				<form:input type="number" path="VATTax" />
+				<p>
+					<form:errors path="VATTax" cssClass="error" />
+				</p>
+			</div>
 			<br>
 
-			<acme:textbox code="config.VATTax" path="VATTax" />
-			<br>
 			<p>
 				<spring:message code="config.makers" />
 				:

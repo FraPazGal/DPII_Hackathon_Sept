@@ -149,6 +149,9 @@ public class MessageBoxService {
 			result.setId(bd.getId());
 		}
 		result.setName(messageBox.getName());
+		final Collection<MessageBox> mBoxes = this.messageBoxRepository.firstBoxesByActor(actor.getId());
+		if (messageBox.getParentMessageBoxes() != null)
+			Assert.isTrue(mBoxes.contains(messageBox.getParentMessageBoxes()));
 		result.setParentMessageBoxes(messageBox.getParentMessageBoxes());
 		this.validator.validate(result, binding);
 

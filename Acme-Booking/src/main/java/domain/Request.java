@@ -1,3 +1,4 @@
+
 package domain;
 
 import java.util.Collection;
@@ -27,111 +28,111 @@ public class Request extends DomainEntity {
 
 	/* Attributes */
 
-	private String title, bookingReason, status, rejectionReason;
-	private Integer expectedAttendance, duration;
-	private Double reservationPrice;
-	private Date requestedMoment, reservationDate;
-	private Collection<Service> services;
-	
+	private String				title, bookingReason, status, rejectionReason;
+	private Integer				expectedAttendance, duration;
+	private Double				reservationPrice;
+	private Date				requestedMoment, reservationDate;
+	private Collection<Service>	services;
+
+
 	/* Getters and setters */
-	
+
 	@NotBlank
 	public String getTitle() {
-		return title;
+		return this.title;
 	}
-	
-	public void setTitle(String title) {
+
+	public void setTitle(final String title) {
 		this.title = title;
 	}
-	
+
 	@NotBlank
-	@Type(type="text")
+	@Type(type = "text")
 	public String getBookingReason() {
-		return bookingReason;
+		return this.bookingReason;
 	}
-	
-	public void setBookingReason(String bookingReason) {
+
+	public void setBookingReason(final String bookingReason) {
 		this.bookingReason = bookingReason;
 	}
-	
+
 	@NotBlank
 	@Pattern(regexp = "\b(PENDING|ACCEPTED|REJECTED)\b")
 	public String getStatus() {
-		return status;
+		return this.status;
 	}
-	
-	public void setStatus(String status) {
+
+	public void setStatus(final String status) {
 		this.status = status;
 	}
-	
+
 	public String getRejectionReason() {
-		return rejectionReason;
+		return this.rejectionReason;
 	}
-	
-	public void setRejectionReason(String rejectionReason) {
+
+	public void setRejectionReason(final String rejectionReason) {
 		this.rejectionReason = rejectionReason;
 	}
-	
+
 	@NotNull
-	@Min(value = 0L, message = "The value must be positive")
+	@Min(value = 0L)
 	public Integer getExpectedAttendance() {
-		return expectedAttendance;
+		return this.expectedAttendance;
 	}
-	
-	public void setExpectedAttendance(Integer expectedAttendance) {
+
+	public void setExpectedAttendance(final Integer expectedAttendance) {
 		this.expectedAttendance = expectedAttendance;
 	}
-	
+
 	@NotNull
-	@Min(value = 0L, message = "The value must be positive")
+	@Min(value = 0L)
 	public Integer getDuration() {
-		return duration;
+		return this.duration;
 	}
-	
-	public void setDuration(Integer duration) {
+
+	public void setDuration(final Integer duration) {
 		this.duration = duration;
 	}
-	
+
 	@NotNull
-	@Min(value = 0L, message = "The value must be positive")
+	@Min(value = 0L)
 	public Double getReservationPrice() {
-		return reservationPrice;
+		return this.reservationPrice;
 	}
-	
-	public void setReservationPrice(Double reservationPrice) {
+
+	public void setReservationPrice(final Double reservationPrice) {
 		this.reservationPrice = reservationPrice;
 	}
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
 	public Date getRequestedMoment() {
-		return requestedMoment;
+		return this.requestedMoment;
 	}
-	
-	public void setRequestedMoment(Date requestedMoment) {
+
+	public void setRequestedMoment(final Date requestedMoment) {
 		this.requestedMoment = requestedMoment;
 	}
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
 	public Date getReservationDate() {
-		return reservationDate;
+		return this.reservationDate;
 	}
-	
-	public void setReservationDate(Date reservationDate) {
+
+	public void setReservationDate(final Date reservationDate) {
 		this.reservationDate = reservationDate;
 	}
-	
+
 	@Valid
 	@NotNull
 	@ManyToMany
 	public Collection<Service> getServices() {
-		return services;
+		return this.services;
 	}
 
-	public void setServices(Collection<Service> services) {
+	public void setServices(final Collection<Service> services) {
 		this.services = services;
 	}
-
 
 }
