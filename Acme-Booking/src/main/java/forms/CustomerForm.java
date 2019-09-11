@@ -1,5 +1,7 @@
 package forms;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.CreditCardNumber;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
@@ -126,6 +128,7 @@ public class CustomerForm {
 		this.address = address;
 	}
 	
+	@NotBlank
 	public String getHolder() {
 		return holder;
 	}
@@ -134,6 +137,7 @@ public class CustomerForm {
 		this.holder = holder;
 	}
 
+	@NotBlank
 	public String getMake() {
 		return make;
 	}
@@ -142,6 +146,7 @@ public class CustomerForm {
 		this.make = make;
 	}
 
+	@NotBlank
 	@CreditCardNumber
 	public String getNumber() {
 		return number;
@@ -151,6 +156,7 @@ public class CustomerForm {
 		this.number = number;
 	}
 
+	@NotNull
 	@Range(min = 1, max = 12)
 	public Integer getExpirationMonth() {
 		return expirationMonth;
@@ -160,6 +166,7 @@ public class CustomerForm {
 		this.expirationMonth = expirationMonth;
 	}
 
+	@NotNull
 	@Range(min = 0, max = 99)
 	public Integer getExpirationYear() {
 		return expirationYear;
@@ -169,6 +176,7 @@ public class CustomerForm {
 		this.expirationYear = expirationYear;
 	}
 
+	@NotNull
 	@Range(min = 0, max = 999)
 	public Integer getCVV() {
 		return CVV;

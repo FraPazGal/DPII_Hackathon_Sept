@@ -160,6 +160,7 @@ public class CustomerRegistrationForm {
 		this.middleName = middleName;
 	}
 
+	@NotBlank
 	public String getHolder() {
 		return holder;
 	}
@@ -168,6 +169,7 @@ public class CustomerRegistrationForm {
 		this.holder = holder;
 	}
 
+	@NotBlank
 	public String getMake() {
 		return make;
 	}
@@ -176,6 +178,7 @@ public class CustomerRegistrationForm {
 		this.make = make;
 	}
 
+	@NotBlank
 	@CreditCardNumber
 	public String getNumber() {
 		return number;
@@ -185,6 +188,7 @@ public class CustomerRegistrationForm {
 		this.number = number;
 	}
 
+	@NotNull
 	@Range(min = 1, max = 12)
 	public Integer getExpirationMonth() {
 		return expirationMonth;
@@ -194,6 +198,7 @@ public class CustomerRegistrationForm {
 		this.expirationMonth = expirationMonth;
 	}
 
+	@NotNull
 	@Range(min = 0, max = 99)
 	public Integer getExpirationYear() {
 		return expirationYear;
@@ -203,6 +208,7 @@ public class CustomerRegistrationForm {
 		this.expirationYear = expirationYear;
 	}
 
+	@NotNull
 	@Range(min = 0, max = 999)
 	public Integer getCVV() {
 		return CVV;

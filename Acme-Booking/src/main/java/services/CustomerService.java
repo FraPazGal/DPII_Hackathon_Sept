@@ -141,39 +141,35 @@ public class CustomerService {
 
 		res.setUserAccount(userAccount);
 
-		if (!form.getHolder().isEmpty() || !form.getNumber().isEmpty() || form.getCVV() != null ||
-				form.getExpirationMonth() != null || form.getExpirationYear() != null) {
+		try {
+			Assert.isTrue(form.getHolder() != "" && form.getMake() != "" && form.getNumber() != "" && form.getCVV() != null && form.getExpirationMonth() != null && form.getExpirationYear() != null);
 
 			try {
-				Assert.isTrue(form.getHolder() != "" && form.getMake() != "" && form.getNumber() != "" && form.getCVV() != null && form.getExpirationMonth() != null && form.getExpirationYear() != null);
-
-				try {
-					Assert.isTrue(!this.creditCardService.checkIfExpired(form.getExpirationMonth(), form.getExpirationYear()));
-				} catch (final Throwable oops) {
-					binding.rejectValue("expirationMonth", "card.date.error");
-				}
-				
+				Assert.isTrue(!this.creditCardService.checkIfExpired(form.getExpirationMonth(), form.getExpirationYear()));
 			} catch (final Throwable oops) {
-				binding.rejectValue("CVV", "card.invalid");
+				binding.rejectValue("expirationMonth", "card.date.error");
 			}
 			
-			try {
-				Assert.isTrue(this.utilityService.isValidCCMake(form.getMake()));
-			} catch (Throwable oops) {
-				binding.rejectValue("make", "invalid.make");
-			}
-
-			final CreditCard cc = new CreditCard();
-
-			cc.setHolder(form.getHolder());
-			cc.setMake(form.getMake());
-			cc.setNumber(form.getNumber());
-			cc.setCVV(form.getCVV());
-			cc.setExpirationMonth(form.getExpirationMonth());
-			cc.setExpirationYear(form.getExpirationYear());
-
-			res.setCreditCard(cc);
+		} catch (final Throwable oops) {
+			binding.rejectValue("CVV", "card.invalid");
 		}
+		
+		try {
+			Assert.isTrue(this.utilityService.isValidCCMake(form.getMake()));
+		} catch (Throwable oops) {
+			binding.rejectValue("make", "invalid.make");
+		}
+
+		final CreditCard cc = new CreditCard();
+
+		cc.setHolder(form.getHolder());
+		cc.setMake(form.getMake());
+		cc.setNumber(form.getNumber());
+		cc.setCVV(form.getCVV());
+		cc.setExpirationMonth(form.getExpirationMonth());
+		cc.setExpirationYear(form.getExpirationYear());
+
+		res.setCreditCard(cc);
 
 		/* Username */
 		if (form.getUsername() != null)
@@ -242,39 +238,35 @@ public class CustomerService {
 		if (form.getMiddleName() != null)
 			res.setMiddleName(form.getMiddleName());
 
-		if (!form.getHolder().isEmpty() || !form.getNumber().isEmpty() || form.getCVV() != null ||
-				form.getExpirationMonth() != null || form.getExpirationYear() != null) {
+		try {
+			Assert.isTrue(form.getHolder() != "" && form.getMake() != "" && form.getNumber() != "" && form.getCVV() != null && form.getExpirationMonth() != null && form.getExpirationYear() != null);
 
 			try {
-				Assert.isTrue(form.getHolder() != "" && form.getMake() != "" && form.getNumber() != "" && form.getCVV() != null && form.getExpirationMonth() != null && form.getExpirationYear() != null);
-
-				try {
-					Assert.isTrue(!this.creditCardService.checkIfExpired(form.getExpirationMonth(), form.getExpirationYear()));
-				} catch (final Throwable oops) {
-					binding.rejectValue("expirationMonth", "card.date.error");
-				}
-
+				Assert.isTrue(!this.creditCardService.checkIfExpired(form.getExpirationMonth(), form.getExpirationYear()));
 			} catch (final Throwable oops) {
-				binding.rejectValue("CVV", "card.invalid");
-			}
-			
-			try {
-				Assert.isTrue(this.utilityService.isValidCCMake(form.getMake()));
-			} catch (Throwable oops) {
-				binding.rejectValue("make", "invalid.make");
+				binding.rejectValue("expirationMonth", "card.date.error");
 			}
 
-			final CreditCard cc = new CreditCard();
-
-			cc.setHolder(form.getHolder());
-			cc.setMake(form.getMake());
-			cc.setNumber(form.getNumber());
-			cc.setCVV(form.getCVV());
-			cc.setExpirationMonth(form.getExpirationMonth());
-			cc.setExpirationYear(form.getExpirationYear());
-
-			res.setCreditCard(cc);
+		} catch (final Throwable oops) {
+			binding.rejectValue("CVV", "card.invalid");
 		}
+		
+		try {
+			Assert.isTrue(this.utilityService.isValidCCMake(form.getMake()));
+		} catch (Throwable oops) {
+			binding.rejectValue("make", "invalid.make");
+		}
+
+		final CreditCard cc = new CreditCard();
+
+		cc.setHolder(form.getHolder());
+		cc.setMake(form.getMake());
+		cc.setNumber(form.getNumber());
+		cc.setCVV(form.getCVV());
+		cc.setExpirationMonth(form.getExpirationMonth());
+		cc.setExpirationYear(form.getExpirationYear());
+
+		res.setCreditCard(cc);
 
 		/* Email */
 		if (!form.getEmail().isEmpty())

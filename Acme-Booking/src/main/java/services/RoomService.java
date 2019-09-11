@@ -280,6 +280,7 @@ public class RoomService {
 		
 		this.assertOwnershipAndStatus(room, "DRAFT");
 		this.serviceService.deleteServicesOfRoom(room.getId(), "DRAFT");
+		this.categoryService.deleteRoomFromCats(room);
 		this.delete(room);
 	}
 	
@@ -411,5 +412,13 @@ public class RoomService {
 	
 	private boolean canBeDeleted (Integer roomId) {
 		return this.roomRepository.canBeDeleted(roomId);
+	}
+	
+	public void deleteAdminFromRooms(Integer adminId) {
+		Collection<Room> rooms = this.roomRepository.findRoomsFromAdmin(adminId);
+		for(Room r : rooms) {
+			r.setAdministrator(null);
+			this.roomRepository.save(r);
+		}
 	}
 }

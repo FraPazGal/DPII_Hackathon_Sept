@@ -172,7 +172,7 @@ public class CustomerServiceTest extends AbstractTest {
 			
 			{
 				"customer1", "Name", "MiddleName", "Surname", "http://www.photo.com", "customer@email.com", "64578621", "C/ Address nº 5",
-				"", "", "", null, null, null, null
+				"Name of holder", "VISA", "1111222233334444", 10, 20, 164, null
 			},
 			//Positive test case, a customer edits their profile
 		};

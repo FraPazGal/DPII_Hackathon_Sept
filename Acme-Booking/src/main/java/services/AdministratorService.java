@@ -126,6 +126,9 @@ public class AdministratorService {
 
 	@Autowired
 	private SystemConfigurationService systemConfigurationService;
+	
+	@Autowired
+	private RoomService roomService;
 
 	@Autowired
 	private UtilityService utilityService;
@@ -193,6 +196,7 @@ public class AdministratorService {
 		Assert.notNull(administrator, "not.allowed");
 		Assert.isTrue(principal.getId() == administrator.getId(), "not.allowed");
 
+		this.roomService.deleteAdminFromRooms(principal.getId());
 		this.administratorRepository.delete(administrator);
 	}
 

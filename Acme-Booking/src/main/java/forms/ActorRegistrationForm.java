@@ -36,7 +36,6 @@ public class ActorRegistrationForm {
 	}
 
 	@NotBlank
-	@NotNull
 	public String getName() {
 		return name;
 	}
@@ -54,7 +53,6 @@ public class ActorRegistrationForm {
 	}
 
 	@NotBlank
-	@NotNull
 	public String getSurname() {
 		return surname;
 	}
@@ -73,7 +71,6 @@ public class ActorRegistrationForm {
 	}
 
 	@NotBlank
-	@NotNull
 	public String getEmail() {
 		return email;
 	}
@@ -99,7 +96,6 @@ public class ActorRegistrationForm {
 	}
 
 	@NotBlank
-	@NotNull
 	public String getUsername() {
 		return username;
 	}
@@ -109,7 +105,7 @@ public class ActorRegistrationForm {
 	}
 
 	@NotBlank
-	@NotNull
+	@Size(min = 5, max = 32)
 	public String getPassword() {
 		return password;
 	}
