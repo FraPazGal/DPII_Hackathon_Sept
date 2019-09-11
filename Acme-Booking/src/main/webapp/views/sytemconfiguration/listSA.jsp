@@ -19,44 +19,53 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 
-<h1><spring:message code="administrator.list.suspicious.actors" /></h1>
+<h1>
+	<spring:message code="administrator.list.suspicious.actors" />
+</h1>
 <!-- Tabla de actores sospechosos -->
 <display:table pagesize="5" class="displaytag" name="actors"
-		requestURI="config/admin/listSA.do" id="actors">
-		
-	<jstl:choose>
-		<jstl:when test="${actors.userAccount.isBanned }">
-			<spring:message var="status" code="actor.banned" />
-		</jstl:when>
-		<jstl:otherwise>
-			<spring:message	var="status" code="actor.active" />
-		</jstl:otherwise>
-	</jstl:choose>
+	requestURI="config/admin/listSA.do" id="actors">
 
-	<display:column property="userAccount.username" titleKey="actor.username" sortable="true" />
-	
+	<jstl:if test="${not empty actors}">
+		<jstl:choose>
+			<jstl:when test="${actors.userAccount.isBanned }">
+				<spring:message var="status" code="actor.banned" />
+			</jstl:when>
+			<jstl:otherwise>
+				<spring:message var="status" code="actor.active" />
+			</jstl:otherwise>
+		</jstl:choose>
+	</jstl:if>
+
+	<display:column property="userAccount.username"
+		titleKey="actor.username" sortable="true" />
+
 	<display:column titleKey="actor.status" sortable="true">
 		<jstl:out value="${status}" />
 	</display:column>
 
-	<display:column property="surname" titleKey="actor.surname"	sortable="true" />
+	<display:column property="surname" titleKey="actor.surname"
+		sortable="true" />
 
 	<display:column property="name" titleKey="actor.name" sortable="true" />
-	
+
 	<display:column property="email" titleKey="actor.email" />
 
-	<display:column property="userAccount.authorities" titleKey="actor.type" />
+	<display:column property="userAccount.authorities"
+		titleKey="actor.type" />
 
 	<display:column>
 		<jstl:choose>
 			<jstl:when test="${!actors.userAccount.isBanned}">
 				<jstl:if test="${actors.isSpammer}">
-					<input type="button" name="ban"	value="<spring:message code="actor.ban" />"
+					<input type="button" name="ban"
+						value="<spring:message code="actor.ban" />"
 						onclick="redirect: location.href = 'config/admin/ban.do?actorId=${actors.id}';" />
 				</jstl:if>
 			</jstl:when>
 			<jstl:when test="${actors.userAccount.isBanned}">
-				<input type="button" name="unban" value="<spring:message code="actor.unban" />"
+				<input type="button" name="unban"
+					value="<spring:message code="actor.unban" />"
 					onclick="redirect: location.href = 'config/admin/unban.do?actorId=${actors.id}';" />
 			</jstl:when>
 		</jstl:choose>

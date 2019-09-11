@@ -93,6 +93,7 @@ public class MessageService {
 		final boolean containsSpam = this.utilityService.isSpam(atributosAComprobar);
 		if (containsSpam) {
 			message.setIsSpam(true);
+			principal.setIsSpammer(true);
 			inSpamBox = this.messageBoxService.findByName(message.getReceiver().getId(), "Spam box");
 		} else
 			inSpamBox = this.messageBoxService.findByName(message.getReceiver().getId(), "In box");

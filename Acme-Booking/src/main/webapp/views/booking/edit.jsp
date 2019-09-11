@@ -71,7 +71,7 @@
 			<acme:textbox code="booking.expectedAttendance"
 				path="expectedAttendance" size="100px" />
 			<br /> <br />
-			<acme:textbox code="booking.duration" path="duration" size="20px" />
+			<acme:textbox code="booking.duration" path="duration" size="20px" /> <spring:message code="booking.inhours" />
 			<br /> <br />
 			<acme:textbox code="booking.reservationDate" path="reservationDate"
 				size="20px" placeholder="date.placeholder" />

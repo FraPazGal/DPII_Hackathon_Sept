@@ -365,6 +365,86 @@
 			</list>
 		</property>
 	</bean>
+	<!-- BOX -->
+<bean id="inBoxAdmin1" class="domain.MessageBox">
+		<property name="name" value="In box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+			<ref bean="administrator1" />
+		</property>
+	</bean>
+
+	<bean id="spamBoxAdmin1" class="domain.MessageBox">
+		<property name="name" value="Spam box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="administrator1" />
+		</property>
+
+	</bean>
+
+	<bean id="outBoxAdmin1" class="domain.MessageBox">
+		<property name="name" value="Out box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<list>			
+			</list>
+		</property>
+		<property name="owner">
+			<ref bean="administrator1" />
+		</property>
+
+
+	</bean>
+
+	<bean id="trashBoxAdmin1" class="domain.MessageBox">
+		<property name="name" value="Trash box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+		</property>
+		<property name="owner">
+
+			<ref bean="administrator1" />
+		</property>
+
+	</bean>
+
+	<bean id="notificationBoxAdmin1" class="domain.MessageBox">
+		<property name="name" value="Notification box" />
+		<property name="isPredefined" value="true" />
+		<property name="parentMessageBoxes">
+			<null />
+		</property>
+		<property name="messages">
+			<null />
+
+		</property>
+		<property name="owner">
+
+			<ref bean="administrator1" />
+		</property>
+
+	</bean>
 
 	<!-- Presentation -->
 	<bean id="presentation" class="domain.Category">
