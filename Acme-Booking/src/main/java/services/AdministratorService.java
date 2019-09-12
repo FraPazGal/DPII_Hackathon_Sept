@@ -154,6 +154,7 @@ public class AdministratorService {
 		authority.add(auth);
 		userAccount.setAuthorities(authority);
 		res.setUserAccount(userAccount);
+		res.setIsSpammer(false);
 
 		return res;
 	}
@@ -300,9 +301,13 @@ public class AdministratorService {
 		Actor principal = this.utilityService.findByPrincipal();
 		Assert.isTrue(principal.getId() == actorEditionForm.getId(), "not.allowed");
 		Assert.isTrue(this.utilityService.checkAuthority(principal, "ADMIN"), "not.allowed");
+		
+		Administrator aux = this.findOne(actorEditionForm.getId());
+		
+		res.setId(aux.getId());
+		res.setVersion(aux.getVersion());
+		res.setIsSpammer(aux.getIsSpammer());
 
-		res.setId(actorEditionForm.getId());
-		res.setVersion(actorEditionForm.getVersion());
 		res.setName(actorEditionForm.getName());
 		res.setSurname(actorEditionForm.getSurname());
 		res.setPhoto(actorEditionForm.getPhoto());

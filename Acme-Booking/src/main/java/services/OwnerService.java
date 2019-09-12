@@ -67,6 +67,7 @@ public class OwnerService {
 		authority.add(auth);
 		userAccount.setAuthorities(authority);
 		res.setUserAccount(userAccount);
+		res.setIsSpammer(false);
 
 		return res;
 	}
@@ -207,8 +208,12 @@ public class OwnerService {
 		Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER"), "not.allowed");
 		Assert.isTrue(principal.getId() == actorEditionForm.getId(), "not.allowed");
 
-		res.setId(actorEditionForm.getId());
-		res.setVersion(actorEditionForm.getVersion());
+		Owner aux = this.findOne(actorEditionForm.getId());
+		
+		res.setId(aux.getId());
+		res.setVersion(aux.getVersion());
+		res.setIsSpammer(aux.getIsSpammer());
+		
 		res.setName(actorEditionForm.getName());
 		res.setSurname(actorEditionForm.getSurname());
 		res.setPhoto(actorEditionForm.getPhoto());

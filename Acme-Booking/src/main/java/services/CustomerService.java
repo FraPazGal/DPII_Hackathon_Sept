@@ -67,6 +67,7 @@ public class CustomerService {
 		authority.add(auth);
 		userAccount.setAuthorities(authority);
 		res.setUserAccount(userAccount);
+		res.setIsSpammer(false);
 
 		return res;
 	}
@@ -112,7 +113,7 @@ public class CustomerService {
 
 	public Customer reconstruct(final CustomerRegistrationForm form, final BindingResult binding) {
 
-		final Customer res = this.create();
+		Customer res = this.create();
 
 		res.setName(form.getName());
 		res.setSurname(form.getSurname());
@@ -226,8 +227,12 @@ public class CustomerService {
 		Assert.isTrue(this.utilityService.checkAuthority(principal, "CUSTOMER"), "not.allowed");
 		Assert.isTrue(principal.getId() == form.getId(), "not.allowed");
 
-		res.setId(form.getId());
-		res.setVersion(form.getVersion());
+		Customer aux = this.findOne(form.getId());
+		
+		res.setId(aux.getId());
+		res.setVersion(aux.getVersion());
+		res.setIsSpammer(aux.getIsSpammer());
+		
 		res.setName(form.getName());
 		res.setSurname(form.getSurname());
 		res.setPhoto(form.getPhoto());
