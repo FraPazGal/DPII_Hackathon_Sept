@@ -55,7 +55,7 @@ public class BookingService {
 	}
 
 	public Collection<Booking> getListAll() {
-		//this.checkBooking();
+		this.checkBooking();
 
 		Actor principal;
 		principal = this.utilityService.findByPrincipal();
@@ -68,10 +68,12 @@ public class BookingService {
 		return booking;
 	}
 	public Booking findOne(final int id) {
+		this.checkBooking();
 		return this.bookingRepository.findOne(id);
 	}
 
 	public Booking findOneMode(final int id) {
+		this.checkBooking();
 		final Booking booking = this.findOne(id);
 		final Actor principal = this.utilityService.findByPrincipal();
 		Assert.isTrue(booking.getRoom().getOwner().equals(principal) || booking.getCustomer().equals(principal));
@@ -91,12 +93,14 @@ public class BookingService {
 	}
 
 	public Booking reconstruct(final Booking bookingF, final BindingResult binding) {
+		this.checkBooking();
 		final Booking result = this.create(bookingF.getRoom());
 		final Actor principal = this.utilityService.findByPrincipal();
 		Booking orig = null;
 		Assert.isTrue(bookingF.getRoom().getStatus().equals("ACTIVE"));
 		if (bookingF.getId() != 0) {
 			orig = this.findOne(bookingF.getId());
+			Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER"));
 			Assert.notNull(orig);
 			Assert.isTrue(orig.getRoom().getOwner().equals(principal));
 			Assert.isTrue(orig.getStatus().equals("PENDING"));
@@ -195,7 +199,7 @@ public class BookingService {
 		return result;
 	}
 	public Booking save(final Booking booking) {
-		//this.checkBooking();
+		this.checkBooking();
 		final Actor principal = this.utilityService.findByPrincipal();
 		Booking result = this.create(booking.getRoom());
 		Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER") || this.utilityService.checkAuthority(principal, "CUSTOMER"));
@@ -207,7 +211,7 @@ public class BookingService {
 	}
 
 	public Collection<Booking> getList(final int id) {
-		//this.checkBooking();
+		this.checkBooking();
 		final Actor principal = this.utilityService.findByPrincipal();
 		Assert.isTrue(this.utilityService.checkAuthority(principal, "MANAGER"));
 		Collection<Booking> bookings = new ArrayList<>();
@@ -216,7 +220,8 @@ public class BookingService {
 	}
 
 	public void rejected(final int id) {
-		//this.checkBooking();
+		this.checkBooking();
+		;
 		final Actor principal = this.utilityService.findByPrincipal();
 		Assert.notNull(principal);
 		Booking booking = this.findOne(id);
@@ -270,7 +275,7 @@ public class BookingService {
 	}
 
 	public void acepted(final int id) {
-		//this.checkBooking();
+		this.checkBooking();
 		final Actor principal = this.utilityService.findByPrincipal();
 		Assert.notNull(principal);
 		Booking booking = this.findOne(id);
@@ -309,6 +314,16 @@ public class BookingService {
 
 	public Collection<Booking> pendingByRoomId(final Integer roomId) {
 		return this.bookingRepository.pendingByRoomId(roomId);
+	}
+
+	public void checkBooking() {
+		final Date now = new Date();
+		final Collection<Booking> bookings = this.bookingRepository.getOld(now);
+		if (!bookings.isEmpty())
+			for (final Booking b : bookings) {
+				b.setStatus("REJECTED");
+				this.bookingRepository.save(b);
+			}
 	}
 
 }

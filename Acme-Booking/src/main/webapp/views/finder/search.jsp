@@ -328,7 +328,7 @@
 	</jstl:if>
 </security:authorize>
 
-<security:authorize access="isAuthenticated()">
+<security:authorize access="permitAll">
 	<jstl:if test="${! empty anon }">
 
 

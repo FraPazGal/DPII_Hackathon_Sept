@@ -1922,7 +1922,7 @@
 		<property name="duration" value="2" />
 		<property name="reservationPrice" value="54.0" />
 		<property name="requestedMoment" value="08/20/2019 16:15" />
-		<property name="reservationDate" value="09/03/2019 16:15" />
+		<property name="reservationDate" value="10/03/2019 16:15" />
 		<property name="customer" ref="customer2" />
 		<property name="room" ref="room1" />
 		<property name="services">
@@ -1940,7 +1940,7 @@
 		<property name="duration" value="3" />
 		<property name="reservationPrice" value="40.0" />
 		<property name="requestedMoment" value="08/22/2019 16:15" />
-		<property name="reservationDate" value="09/05/2019 16:15" />
+		<property name="reservationDate" value="10/05/2019 16:15" />
 		<property name="customer" ref="customer2" />
 		<property name="room" ref="room4" />
 		<property name="services">
