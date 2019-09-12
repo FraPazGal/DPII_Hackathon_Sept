@@ -19,9 +19,15 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 
-<h1>
-	<spring:message code="administrator.list.suspicious.actors" />
-</h1>
+<jstl:choose>
+	<jstl:when test="${catalog == 'ALL'}">
+		<h1><spring:message code="administrator.list.all.actors" /></h1>
+	</jstl:when>
+	<jstl:when test="${catalog == 'SPAMMERS'}">
+		<h1><spring:message code="administrator.list.spammers.actors" /></h1>
+	</jstl:when>
+</jstl:choose>
+
 <!-- Tabla de actores sospechosos -->
 <display:table pagesize="5" class="displaytag" name="actors"
 	requestURI="config/admin/listSA.do" id="actors">
@@ -36,12 +42,23 @@
 			</jstl:otherwise>
 		</jstl:choose>
 	</jstl:if>
-
+	
 	<display:column property="userAccount.username"
 		titleKey="actor.username" sortable="true" />
 
 	<display:column titleKey="actor.status" sortable="true">
 		<jstl:out value="${status}" />
+	</display:column>
+	
+	<jstl:if test="${actors.isSpammer}">
+		<spring:message var="spam" code='spammer.yes' />
+	</jstl:if>
+	<jstl:if test="${!actors.isSpammer}">
+		<spring:message var="spam" code='spammer.no' />
+	</jstl:if>
+	
+	<display:column titleKey="actor.spammer" sortable="true">
+		<jstl:out value="${spam}" />
 	</display:column>
 
 	<display:column property="surname" titleKey="actor.surname"
@@ -57,11 +74,9 @@
 	<display:column>
 		<jstl:choose>
 			<jstl:when test="${!actors.userAccount.isBanned}">
-				<jstl:if test="${actors.isSpammer}">
-					<input type="button" name="ban"
-						value="<spring:message code="actor.ban" />"
-						onclick="redirect: location.href = 'config/admin/ban.do?actorId=${actors.id}';" />
-				</jstl:if>
+				<input type="button" name="ban"
+					value="<spring:message code="actor.ban" />"
+					onclick="redirect: location.href = 'config/admin/ban.do?actorId=${actors.id}';" />
 			</jstl:when>
 			<jstl:when test="${actors.userAccount.isBanned}">
 				<input type="button" name="unban"

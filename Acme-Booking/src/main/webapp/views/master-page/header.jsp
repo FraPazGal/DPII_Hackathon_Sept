@@ -113,8 +113,17 @@
 
 			<li><a href="config/admin/display.do"><spring:message
 						code="master.page.system" /></a></li>
-			<li><a href="config/admin/listSA.do"><spring:message
+						
+			<li><a class="fNiv"><spring:message
+						code="master.page.user.management" /></a>
+				<ul>
+					<li class="arrow"></li>
+					<li><a href="config/admin/listA.do"><spring:message
+						code="master.page.list.actors" /></a></li>
+					<li><a href="config/admin/listSA.do"><spring:message
 						code="master.page.list.suspicious" /></a></li>
+				</ul></li>
+				
 		</security:authorize>
 		<security:authorize access="isAuthenticated()">
 			<!-- Register admin -->

@@ -55,11 +55,6 @@ public class ActorService {
  		Assert.isTrue(this.utilityService.checkAuthority(principal, "ADMIN"), "not.allowed");	
 		Assert.isTrue(!toBan.getUserAccount().getIsBanned(), "wrong.id");	
 
- 		if(toBan.getIsSpammer() != null) {	
-			Assert.isTrue(toBan.getIsSpammer(),"not.spammer");	
-		} else {	
-			Assert.notNull(toBan.getIsSpammer(), "not.spammer");	
-		}	
 		toBan.getUserAccount().setIsBanned(true);	
 		toBan = this.actorRepository.save(toBan);	
 	}	
@@ -76,11 +71,19 @@ public class ActorService {
 	}	
 
  	public Collection<Actor> findAllExceptPrincipal() {	
+ 		Actor principal = this.utilityService.findByPrincipal();	
+ 		Assert.isTrue(this.utilityService.checkAuthority(principal, "ADMIN"), "not.allowed");	
 		Collection<Actor> result = this.actorRepository.findAll();	
-		Actor principal = this.utilityService.findByPrincipal();	
 
  		result.remove(principal);	
 
  		return result;	
+	}
+ 	
+ 	public Collection<Actor> findSpammers() {	
+ 		Actor principal = this.utilityService.findByPrincipal();	
+ 		Assert.isTrue(this.utilityService.checkAuthority(principal, "ADMIN"), "not.allowed");	
+
+ 		return this.actorRepository.findSpammers();		
 	}
 }

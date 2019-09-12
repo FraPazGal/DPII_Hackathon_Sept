@@ -21,7 +21,12 @@
 	</definition>
 	
 	<definition name="config/listSA" extends="master.page">	
-		<put-attribute name="title" value="User management" />	
+		<put-attribute name="title" value="List of spammers" />	
+		<put-attribute name="body" value="/views/sytemconfiguration/listSA.jsp" />	
+	</definition>
+	
+	<definition name="config/listA" extends="master.page">	
+		<put-attribute name="title" value="List of actors" />	
 		<put-attribute name="body" value="/views/sytemconfiguration/listSA.jsp" />	
 	</definition>
 

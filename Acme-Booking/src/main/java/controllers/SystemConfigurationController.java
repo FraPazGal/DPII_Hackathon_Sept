@@ -92,13 +92,29 @@ public class SystemConfigurationController extends AbstractController {
 		return result;
 	}
 	
+	/* List of all actors */
+	@RequestMapping(value = "/listA", method = RequestMethod.GET)	
+	public ModelAndView listActors() {	
+		ModelAndView result = new ModelAndView("config/listSA");	
+
+ 		try {	
+			result.addObject("actors", this.actorService.findAllExceptPrincipal());	
+			result.addObject("catalog", "ALL");	
+
+ 		} catch (final Throwable oops) {	
+			result = new ModelAndView("redirect:/welcome/index.do");	
+		} 	
+		return result;	
+	}	
+	
 	/* List of spammers */	
 	@RequestMapping(value = "/listSA", method = RequestMethod.GET)	
 	public ModelAndView listSuspiciousActors() {	
 		ModelAndView result = new ModelAndView("config/listSA");	
 
  		try {	
-			result.addObject("actors", this.actorService.findAllExceptPrincipal());	
+			result.addObject("actors", this.actorService.findSpammers());	
+			result.addObject("catalog", "SPAMMERS");	
 
  		} catch (final Throwable oops) {	
 			result = new ModelAndView("redirect:/welcome/index.do");	
@@ -123,7 +139,7 @@ public class SystemConfigurationController extends AbstractController {
  	/* Unban actor */	
 	@RequestMapping(value = "/unban", method = RequestMethod.GET, params = "actorId")	
 	public ModelAndView unbanActor(@RequestParam int actorId) {	
-		ModelAndView result = new ModelAndView("redirect:listSA.do");	
+		ModelAndView result = new ModelAndView("redirect:listA.do");	
 
  		try {	
 			this.actorService.unban(actorId);	

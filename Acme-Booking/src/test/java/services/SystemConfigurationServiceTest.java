@@ -188,22 +188,22 @@ public class SystemConfigurationServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 
 			{
-				"admin", "customer1", "unban", true/* is spammer */, IllegalArgumentException.class
+				"admin", "customer1", "unban", IllegalArgumentException.class
 			},//negative: invalid authenticated
 			{
-				"admin", "admin", "ban", false/* is spammer */, IllegalArgumentException.class
-			},//negative: ban a not spammer user
+				"admin", "owner1", "ban" , IllegalArgumentException.class
+			},//negative: invalid authenticated
 			{
-				"admin", "admin", "unban", true/* is spammer */, null
+				"admin", "admin", "unban", null
 			}
 		//positive
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.banTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Boolean) testingData[i][3], (Class<?>) testingData[i][4]);
+			this.banTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Class<?>) testingData[i][3]);
 	}
 
-	private void banTemplate(final String userList, final String user, final String ban, final Boolean spammer, final Class<?> expected) {
+	private void banTemplate(final String userList, final String user, final String ban, final Class<?> expected) {
 		Class<?> caught;
 
 		caught = null;
@@ -212,7 +212,7 @@ public class SystemConfigurationServiceTest extends AbstractTest {
 			final Collection<Actor> actores = this.actorService.findAllExceptPrincipal();
 			this.unauthenticate();
 			this.authenticate(user);
-			this.banActor(actores, ban, spammer);
+			this.banActor(actores, ban);
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
 		} finally {
@@ -222,14 +222,18 @@ public class SystemConfigurationServiceTest extends AbstractTest {
 
 	}
 
-	public void banActor(final Collection<Actor> actores, final String ban, final Boolean spammer) {
-		for (final Actor a : actores)
-			if (a.getIsSpammer() == spammer) {
-				if (ban == "ban")
-					this.actorService.ban(a.getId());
-				if (ban == "unban")
-					this.actorService.unban(a.getId());
+	public void banActor(final Collection<Actor> actores, final String ban) {
+		for (final Actor a : actores) {
+			if (ban == "ban" && !a.getUserAccount().getIsBanned()) {
+				this.actorService.ban(a.getId());
 				break;
 			}
+			
+			if (ban == "unban" && a.getUserAccount().getIsBanned()) {
+				this.actorService.unban(a.getId());
+			break;
+			}
+		}
+			
 	}
 }
