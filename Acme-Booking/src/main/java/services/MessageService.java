@@ -394,8 +394,21 @@ public class MessageService {
 		result.setSentMoment(moment);
 		result.setIsSpam(false);
 		result.setMessageBoxes(boxes);
-		result.setBody("Booking have been changed status to " + booking.getStatus());
-		result.setSubject("Booking status changed");
+		String body = "Booking have been changed status to " + booking.getStatus();
+		String status = "PENDING";
+		switch (booking.getStatus()) {
+		case "ACCEPTED":
+			status = "ACEPTADO";
+			break;
+		case "REJECTED":
+			status = "RECHAZADO";
+			break;
+		default:
+		}
+
+		body += " || El estado de la reserva a cambiado ha " + status;
+		result.setBody(body);
+		result.setSubject("Booking status changed||El estado de la reserva ha cambiabo");
 
 		saved = this.messageRepository.save(result);
 
@@ -405,7 +418,6 @@ public class MessageService {
 		return result;
 
 	}
-
 	public MessageForm createForm() {
 		final MessageForm result;
 		Actor principal;

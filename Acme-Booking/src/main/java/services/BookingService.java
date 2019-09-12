@@ -100,6 +100,7 @@ public class BookingService {
 		Assert.isTrue(bookingF.getRoom().getStatus().equals("ACTIVE"));
 		if (bookingF.getId() != 0) {
 			orig = this.findOne(bookingF.getId());
+			Assert.isTrue(this.utilityService.checkAuthority(principal, "OWNER"));
 			Assert.notNull(orig);
 			Assert.isTrue(orig.getRoom().getOwner().equals(principal));
 			Assert.isTrue(orig.getStatus().equals("PENDING"));
